@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <record id="product_discount_qty_tree_view" model="ir.ui.view">
+            <field name="name">product.discount.qty.tree</field>
+            <field name="model">product.discount.qty</field>
+            <field name="arch" type="xml">
+                <tree string="Config Discount Qty">
+                    <field name="type"/>
+                    <field name="determine"/>
+                    <field name="qty"/>
+                    <field name="disc_qty"/>
+                    <field name="partner_ids"/>
+                    <field name="product_ids"/>
+                    <field name="user_ids" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="product_discount_qty_form_view" model="ir.ui.view">
+            <field name="name">product.discount.qty.form</field>
+            <field name="model">product.discount.qty</field>
+            <field name="arch" type="xml">
+                <form string="Config Discount Qty">
+                    <group col="4" colspan="4">
+                        <field name="type" on_change="onchange_type(type)"/>
+                        <field name="qty"/>
+                        <field name="disc_qty"/>
+                        <field name="determine" required="True" />
+                        <field name="user_ids"
+                               widget="many2many_tags"
+                               attrs="{'invisible':[('determine','!=','saleman')]}" />
+                    </group>
+                    <group col="4" colspan="4">
+                        <group>
+                            <labor string="Client Apply" colspan="2"/>
+                            <field name="partner_ids" nolabel="1">
+                                 <tree string="Client">
+                                    <field name="name"/>
+                                    <field name="city"/>
+                                    <field name="state_id"/>
+                                    <field name="category_id"/>
+                                </tree>
+                            </field>
+                        </group>
+                        <group>
+                            <labor string="Product Apply" colspan="2"/>
+                            <field name="product_ids" nolabel="1">
+                                <tree string="Product">
+                                    <field name="name"/>
+                                    <field name="attribute_value_ids"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </group>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_product_discount_qty" model="ir.actions.act_window">
+            <field name="name">Descuento por Merma</field>
+            <field name="res_model">product.discount.qty</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="product_discount_qty_tree_view"/>
+        </record>
+        <menuitem icon="STOCK_PRINT" name="Descuento por Merma" action="action_product_discount_qty" id="menu_action_product_discount_qty"
+                  parent="base.menu_base_config" />
+
+    </data>
+</openerp>

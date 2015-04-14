@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_order_form1" model="ir.ui.view">
+            <field name="name">sale.order.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/group/group/field[@name='price_unit']" position="after">
+                    <field name="discount_kg" class="oe_inline" groups="sale.group_discount_per_so_line"/>
+                </xpath>
+                <xpath expr="//tree/field[@name='tax_id']" position="replace">
+                    <field name="tax_id" widget="many2many_tags" domain="[('parent_id','=',False),('type_tax_use','&lt;&gt;','purchase')]" invisible="1"/>
+                    <field name="discount_kg" groups="sale.group_discount_per_so_line"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</openerp>

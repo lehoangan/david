@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="gov_form_approval_transport_wizard_view" model="ir.ui.view">
+            <field name="name">AUTORIZACIÓN DE REMISIÓN</field>
+            <field name="model">gov.form.approval.transport.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Report Options">
+                    <group col="4">
+                        <field name="market_id"/>
+                        <field name="driver_id"/>
+                        <field name="date"/>
+                        <field name="number"/>
+                        <field name="bellow"/>
+                    </group>
+                    <footer>
+                        <button name="print_report" string="Imprimir" type="object" default_focus="1"
+                                class="oe_highlight"/>
+                        or
+                        <button string="Cancelar" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_gov_form_approval_transport_wizard" model="ir.actions.act_window">
+            <field name="name">AUTORIZACIÓN DE REMISIÓN</field>
+            <field name="res_model">gov.form.approval.transport.wizard</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="gov_form_approval_transport_wizard_view"/>
+            <field name="target">new</field>
+        </record>
+        <menuitem icon="STOCK_PRINT" name="AUTORIZACIÓN DE REMISIÓN" action="action_gov_form_approval_transport_wizard" id="menu_gov_form_approval_transport_wizard"
+                  parent="base.menu_sales" sequence="101"/>
+    </data>
+</openerp>

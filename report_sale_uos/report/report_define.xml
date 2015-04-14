@@ -1,0 +1,151 @@
+<?xml version="1.0"?>
+<openerp>
+<data noupdate="1">
+
+    <record id="aeroo_sale_detail_id" model="ir.actions.report.xml">
+        <field name="name">Sale Report</field>
+        <field name="type">ir.actions.report.xml</field>
+        <field name="model">sale.detail.report</field>
+        <field name="report_name">sale_detail_report</field>
+        <field name="report_type">aeroo</field>
+        <field name="in_format">oo-ods</field>
+        <field name="parser_loc">report_sale_uos/report/sale_detail.py</field>
+        <field name="report_rml">report_sale_uos/report/sale_detail.ods</field>
+        <field name="parser_state">loc</field>
+        <field name="tml_source">file</field>
+    </record>
+    
+    <record id="aeroo_sale_sumary_id" model="ir.actions.report.xml">
+        <field name="name">Sale Sumary</field>
+        <field name="type">ir.actions.report.xml</field>
+        <field name="model">sale.sumary.report</field>
+        <field name="report_name">sale_sumary_report</field>
+        <field name="report_type">aeroo</field>
+        <field name="in_format">oo-ods</field>
+        <field name="parser_loc">report_sale_uos/report/sale_sumary.py</field>
+        <field name="report_rml">report_sale_uos/report/sale_sumary.ods</field>
+        <field name="parser_state">loc</field>
+        <field name="tml_source">file</field>
+    </record>
+    
+    <record id="aeroo_invoice_detail_id" model="ir.actions.report.xml">
+        <field name="name">Invoice Report</field>
+        <field name="type">ir.actions.report.xml</field>
+        <field name="model">invoice.detail.report</field>
+        <field name="report_name">invoice_detail_report</field>
+        <field name="report_type">aeroo</field>
+        <field name="in_format">oo-ods</field>
+        <field name="parser_loc">report_sale_uos/report/invoice_detail.py</field>
+        <field name="report_rml">report_sale_uos/report/invoice_detail.ods</field>
+        <field name="parser_state">loc</field>
+        <field name="tml_source">file</field>
+    </record>
+    
+    <record id="aeroo_invoice_total_id" model="ir.actions.report.xml">
+        <field name="name">Invoice Report</field>
+        <field name="type">ir.actions.report.xml</field>
+        <field name="model">invoice.detail.report</field>
+        <field name="report_name">invoice_total_report</field>
+        <field name="report_type">aeroo</field>
+        <field name="in_format">oo-ods</field>
+        <field name="parser_loc">report_sale_uos/report/invoice_detail.py</field>
+        <field name="report_rml">report_sale_uos/report/invoice_total.ods</field>
+        <field name="parser_state">loc</field>
+        <field name="tml_source">file</field>
+    </record>
+    
+    <record id="aeroo_payment_detail_id" model="ir.actions.report.xml">
+        <field name="name">payment Report</field>
+        <field name="type">ir.actions.report.xml</field>
+        <field name="model">payment.detail.report</field>
+        <field name="report_name">payment_detail_report</field>
+        <field name="report_type">aeroo</field>
+        <field name="in_format">oo-ods</field>
+        <field name="parser_loc">report_sale_uos/report/payment_detail.py</field>
+        <field name="report_rml">report_sale_uos/report/payment_detail.ods</field>
+        <field name="parser_state">loc</field>
+        <field name="tml_source">file</field>
+    </record>
+    
+    <record id="aeroo_discount_client_id" model="ir.actions.report.xml">
+        <field name="name">Discount Client Report</field>
+        <field name="type">ir.actions.report.xml</field>
+        <field name="model">payment.detail.report</field>
+        <field name="report_name">discount_client_report</field>
+        <field name="report_type">aeroo</field>
+        <field name="in_format">oo-ods</field>
+        <field name="parser_loc">report_sale_uos/report/discount_client.py</field>
+        <field name="report_rml">report_sale_uos/report/discount_client.ods</field>
+        <field name="parser_state">loc</field>
+        <field name="tml_source">file</field>
+    </record>
+    
+    <record id="aeroo_collector_payment_detail_id" model="ir.actions.report.xml">
+        <field name="name">payment_collector Report</field>
+        <field name="type">ir.actions.report.xml</field>
+        <field name="model">collector.payment.detail.report</field>
+        <field name="report_name">collector_payment_detail_report</field>
+        <field name="report_type">aeroo</field>
+        <field name="in_format">oo-ods</field>
+        <field name="parser_loc">report_sale_uos/report/collector_payment_detail.py</field>
+        <field name="report_rml">report_sale_uos/report/collector_payment_detail.ods</field>
+        <field name="parser_state">loc</field>
+        <field name="tml_source">file</field>
+    </record>
+    
+    <record id="aeroo_sale_analysis_id" model="ir.actions.report.xml">
+        <field name="name">Sale Analysis Report</field>
+        <field name="type">ir.actions.report.xml</field>
+        <field name="model">collector.payment.detail.report</field>
+        <field name="report_name">sale_analysis_report</field>
+        <field name="report_type">aeroo</field>
+        <field name="in_format">oo-ods</field>
+        <field name="parser_loc">report_sale_uos/report/sale_analysis.py</field>
+        <field name="report_rml">report_sale_uos/report/sale_analysis.ods</field>
+        <field name="parser_state">loc</field>
+        <field name="tml_source">file</field>
+    </record>
+
+    <record id="aeroo_accounts_receivable_report_id" model="ir.actions.report.xml">
+        <field name="name">Receivable Report</field>
+        <field name="type">ir.actions.report.xml</field>
+        <field name="model">accounts.receivable.report</field>
+        <field name="report_name">accounts_receivable_report</field>
+        <field name="report_type">aeroo</field>
+        <field name="in_format">oo-ods</field>
+        <field name="parser_loc">report_sale_uos/report/accounts_receivable_report.py</field>
+        <field name="report_rml">report_sale_uos/report/accounts_receivable_report.ods</field>
+        <field name="parser_state">loc</field>
+        <field name="tml_source">file</field>
+    </record>
+
+    <report
+            id="action_report_so_receipt2"
+            string="SO Receipt"
+            model="sale.order"
+            report_type="qweb-pdf"
+            name="report_sale_uos.report_so_receipt"
+            file="report_sale_uos.report_so_receipt"
+    />
+    <record id="paperformat_so_receipt" model="report.paperformat">
+        <field name="name">SO Receipt</field>
+        <field name="default" eval="True"/>
+        <field name="format">custom</field>
+        <field name="page_height">150</field>
+        <field name="page_width">60</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">3</field>
+        <field name="margin_bottom">3</field>
+        <field name="margin_left">3</field>
+        <field name="margin_right">3</field>
+        <field name="header_line" eval="False" />
+        <field name="header_spacing">3</field>
+        <field name="dpi">130</field>
+    </record>
+    <record id="action_report_so_receipt2" model="ir.actions.report.xml">
+        <field name="paperformat_id" ref="paperformat_so_receipt"/>
+    </record>
+
+</data>
+</openerp>
+

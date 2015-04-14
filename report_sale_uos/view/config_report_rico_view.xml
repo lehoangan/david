@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>        
+        <record id="config_report_rico_tree_view" model="ir.ui.view">
+            <field name="name">config.report.rico.tree</field>
+            <field name="model">config.report.rico</field>
+            <field name="arch" type="xml">
+                <tree string="Config Report">
+                    <field name="account_ids"/>
+                    <field name="categ_id" />
+                    <field name="account_id"/>
+                    <field name="categ_ids"/>
+                    <field name="local_account_ids"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="config_report_rico_form_view" model="ir.ui.view">
+            <field name="name">config.report.rico.form</field>
+            <field name="model">config.report.rico</field>
+            <field name="arch" type="xml">
+                <form string="Config Report">
+					<group col="2" colspan="4">                        
+                        <field name="account_ids"/>
+                    </group>
+                    <group col="4" colspan="4">
+                        <field name="categ_id"/>
+                        <field name="account_id"/>
+                        <field name="categ_ids"/>
+                        <field name="local_account_ids"/>
+                    </group>
+                    
+                </form>
+            </field>
+        </record>
+
+        <record id="action_config_report_rico" model="ir.actions.act_window">
+            <field name="name">Config Report</field>
+            <field name="res_model">config.report.rico</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="config_report_rico_tree_view"/>
+        </record>
+        <menuitem icon="STOCK_PRINT" name="Config Report" action="action_config_report_rico" id="menu_action_config_report_rico"
+                  parent="new_account_report" />
+
+    </data>
+</openerp>

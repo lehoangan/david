@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <record id="sale_commission_search_view" model="ir.ui.view">
+            <field name="name">sale.commission.search</field>
+            <field name="model">sale.commission</field>
+            <field name="arch" type="xml">
+                <search string="Set Commission">
+                    <field name="name"/>
+                    <field name="type"/>
+                    <field name="user_ids" />
+                </search>
+            </field>
+        </record>
+        
+        <record id="sale_commission_tree_view" model="ir.ui.view">
+            <field name="name">sale.commission.tree</field>
+            <field name="model">sale.commission</field>
+            <field name="arch" type="xml">
+                <tree string="Set Commission">
+                    <field name="name"/>
+                    <field name="type"/>
+                    <field name="user_ids" />
+                    <field name="account_debit"/>
+                    <field name="account_crebit"/>
+                    <field name="journal_id" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="sale_commission_form_view" model="ir.ui.view">
+            <field name="name">sale.commission.form</field>
+            <field name="model">sale.commission</field>
+            <field name="arch" type="xml">
+                <form string="Comisiones Distribuidor">
+                    <group col="4" colspan="4">
+                        <field name="name"/>
+                        <field name="type"/>
+                        <field name="account_debit"/>
+                        <field name="account_crebit"/>
+                        <field name="journal_id" />
+                    </group>
+                    <group col="4" colspan="4">
+                        <group>
+                            <labor string="Saleman Apply" colspan="2"/>
+                            <field name="user_ids" nolabel="1">
+                                 <tree string="Saleman">
+                                    <field name="name"/>
+                                </tree>
+                            </field>
+                        </group>
+                        <group>
+                            <labor string="Commission Details" colspan="2"/>
+                            <field name="detail_ids" nolabel="1">
+                                <tree string="Details" editable="top">
+                                    <field name="product_ids"  widget="many2many_tags"/>
+                                    <field name="value"/>
+                                    <field name="uom_id"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_sale_commission" model="ir.actions.act_window">
+            <field name="name">Comisiones Distribuidor</field>
+            <field name="res_model">sale.commission</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="sale_commission_tree_view"/>
+        </record>
+        <menuitem icon="STOCK_PRINT" name="Comisiones Distribuidor" action="action_sale_commission" id="menu_action_sale_commission"
+                  parent="base.menu_base_config" />
+
+    </data>
+</openerp>

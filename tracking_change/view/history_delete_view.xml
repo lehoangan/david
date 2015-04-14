@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <record id="history_delete_search_view" model="ir.ui.view">
+            <field name="name">history.delete.search</field>
+            <field name="model">history.delete</field>
+            <field name="arch" type="xml">
+                <search string="History Delete">
+                    <field name="name"/>
+                    <field name="object_id"/>
+                    <field name="date" />
+                    <field name="user_id"/>
+                    <field name="res_id"/>
+                </search>
+            </field>
+        </record>
+        
+        <record id="history_delete_tree_view" model="ir.ui.view">
+            <field name="name">history.delete.tree</field>
+            <field name="model">history.delete</field>
+            <field name="arch" type="xml">
+                <tree string="History Delete">
+                    <field name="name"/>
+                    <field name="object_id"/>
+                    <field name="date" />
+                    <field name="user_id"/>
+                    <field name="res_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="history_delete_form_view" model="ir.ui.view">
+            <field name="name">history.delete.form</field>
+            <field name="model">history.delete</field>
+            <field name="arch" type="xml">
+                <form string="Comisiones Distribuidor">
+                    <group col="4" colspan="4">
+                        <field name="name"/>
+                        <field name="object_id"/>
+                        <field name="date" />
+                        <field name="user_id"/>
+                        <field name="res_id"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_history_delete" model="ir.actions.act_window">
+            <field name="name">History Delete</field>
+            <field name="res_model">history.delete</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="history_delete_tree_view"/>
+        </record>
+        <menuitem icon="STOCK_PRINT" name="History Delete" action="action_history_delete" id="menu_action_history_delete"
+                  parent="base.menu_base_config" />
+
+    </data>
+</openerp>

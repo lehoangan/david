@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="accounts_receivable_report_view" model="ir.ui.view">
+            <field name="name">Receivable Report</field>
+            <field name="model">accounts.receivable.report</field>
+            <field name="arch" type="xml">
+                <form string="Report Options">
+                    <group col="4">
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        <field name="type"/>
+                    </group>
+                    <field name="tag_ids"/>
+                    <footer>
+                        <button name="print_report" string="Imprimir" type="object" default_focus="1"
+                                class="oe_highlight"/>
+                        or
+                        <button string="Cancelar" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_accounts_receivable_report" model="ir.actions.act_window">
+            <field name="name">Reporte Cuentas x Cobrar</field>
+            <field name="res_model">accounts.receivable.report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="accounts_receivable_report_view"/>
+            <field name="target">new</field>
+        </record>
+        
+        <menuitem
+            parent="account.menu_finance_reports"
+            id="new_client_account_report"
+            name="Client Reports"/>
+            
+        <menuitem icon="STOCK_PRINT" name="Reporte Cuentas x Cobrar" action="action_accounts_receivable_report" id="menu_accounts_receivable_report"
+                  parent="new_client_account_report" />
+    </data>
+</openerp>

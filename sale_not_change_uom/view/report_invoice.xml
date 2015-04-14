@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+    <template id="report_invoice_document1" inherit_id="account.report_invoice_document">
+        <xpath expr="//div[@class='page']/table[@class='table table-condensed']" position="replace">
+            <table class="table table-condensed">
+                <thead>
+                    <tr>
+                        <th>Descripción</th>
+                        <th class="text-right">Cantidad</th>
+                        <th class="text-right">Cantidad(KG)</th>
+                        <th class="text-right">Precio Unit</th>
+                        <th groups="sale.group_discount_per_so_line">Desc.(KG)</th>
+                        <th groups="sale.group_discount_per_so_line">Desc.(%)</th>
+                        <th class="text-right">Precio</th>
+                    </tr>
+               </thead>
+               <tbody class="invoice_tbody">
+                    <tr t-foreach="o.invoice_line" t-as="l">
+                        <td>
+                           <span t-field="l.name"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="l.product_uos_qty"/>
+                            <span groups="product.group_uom" t-field="l.uom_id"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="l.quantity"/>
+                            <span t-field="l.uos_id"  groups="product.group_uom"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="l.price_unit"/>
+                        </td>
+                        <td groups="sale.group_discount_per_so_line">
+                            <span t-field="l.discount_kg"/>
+                        </td>
+                        <td groups="sale.group_discount_per_so_line">
+                            <span t-field="l.discount"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="l.price_subtotal"
+                                t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </xpath>
+    </template>
+
+    <template id="report_invoice_layouted1" inherit_id="sale_layout.report_invoice_layouted">
+    <xpath expr="//t[@t-as='l']" position="replace">
+
+
+        <!-- Lines associated -->
+        <t t-foreach="p['lines']" t-as="l">
+            <tr>
+                <td>
+                   <span t-field="l.name"/>
+                </td>
+                <td class="text-right">
+                    <span t-field="l.product_uos_qty"/>
+                    <span groups="product.group_uom" t-field="l.uom_id"/>
+                </td>
+                <td class="text-right">
+                    <span t-field="l.quantity"/>
+                    <span t-field="l.uos_id"  groups="product.group_uom"/>
+                </td>
+                <td class="text-right">
+                    <span t-field="l.price_unit"/>
+                </td>
+                <td groups="sale.group_discount_per_so_line">
+                    <span t-field="l.discount_kg"/>
+                </td>
+                <td groups="sale.group_discount_per_so_line">
+                    <span t-field="l.discount"/>
+                </td>
+                <td class="text-right">
+                    <span t-field="l.price_subtotal"
+                        t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>
+                </td>
+            </tr>
+        </t>
+
+
+    </xpath>
+</template>
+</data>
+</openerp>

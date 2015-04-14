@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="sale_sumary_report_view" model="ir.ui.view">
+            <field name="name">Sale Sumary</field>
+            <field name="model">sale.sumary.report</field>
+            <field name="arch" type="xml">
+                <form string="Report Options">
+                    <group col="4">
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        <field name="state"/>
+                        <field name="invoice_state" attrs="{'invisible':[('state','!=','done')]}"/>
+                        <newline />
+                    </group>
+                    <field name="product_ids" col="4"/>
+                    <footer>
+                        <button name="print_report" string="Imprimir" type="object" default_focus="1"
+                                class="oe_highlight"/>
+                        or
+                        <button string="Cancelar" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_sale_sumary_report" model="ir.actions.act_window">
+            <field name="name">Resumen De Ventas</field>
+            <field name="res_model">sale.sumary.report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="sale_sumary_report_view"/>
+            <field name="target">new</field>
+        </record>
+        <menuitem icon="STOCK_PRINT" name="Resumen De Ventas" action="action_sale_sumary_report" id="menu_sale_sumary_report"
+                  parent="base.menu_sales" sequence="100"/>
+    </data>
+</openerp>
