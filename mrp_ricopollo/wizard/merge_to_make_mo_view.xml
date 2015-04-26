@@ -1,0 +1,25 @@
+<openerp>
+    <data>
+
+        <record id="merge_to_make_mo_view" model="ir.ui.view">
+            <field name="name">merge.to.make.mo.form</field>
+            <field name="model">merge.to.make.mo</field>
+            <field name="arch" type="xml">
+                <form string="Make MOs">
+                    <footer>
+                        <button string="Make" name="make_mo" type="object" default_focus="1" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window id="action_merge_to_make_mo"
+            multi="True"
+            key2="client_action_multi" name="Merge and Make MOs"
+            res_model="merge.to.make.mo" src_model="mrp.request.form"
+            view_mode="form" target="new" view_type="form" />
+
+    </data>
+</openerp>

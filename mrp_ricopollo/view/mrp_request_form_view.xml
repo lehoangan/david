@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+		<record id="mrp_request_form_search_view" model="ir.ui.view">
+            <field name="name">mrp.request.form.search</field>
+            <field name="model">mrp.request.form</field>
+            <field name="arch" type="xml">
+                <search string="MRP Request Form">
+                    <field name="name"/>
+                    <field name="ref"/>
+                    <field name="warehouse_id"/>
+                    <field name="warehouse_to_id"/>
+                    <field name="date"/>
+                    <field name="user_id"/>
+                    <field name="state" />
+                </search>
+            </field>
+        </record>
+        
+        <record id="mrp_request_form_tree_view" model="ir.ui.view">
+            <field name="name">mrp.request.form.tree</field>
+            <field name="model">mrp.request.form</field>
+            <field name="arch" type="xml">
+                <tree string="MRP Request Form">
+                    <field name="name"/>
+                    <field name="ref"/>
+                    <field name="warehouse_id"/>
+                    <field name="warehouse_to_id"/>
+                    <field name="date"/>
+                    <field name="user_id"/>
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="mrp_request_form_form_view" model="ir.ui.view">
+            <field name="name">mrp.request.form.form</field>
+            <field name="model">mrp.request.form</field>
+            <field name="arch" type="xml">
+                <form string="MRP Request Form">
+					<header>
+                        <button name="action_cancel" states="draft,approve,mo" type="object" string="Cancel"/>
+                        <button name="action_approve" states="draft" type="object" string="Approve"/>
+                        <button name="action_set_to_draft" states="cancel" type="object" string="Set To Draft"/>
+                        <button name="action_make_mo" states="approve" type="object" string="Make MO"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,done" />
+					</header>
+                    <group col="4" colspan="4">
+                        <field name="name"/>
+						<field name="ref"/>
+						<field name="warehouse_id"/>
+						<field name="warehouse_to_id"/>
+						<field name="date"/>
+						<field name="user_id"/>
+						<field name="validate_date" invisible="1"/>
+						<field name="validate_user_id" invisible="1"/>
+                    </group>
+                    <group col="4" colspan="4">
+                        <group>
+                            <field name="line_ids" nolabel="1">
+                                 <tree string="Detail" editable="top">
+                                    <field name="product_id" on_change="onchange_product_id(product_id,qty_qq,context)"/>
+                                    <field name="qty_qq" on_change="onchange_product_id(product_id,qty_qq,context)"/>
+                                    <field name="qty_unit"/>
+                                    <field name="uom_id"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </group>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_mrp_request_form" model="ir.actions.act_window">
+            <field name="name">MRP Request Form</field>
+            <field name="res_model">mrp.request.form</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="mrp_request_form_tree_view"/>
+        </record>
+        <menuitem icon="STOCK_PRINT" name="MRP Request Form" action="action_mrp_request_form" id="menu_action_mrp_request_form"
+                  parent="base.menu_sales" sequence="110"/>
+
+    </data>
+</openerp>
