@@ -32,7 +32,7 @@ class mrp_request_form(osv.osv):
         'name': fields.char('Description', 100, readonly=True, states={'draft': [('readonly', False)]}),
         'ref': fields.char('Ref', 100, readonly=True, states={'draft': [('readonly', False)]}),
         'warehouse_id': fields.many2one('stock.warehouse', 'Farm Name', required=True, readonly=True, states={'draft': [('readonly', False)]}),
-        'warehouse_to_id': fields.many2one('stock.warehouse', 'Recieve Request', required=True, readonly=True, states={'draft': [('readonly', False)]}),
+        'warehouse_to_id': fields.many2one('stock.warehouse', 'Receive Request', required=True, readonly=True, states={'draft': [('readonly', False)]}),
         'date': fields.date('Date Request', required=True, readonly=True, states={'draft': [('readonly', False)]}),
         'user_id': fields.many2one('res.users', 'Create By', readonly=True),
         'validate_date': fields.date('Date Validate', readonly=True),
@@ -72,7 +72,7 @@ class mrp_request_form(osv.osv):
             if not warehouse_to_id:
                 warehouse_to_id = obj.warehouse_to_id
             elif warehouse_to_id != obj.warehouse_to_id:
-                raise osv.except_osv(_("Invalid Action!"), _("Selected the same recieve place."))
+                raise osv.except_osv(_("Invalid Action!"), _("Selected the same receive place."))
             for line in obj.line_ids:
                 q = product_uom_obj._compute_qty(cr, uid, line.uom_id.id, line.qty_unit, line.product_id.uom_id.id)
                 name = '%s:%s'%(obj.name, obj.ref)
@@ -89,7 +89,7 @@ class mrp_request_form(osv.osv):
                 bom = bom_obj.browse(cr, uid, bom_id, context=context)
                 routing_id = bom.routing_id.id
                 produce_id = production_obj.create(cr, uid, {
-                    'origin': dict_product[product_id][1],
+                    'origin': ','.join([str(x) for x in dict_product[product_id][1]]),
                     'product_id': product_id,
                     'product_qty': dict_product[product_id][0],
                     'product_uom': dict_product[product_id][2],
@@ -99,5 +99,7 @@ class mrp_request_form(osv.osv):
                     'routing_id': routing_id,
                     'date_planned': time.strftime('%Y-%m-%d %H:%M:%S'),
                 })
+            else:
+                raise osv.except_osv(_('Invalid Action!'), _('No BOM found for %s.')%self.pool.get('product.product').browse(cr, uid, product_id).name)
 
         return self.write(cr, uid, ids, {'state': 'mo'})

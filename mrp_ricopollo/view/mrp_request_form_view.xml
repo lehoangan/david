@@ -83,8 +83,8 @@
             <field name="view_mode">tree,form</field>
             <field name="view_id" ref="mrp_request_form_tree_view"/>
         </record>
-        <menuitem icon="STOCK_PRINT" name="MRP Request Form" action="action_mrp_request_form" id="menu_action_mrp_request_form"
-                  parent="base.menu_sales" sequence="110"/>
+        <menuitem name="MRP Request Form" action="action_mrp_request_form" id="menu_action_mrp_request_form"
+            parent="mrp.menu_mrp_manufacturing" sequence="1"/>
 
     </data>
 </openerp>

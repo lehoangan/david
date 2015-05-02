@@ -31,7 +31,9 @@
     'data': [
         'security/ir.model.access.csv',
         'view/mrp_request_form_view.xml',
-        'wizard/merge_to_make_mo_view.xml'],
+        'view/stock_warehouse_view.xml',
+        'wizard/merge_to_make_mo_view.xml',
+        'wizard/approve_multi_request_form_view.xml'],
     'auto_install': False,
     'installable': True,
 }

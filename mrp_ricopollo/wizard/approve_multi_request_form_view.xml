@@ -1,0 +1,25 @@
+<openerp>
+    <data>
+
+        <record id="approve_multi_request_form_view" model="ir.ui.view">
+            <field name="name">approve.multi.request.form.form</field>
+            <field name="model">approve.multi.request.form</field>
+            <field name="arch" type="xml">
+                <form string="Approve Multi Request">
+                    <footer>
+                        <button string="Approve" name="approve_multi_request" type="object" default_focus="1" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window id="action_approve_multi_request_form"
+            multi="True"
+            key2="client_action_multi" name="Approve Multi Request"
+            res_model="approve.multi.request.form" src_model="mrp.request.form"
+            view_mode="form" target="new" view_type="form" />
+
+    </data>
+</openerp>

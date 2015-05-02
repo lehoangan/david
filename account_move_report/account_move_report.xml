@@ -6,7 +6,7 @@
                 model="account.move"
                 name="account.move.report.webkit"
                 file="account_move_report/report/account_move_report_html.mako"
-                string="Report Journal Entries"
+                string="Reporte de Comprobante"
                 report_type="webkit"
                 attachment_use="1"/>
         

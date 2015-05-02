@@ -28,13 +28,14 @@
         Not change UoS quantity when change UoM quanity
                     """,
     'images': [],
-    'depends': ['sale', 'sale_stock', 'sale_layout'],
+    'depends': ['sale', 'sale_stock', 'sale_layout', 'account'],
     'data': [
         'view/sale_stock_view.xml',
         'view/report_saleorder.xml',
         'view/sale_order_view.xml',
         'view/account_invoice_view.xml',
         'view/report_invoice.xml',
+        'view/res_partner_view.xml',
         'report/sale_report_view.xml',
     ],
     'installable': True,

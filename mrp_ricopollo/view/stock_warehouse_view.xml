@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+		<record id="stock_warehouse_inherit_view" model="ir.ui.view">
+            <field name="name">stock.warehouse.search</field>
+            <field name="model">stock.warehouse</field>
+            <field name="inherit_id" ref="stock.view_warehouse"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//field[@name='partner_id']" position="before">
+                       <field name="manager_id" on_change="onchange_manager(manager_id,context)"/>
+                    </xpath>
+                    <xpath expr="//field[@name='partner_id']" position="after">
+                       <field name="capacity"/>
+                   </xpath>
+                </data>
+            </field>
+        </record>
+    </data>
+</openerp>

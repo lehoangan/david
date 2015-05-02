@@ -2,16 +2,74 @@
     <head>
         <style type="text/css">
             ${css}
+            table {
+    border-collapse: separated;
+
+}
+            table, .th, .td {
+    border: 2px solid white;
+}
+    table.basic_table{
+    text-align:left;
+    }
+
+    .celdaTotal{
+    font-size:8pt;
+    font-style:normal;
+    font-family: FreeMono;
+    text-align:right;
+    font-weight:bold;
+    background-color:#dcdcdc;
+    }
+
+    .celdaDetailTitulo{
+    font-style:italic;
+    font-size:10pt;
+    text-align:left;
+    font-family:Arial,Helvetica,sans-serif;
+    }
+
+    .celdaDetail{
+    font-size:7pt;
+    font-family: monospace;
+    background-color:#F5F5F5;
+    text-align:left;
+    }
+
+    .celdaTituloTabla{
+    font-size:7pt;
+    text-align:center;
+    font-family:Arial,Helvetica,sans-serif;
+    font-weight: bold;
+    background-color:#620400;
+    color:#FFFFFF;
+    }
+
+    div.td_company
+    {
+    font-size:12pt;
+    margin-left:0;
+    font-weight:bold;
+    font-family:Arial,Helvetica,sans-serif;
+    }
+
+    div.td_company_title
+    {
+    font-size:22pt;
+    margin-left:0;
+    font-weight:bold;
+    font-family:Arial,Helvetica,sans-serif;
+    }
         </style>
     </head>
     <body>
         %for o in objects :
         <table width = '100%' class='td_company_title'>
             <tr>
-                <td style="vertical-align: top;max-height: 45px;">
-                    ${helper.embed_image('jpeg',str(o.company_id.logo),180, 85)}
+                <td style="vertical-align: top;max-height: 45px;" width= '30%'>
+                    ${helper.embed_image('jpeg',str(o.company_id.logo),95, 95)}
                 </td>
-                <td>
+                <td width= '40%'>
                     <div>${o.company_id.name or ''|entity}</div>
                     <br>${o.company_id.partner_id.street or ''|entity} No. 
                                                 ${o.company_id.partner_id.street2 or ''|entity}
@@ -20,8 +78,8 @@
                                                 , ${o.company_id.partner_id.state_id.name or ''|entity}
                                                 , ${o.company_id.partner_id.country_id.name or ''|entity}
                 </td>
-                <td>
-                    <div>${_("Printing Date:")} ${time.strftime('%Y-%m-%d %H:%M:%S')}</div>
+                <td width= '30%' class='celdaDetailTitulo'>
+                    <div>${_("Printing Date:")} ${time.strftime('%d/%m/%Y %H:%M:%S',time.strptime(time.strftime('%Y-%m-%d %H:%M:%S'), '%Y-%m-%d %H:%M:%S'))}</div>
                 </td>
             </tr>
         </table>                                   
@@ -29,7 +87,7 @@
         <table class='celdaDetailTitulo'>
             <tr>
                 <div>
-                    <td>${_("Journal Entries: ")} ${o.name or '' |entity}</td>
+                    <td>${_("Comprobante: ")} ${o.name or '' |entity}</td>
                 </div>
             </tr>
             <tr>
@@ -43,7 +101,7 @@
                         ${_("Period: ")} ${o.period_id.name or '' |entity}
                     </td>
                     <td width= '50%'>
-                        ${_("Date: ")} ${o.date or '' |entity}
+                        ${_("Date: ")} ${time.strftime('%d/%m/%Y',time.strptime(o.date, '%Y-%m-%d')) or '' |entity}
                     </td>  
                 </div>
             </tr>
@@ -68,44 +126,29 @@
                 <td width='5%'>
                     <div>${_("Invoice")}</div>
                 </td>
-                <td width='6%'>
+                <td width='7%'>
                     <div>${_("Name")}</div>
                 </td>
-                <td width='7%'>
+                <td width='14%'>
                     <div>${_("Partner")}</div>
                 </td>
-                <td width='8%'>
+                <td width='20%'>
                     <div>${_("Account")}</div>
                 </td>
-                <td width='6%'>
+                <td width='14%'>
                     <div>${_("Due date")}</div>
                 </td>
-                <td width='5%'>
+                <td width='8%'>
                     <div>${_("Debit")}</div>
                 </td>
-                <td width='5%'>
+                <td width='8%'>
                     <div>${_("Credit")}</div>
-                </td>
-                <td width='6%'>
-                    <div>${_("Analytic Account")}</div>
                 </td>
                 <td width='6%'>
                     <div>${_("Amount Currency")}</div>
                 </td>
                 <td width='6%'>
                     <div>${_("Currency")}</div>
-                </td>
-                <!--<td width='6%'>
-                    <div>${_("Tax Account")}</div>
-                </td>
-                <td width='6%'>
-                    <div>${_("Tax Amount")}</div>
-                </td>
-                <td width='6%'>
-                    <div>${_("Tax Secondary")}</div>
-                </td>-->
-                <td width='6%'>
-                    <div>${_("Status")}</div>
                 </td>
                 <td width='6%'>
                     <div>${_("Reconcile")}</div>
@@ -119,48 +162,29 @@
                 <td width='5%'>
                     <div>${line.invoice.number or '' |entity}</div>
                 </td>
-                <td width='6%' style="word-wrap: break-word">
+                <td width='7%' style="word-wrap: break-word">
                     <div>${line.name or '' |entity}</div>
                 </td>
-                <td width='7%'>
+                <td width='14%'>
                     <div>${line.partner_id.name or ''}</div>
                 </td>
-                <td width='8%'>
+                <td width='10%'>
                     <div>${line.account_id.code or '' |entity} - ${line.account_id.name or '' |entity}</div>
                 </td>
-                <td width='6%'>
+                <td width='14%'>
                     <div>${line.date_maturity or '' |entity}</div>
                 </td>
-                <td width='5%' style="text-align:right;">
+                <td width='8%' style="text-align:right;">
                     <div>${formatLang(line.debit or 0.0) |entity}</div>
                 </td>
-                <td width='5%' style="text-align:right;">
+                <td width='8%' style="text-align:right;">
                     <div>${formatLang(line.credit or 0.0) |entity}</div>
                 </td>
-                <td width='6%'>
-                    <div>${line.analytic_account_id.name or '' |entity}</div>
-                </td>
-                <td width='6%' style="text-align:right;">
+                <td width='16%' style="text-align:right;">
                     <div>${formatLang(line.amount_currency or 0.0) |entity}</div>
                 </td>
                 <td width='6%'>
                     <div>${line.currency_id.name or '' |entity}</div>
-                </td>
-                <!--<td width='6%'>
-                    <div>${line.tax_code_id.name or '' |entity}</div>
-                </td>
-                <td width='6%' style="text-align:right;">
-                    <div>${formatLang(line.tax_amount or 0.0) |entity}</div>
-                </td>
-                <td width='6%' style="text-align:center;">
-                    <div>${'' |entity}</div>
-                </td>-->
-                <td width='6%' style="text-align:center;">
-                    %if line.state == "valid":
-                        ${_("Balanced")}
-                    %elif line.state == "draft":
-                        ${_("Unbalanced")}
-                    %endif
                 </td>
                 <td width='6%'>
                     <div>${line.reconcile_id.name or '' |entity}</div>
