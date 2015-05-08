@@ -31,9 +31,12 @@
     'data': [
         'security/ir.model.access.csv',
         'view/mrp_request_form_view.xml',
+        'report/report_define.xml',
         'view/stock_warehouse_view.xml',
+        'view/res_users_view.xml',
         'wizard/merge_to_make_mo_view.xml',
-        'wizard/approve_multi_request_form_view.xml'],
+        'wizard/approve_multi_request_form_view.xml',
+        'wizard/manufacture_request_report_wizard_view.xml'],
     'auto_install': False,
     'installable': True,
 }

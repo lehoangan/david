@@ -7,7 +7,7 @@
             <field name="arch" type="xml">
                 <search string="MRP Request Form">
                     <field name="name"/>
-                    <field name="ref"/>
+                    <field name="description"/>
                     <field name="warehouse_id"/>
                     <field name="warehouse_to_id"/>
                     <field name="date"/>
@@ -23,9 +23,10 @@
             <field name="arch" type="xml">
                 <tree string="MRP Request Form">
                     <field name="name"/>
-                    <field name="ref"/>
+                    <field name="description"/>
                     <field name="warehouse_id"/>
                     <field name="warehouse_to_id"/>
+					<field name="qty_chicken"/>
                     <field name="date"/>
                     <field name="user_id"/>
                     <field name="state" />
@@ -47,11 +48,12 @@
 					</header>
                     <group col="4" colspan="4">
                         <field name="name"/>
-						<field name="ref"/>
+						<field name="description"/>
 						<field name="warehouse_id"/>
 						<field name="warehouse_to_id"/>
 						<field name="date"/>
-						<field name="user_id"/>
+						<field name="qty_chicken"/>
+						<field name="user_id" invisible="1"/>
 						<field name="validate_date" invisible="1"/>
 						<field name="validate_user_id" invisible="1"/>
                     </group>

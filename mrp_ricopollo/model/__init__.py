@@ -20,4 +20,5 @@
 
 import mrp_request_form,mrp_request_form_line
 import stock_warehouse
+import res_users
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

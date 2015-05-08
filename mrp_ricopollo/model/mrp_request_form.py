@@ -29,13 +29,14 @@ class mrp_request_form(osv.osv):
     _inherit = ['mail.thread']
 
     _columns ={        
-        'name': fields.char('Description', 100, readonly=True, states={'draft': [('readonly', False)]}),
-        'ref': fields.char('Ref', 100, readonly=True, states={'draft': [('readonly', False)]}),
+        'name': fields.char('Ref', 100, readonly=True, states={'draft': [('readonly', False)]}),
+        'description': fields.char('Description', 100, readonly=True, states={'draft': [('readonly', False)]}),
         'warehouse_id': fields.many2one('stock.warehouse', 'Farm Name', required=True, readonly=True, states={'draft': [('readonly', False)]}),
         'warehouse_to_id': fields.many2one('stock.warehouse', 'Receive Request', required=True, readonly=True, states={'draft': [('readonly', False)]}),
         'date': fields.date('Date Request', required=True, readonly=True, states={'draft': [('readonly', False)]}),
         'user_id': fields.many2one('res.users', 'Create By', readonly=True),
         'validate_date': fields.date('Date Validate', readonly=True),
+        'qty_chicken': fields.float('Quantity Chitken', required=True, states={'draft': [('readonly', False)]}),
         'validate_user_id': fields.many2one('res.users', 'Validate By', readonly=True),
         'line_ids': fields.one2many('mrp.request.form.line', 'request_id', 'Detail Request', readonly=True, states={'draft': [('readonly', False)]}),
         'state': fields.selection([
