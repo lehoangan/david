@@ -5,7 +5,7 @@
             <field name="name">mrp.request.form.search</field>
             <field name="model">mrp.request.form</field>
             <field name="arch" type="xml">
-                <search string="MRP Request Form">
+                <search string="Solicitud de Alimentos">
                     <field name="name"/>
                     <field name="description"/>
                     <field name="warehouse_id"/>
@@ -21,7 +21,7 @@
             <field name="name">mrp.request.form.tree</field>
             <field name="model">mrp.request.form</field>
             <field name="arch" type="xml">
-                <tree string="MRP Request Form">
+                <tree string="Solicitud de Alimentos">
                     <field name="name"/>
                     <field name="description"/>
                     <field name="warehouse_id"/>
@@ -38,7 +38,7 @@
             <field name="name">mrp.request.form.form</field>
             <field name="model">mrp.request.form</field>
             <field name="arch" type="xml">
-                <form string="MRP Request Form">
+                <form string="Solicitud de Alimentos">
 					<header>
                         <button name="action_cancel" states="draft,approve,mo" type="object" string="Cancel"/>
                         <button name="action_approve" states="draft" type="object" string="Approve"/>
@@ -49,7 +49,7 @@
                     <group col="4" colspan="4">
                         <field name="name"/>
 						<field name="description"/>
-						<field name="warehouse_id"/>
+						<field name="warehouse_id" on_change="onchange_warehouse_id(warehouse_id)"/>
 						<field name="warehouse_to_id"/>
 						<field name="date"/>
 						<field name="qty_chicken"/>
@@ -78,14 +78,14 @@
         </record>
 
         <record id="action_mrp_request_form" model="ir.actions.act_window">
-            <field name="name">MRP Request Form</field>
+            <field name="name">Solicitud de Alimentos</field>
             <field name="res_model">mrp.request.form</field>
             <field name="type">ir.actions.act_window</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="view_id" ref="mrp_request_form_tree_view"/>
         </record>
-        <menuitem name="MRP Request Form" action="action_mrp_request_form" id="menu_action_mrp_request_form"
+        <menuitem name="Solicitud de Alimentos" action="action_mrp_request_form" id="menu_action_mrp_request_form"
             parent="mrp.menu_mrp_manufacturing" sequence="1"/>
 
     </data>

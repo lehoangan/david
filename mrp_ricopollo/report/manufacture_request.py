@@ -40,8 +40,9 @@ class Parser(report_sxw.rml_parse):
             'get_detail': self.get_detail,
             'get_product': self.get_product,
             'get_total' : self.get_total,
+            'get_farm_desc': self.get_farm_desc,
         })
-    
+
     def product(self, prod_id):
         res = self.pool.get('product.product').name_get(self.cr, self.uid, [prod_id])
         return res and res[0] and res[0][1] or self.pool.get('product.product').browse(self.cr, self.uid, prod_id).name
@@ -76,6 +77,38 @@ class Parser(report_sxw.rml_parse):
         self.cr.execute(select_str)
         res = self.cr.dictfetchall()
         return res
+
+    def get_farm_desc(self, form, farm):
+        where_str = ''
+        if form['state'] == 'draft':
+            where_str = ''' WHERE req.state = 'draft' '''
+        else:
+            where_str = ''' WHERE req.state not in ('draft', 'cancel') '''
+
+        if form['date']:
+            where_str = '%s %s'%(where_str, ''' AND req.date::date = '%s' '''%form['date'])
+
+        if farm and farm['id']:
+            where_str = '%s %s'%(where_str, ''' AND req.warehouse_id = %s '''%farm['id'])
+
+        select_str = """
+                 SELECT
+                        distinct req.description as desc
+                FROM
+                    mrp_request_form req
+                    join stock_warehouse w on (req.warehouse_id = w.id)
+
+                %s
+        """%where_str
+        self.cr.execute(select_str)
+        res = self.cr.dictfetchall()
+        desc = ''
+        for tmp in res:
+            if not desc:
+                desc = tmp['desc']
+            else:
+                desc = '%s, %s'%(desc, tmp['desc'])
+        return desc
 
     def get_detail(self, form, farm):
         where_str = ''

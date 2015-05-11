@@ -30,19 +30,19 @@ class mrp_request_form(osv.osv):
 
     _columns ={        
         'name': fields.char('Ref', 100, readonly=True, states={'draft': [('readonly', False)]}),
-        'description': fields.char('Description', 100, readonly=True, states={'draft': [('readonly', False)]}),
-        'warehouse_id': fields.many2one('stock.warehouse', 'Farm Name', required=True, readonly=True, states={'draft': [('readonly', False)]}),
+        'description': fields.char('Notas', 100, readonly=True, states={'draft': [('readonly', False)]}),
+        'warehouse_id': fields.many2one('stock.warehouse', 'Código de Granja', required=True, readonly=True, states={'draft': [('readonly', False)]}),
         'warehouse_to_id': fields.many2one('stock.warehouse', 'Receive Request', required=True, readonly=True, states={'draft': [('readonly', False)]}),
-        'date': fields.date('Date Request', required=True, readonly=True, states={'draft': [('readonly', False)]}),
+        'date': fields.date('Fecha de Pedido', required=True, readonly=True, states={'draft': [('readonly', False)]}),
         'user_id': fields.many2one('res.users', 'Create By', readonly=True),
         'validate_date': fields.date('Date Validate', readonly=True),
-        'qty_chicken': fields.float('Quantity Chitken', required=True, states={'draft': [('readonly', False)]}),
+        'qty_chicken': fields.float('Capacidad Pollos', required=True, states={'draft': [('readonly', False)]}),
         'validate_user_id': fields.many2one('res.users', 'Validate By', readonly=True),
         'line_ids': fields.one2many('mrp.request.form.line', 'request_id', 'Detail Request', readonly=True, states={'draft': [('readonly', False)]}),
         'state': fields.selection([
-            ('draft', 'Draft Quotation'),
-            ('approve', 'Approved'),
-            ('cancel', 'Cancelled'),
+            ('draft', 'Borrador'),
+            ('approve', 'Aprobar'),
+            ('cancel', 'Cancelar'),
             ('mo', 'MO Created'),
             ], 'Status', readonly=True,select=True),
     }
@@ -52,6 +52,13 @@ class mrp_request_form(osv.osv):
         'user_id': lambda self,cr,uid,context=None: uid,
         'date': time.strftime('%Y-%m-%d'),
     }
+
+    def onchange_warehouse_id(self, cr, uid, ids, warehouse_id, context=None):
+        if not warehouse_id:
+            return {'value': {'qty_chicken': 0}}
+        warehouse = self.pool.get('stock.warehouse').browse(cr, uid, warehouse_id)
+        return {'value': {'qty_chicken': warehouse.capacity}}
+
     def action_cancel(self, cr, uid, ids, context=None):
         return self.write(cr, uid, ids, {'state': 'cancel',})
 

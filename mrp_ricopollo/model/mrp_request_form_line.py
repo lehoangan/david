@@ -27,10 +27,10 @@ import time
 class mrp_request_form_line(osv.osv):
     _name = 'mrp.request.form.line'
     _columns ={
-        'product_id': fields.many2one('product.product', 'Product Requested', required=True),
+        'product_id': fields.many2one('product.product', 'Producto Solicitado', required=True),
         'request_id': fields.many2one('mrp.request.form', 'Parent', required=True,ondelete='cascade'),
-        'qty_qq': fields.float('Quantity in quintals (qq)', required=True),
-        'qty_unit': fields.float('Quantity Unit', required=True),
+        'qty_qq': fields.float('Quintales (qq)', required=True),
+        'qty_unit': fields.float('Kilogramos', required=True),
         'uom_id': fields.many2one('product.uom', 'UoM', required=True),
     }
 
