@@ -47,7 +47,10 @@ class Parser(report_sxw.rml_parse):
         if form['state'] == 'draft':
             where_str = ''' WHERE inv.state = 'draft' AND inv.type = 'out_invoice' '''
         else:
-            where_str = ''' WHERE inv.state not in ('draft', 'cancel') AND inv.type = 'out_invoice' '''
+            if form['inv_state'] != 'all':
+                where_str = ''' WHERE inv.state = '%s' AND inv.type = 'out_invoice' '''%form['inv_state']
+            else:
+                where_str = ''' WHERE inv.state not in ('draft', 'cancel') AND inv.type = 'out_invoice' '''
 
         if form['partner_id']:
             where_str = '%s %s'%(where_str, ' AND inv.partner_id = %s'%form['partner_id'][0])
@@ -84,7 +87,10 @@ class Parser(report_sxw.rml_parse):
         if form['state'] == 'draft':
             where_str = ''' WHERE inv.state = 'draft' AND inv.type = 'out_invoice' AND inv.partner_id=%s '''%partner_id
         else:
-            where_str = ''' WHERE inv.state not in ('draft', 'cancel') AND inv.type = 'out_invoice' AND inv.partner_id=%s '''%partner_id
+            if form['inv_state'] != 'all':
+                where_str = ''' WHERE inv.state = '%s' AND inv.type = 'out_invoice' AND inv.partner_id=%s '''%(form['inv_state'], partner_id)
+            else:
+                where_str = ''' WHERE inv.state not in ('draft', 'cancel') AND inv.type = 'out_invoice' AND inv.partner_id=%s '''%partner_id
 
         if form['partner_id']:
             where_str = '%s %s'%(where_str, ' AND inv.partner_id = %s'%form['partner_id'][0])
@@ -140,7 +146,10 @@ class Parser(report_sxw.rml_parse):
         if form['state'] == 'draft':
             where_str = ''' WHERE inv.state = 'draft' AND inv.type = 'out_invoice'  '''
         else:
-            where_str = ''' WHERE inv.state not in ('draft', 'cancel') AND inv.type = 'out_invoice' '''
+            if form['inv_state'] != 'all':
+                where_str = ''' WHERE inv.state = '%s' AND inv.type = 'out_invoice'  '''%form['inv_state']
+            else:
+                where_str = ''' WHERE inv.state not in ('draft', 'cancel') AND inv.type = 'out_invoice' '''
 
         if form['partner_id']:
             where_str = '%s %s'%(where_str, ' AND inv.partner_id = %s'%form['partner_id'][0])
@@ -182,7 +191,10 @@ class Parser(report_sxw.rml_parse):
         if form['state'] == 'draft':
             where_str = ''' WHERE inv.state = 'draft' AND inv.type = 'out_invoice'  '''
         else:
-            where_str = ''' WHERE inv.state not in ('draft', 'cancel') AND inv.type = 'out_invoice' '''
+            if form['inv_state'] != 'all':
+                where_str = ''' WHERE inv.state = '%s' AND inv.type = 'out_invoice'  '''%form['inv_state']
+            else:
+                where_str = ''' WHERE inv.state not in ('draft', 'cancel') AND inv.type = 'out_invoice' '''
 
         if partner:
             where_str = '%s %s'%(where_str, ' AND inv.partner_id = %s'%partner['id'])
@@ -275,7 +287,10 @@ class Parser(report_sxw.rml_parse):
         if form['state'] == 'draft':
             where_str = ''' WHERE inv.state = 'draft' AND inv.type = 'out_invoice'  '''
         else:
-            where_str = ''' WHERE inv.state not in ('draft', 'cancel') AND inv.type = 'out_invoice' '''
+            if form['inv_state'] != 'all':
+                where_str = ''' WHERE inv.state = '%s' AND inv.type = 'out_invoice'  '''%form['inv_state']
+            else:
+                where_str = ''' WHERE inv.state not in ('draft', 'cancel') AND inv.type = 'out_invoice' '''
 
         if form['partner_id']:
             where_str = '%s %s'%(where_str, ' AND inv.partner_id = %s'%form['partner_id'][0])

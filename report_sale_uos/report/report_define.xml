@@ -92,11 +92,24 @@
         <field name="parser_state">loc</field>
         <field name="tml_source">file</field>
     </record>
+
+    <record id="aeroo_collection_journal_payment_detail_id" model="ir.actions.report.xml">
+        <field name="name">payment_collection_journal Report</field>
+        <field name="type">ir.actions.report.xml</field>
+        <field name="model">collector.payment.detail.report</field>
+        <field name="report_name">collection_journal_payment_detail_report</field>
+        <field name="report_type">aeroo</field>
+        <field name="in_format">oo-ods</field>
+        <field name="parser_loc">report_sale_uos/report/collection_journal_payment_detail.py</field>
+        <field name="report_rml">report_sale_uos/report/collection_journal_payment_detail.ods</field>
+        <field name="parser_state">loc</field>
+        <field name="tml_source">file</field>
+    </record>
     
     <record id="aeroo_sale_analysis_id" model="ir.actions.report.xml">
         <field name="name">Sale Analysis Report</field>
         <field name="type">ir.actions.report.xml</field>
-        <field name="model">collector.payment.detail.report</field>
+        <field name="model">sale.analysis.report</field>
         <field name="report_name">sale_analysis_report</field>
         <field name="report_type">aeroo</field>
         <field name="in_format">oo-ods</field>

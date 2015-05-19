@@ -54,6 +54,9 @@ class Parser(report_sxw.rml_parse):
         if form['user_id']:
             where_str = '%s %s'%(where_str, ' AND vou.create_uid = %s'%form['user_id'][0])
 
+        if form['journal_id']:
+            where_str = '%s %s'%(where_str, ' AND vou.journal_id = %s'%form['journal_id'][0])
+
         if form['date']:
             where_str = '%s %s'%(where_str, ''' AND vou.date::date = '%s' '''%form['date'])
 
@@ -82,6 +85,9 @@ class Parser(report_sxw.rml_parse):
 
         if user['id']:
             where_str = '%s %s'%(where_str, ' AND vou.create_uid = %s'%user['id'])
+
+        if form['journal_id']:
+            where_str = '%s %s'%(where_str, ' AND vou.journal_id = %s'%form['journal_id'][0])
 
         if form['date']:
             where_str = '%s %s'%(where_str, ''' AND vou.date::date = '%s' '''%form['date'])
@@ -112,6 +118,9 @@ class Parser(report_sxw.rml_parse):
 
         if user['id']:
             where_str = '%s %s'%(where_str, ' AND vou.create_uid = %s'%user['id'])
+
+        if form['journal_id']:
+            where_str = '%s %s'%(where_str, ' AND vou.journal_id = %s'%form['journal_id'][0])
 
         if form['date']:
             where_str = '%s %s'%(where_str, ''' AND vou.date::date = '%s' '''%form['date'])
@@ -148,6 +157,9 @@ class Parser(report_sxw.rml_parse):
 
         if user['id']:
             where_str = '%s %s'%(where_str, ' AND vou.create_uid = %s'%user['id'])
+
+        if form['journal_id']:
+            where_str = '%s %s'%(where_str, ' AND vou.journal_id = %s'%form['journal_id'][0])
 
         if form['date']:
             where_str = '%s %s'%(where_str, ''' AND vou.date::date = '%s' '''%form['date'])
@@ -188,6 +200,9 @@ class Parser(report_sxw.rml_parse):
         if user['id']:
             where_str = '%s %s'%(where_str, ' AND vou.create_uid = %s'%user['id'])
 
+        if form['journal_id']:
+            where_str = '%s %s'%(where_str, ' AND vou.journal_id = %s'%form['journal_id'][0])
+
         if form['date']:
             where_str = '%s %s'%(where_str, ''' AND vou.date::date = '%s' '''%form['date'])
 
@@ -225,6 +240,9 @@ class Parser(report_sxw.rml_parse):
 
         if user['id']:
             where_str = '%s %s'%(where_str, ' AND vou.create_uid = %s'%user['id'])
+
+        if form['journal_id']:
+            where_str = '%s %s'%(where_str, ' AND vou.journal_id = %s'%form['journal_id'][0])
 
         if form['date']:
             where_str = '%s %s'%(where_str, ''' AND vou.date::date = '%s' '''%form['date'])

@@ -26,21 +26,31 @@ class collector_payment_detail_report(osv.osv_memory):
 
     _columns = {
         'user_id' : fields.many2one('res.users', 'Collector'),
+        'journal_id' : fields.many2one('account.journal', 'Diario de Cobros',
+                                       domain=[('type', 'in', ('cash', 'bank'))]),
         'date': fields.date('Fecha'),
         'state': fields.selection([
             ('draft', 'Pago Borrador'),
             ('done', ' Pago Efectivo'),
             ], 'Tipo'),
+        'group_by': fields.selection([
+            ('user', 'Collector'),
+            ('journal', ' Diario de Cobros'),
+            ], 'Having By'),
     }
     _defaults={
     'state': 'draft',
+    'group_by': 'user',
     }
 
     def print_report(self, cr, uid, ids, context=None):
         if context is None:
             context = {}
         data = {}
-        data['form'] = self.read(cr, uid, ids, ['date', 'user_id','state'])[0]
-        return self.pool['report'].get_action(cr, uid, [], 'collector_payment_detail_report', data=data, context=context)
+        data['form'] = self.read(cr, uid, ids, ['date', 'user_id', 'state', 'group_by', 'journal_id'])[0]
+        if data['form']['group_by'] == 'user':
+            return self.pool['report'].get_action(cr, uid, [], 'collector_payment_detail_report', data=data, context=context)
+        else:
+            return self.pool['report'].get_action(cr, uid, [], 'collection_journal_payment_detail_report', data=data, context=context)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

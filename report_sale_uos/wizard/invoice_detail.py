@@ -36,17 +36,23 @@ class invoice_detail_report(osv.osv_memory):
             ('draft', 'Factura Borrador'),
             ('done', ' Factura'),
             ], 'Factura Tipo'),
+        'inv_state': fields.selection([
+            ('open', 'Abierto'),
+            ('paid', ' Pagado'),
+            ('all', ' Abierto + Pagado'),
+            ], 'Tipo de Boleta'),
     }
     _defaults={
     'state': 'draft',
     'type': 'completo',
+    'inv_state': 'all',
     }
 
     def print_report(self, cr, uid, ids, context=None):
         if context is None:
             context = {}
         data = {}
-        data['form'] = self.read(cr, uid, ids, ['date_from', 'date_to', 'partner_id','state','type'])[0]
+        data['form'] = self.read(cr, uid, ids, ['date_from', 'date_to', 'partner_id','state','inv_state','type'])[0]
         if data['form']['type'] == 'completo':
             return self.pool['report'].get_action(cr, uid, [], 'invoice_detail_report', data=data, context=context)
         else:
