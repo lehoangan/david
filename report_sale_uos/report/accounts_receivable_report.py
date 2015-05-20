@@ -396,10 +396,10 @@ class Parser(report_sxw.rml_parse):
             })
             #ending
 
-            ending = self.pool.get('res.partner').browse(self.cr, self.uid, part['id'], {'date_to': form['date_to']}).credit
+            ending = part['opening'] + part['sale_amount'] - part['percent_amount'] - part['kg_amount'] - part['payment']
 
             part.update({
-                'percent_ending': amount_in_period and round(ending/amount_in_period*100, 2) or 0,
+                'percent_ending': part['sale_amount'] and round(ending/part['sale_amount']*100, 2) or 0,
                 'ending': ending
             })
         return res
@@ -434,7 +434,6 @@ class Parser(report_sxw.rml_parse):
             GROUP BY l.product_id
         '''%in_vwhere_str
         self.cr.execute(sql)
-        print sql
         res = self.cr.dictfetchall()
         for discount in res:
             res_name = self.pool.get('product.product').name_get(self.cr, self.uid, discount['product_id'])
@@ -476,9 +475,9 @@ class Parser(report_sxw.rml_parse):
             res['payment'] += line['payment']
             res['diff'] += line['diff']
             res['ending'] += line['ending']
-        # res['percent'] = round(res['percent_amount']/res['sale_amount']*100,2)
-        # res['kg_percent'] = round(res['kg_amount']/res['sale_amount']*100,2)
-        # res['percent_payment'] = round(res['payment']/(res['sale_amount']+res['opening'])*100,2)
-        # res['percent_ending'] = round(res['ending']/res['sale_amount']*100,2)
+        res['percent'] = res['sale_amount'] and round(res['percent_amount']/res['sale_amount']*100,2) or 0
+        res['kg_percent'] = res['sale_amount'] and round(res['kg_amount']/res['sale_amount']*100,2) or 0
+        res['percent_payment'] = (res['sale_amount']+res['opening']) and round(res['payment']/(res['sale_amount']+res['opening'])*100,2) or 0
+        res['percent_ending'] = res['sale_amount'] and round(res['ending']/res['sale_amount']*100,2) or 0
         return [res]
 
