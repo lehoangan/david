@@ -19,6 +19,10 @@
 ##############################################################################
 
 import mrp_request_form,mrp_request_form_line
-import stock_warehouse
+import stock_warehouse,stock_location
 import res_users
+import history_cycle_form
+import stock_move, stock_picking
+import account_move_line
+import purchase
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

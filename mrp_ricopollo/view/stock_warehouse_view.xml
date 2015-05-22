@@ -7,12 +7,38 @@
             <field name="inherit_id" ref="stock.view_warehouse"/>
             <field name="arch" type="xml">
                 <data>
+                    <xpath expr="//div[@class='oe_right oe_button_box']" position="before">
+                        <header>
+                            <button name="action_open_cycle" states="draft" string="Open Cycle" type="object" class="oe_highlight"/>
+                            <button name="action_close_cycle" states="open" string="Close Cycle" type="object" class="oe_highlight"/>
+                            <field name="state" widget="statusbar" nolabel="1" />
+                        </header>
+                    </xpath>
                     <xpath expr="//field[@name='partner_id']" position="before">
                        <field name="manager_id" on_change="onchange_manager(manager_id,context)"/>
                     </xpath>
                     <xpath expr="//field[@name='partner_id']" position="after">
                        <field name="capacity"/>
-                   </xpath>
+                    </xpath>
+                    <xpath expr="//field[@name='code']" position="after">
+                       <field name="is_farm"/>
+                        <field name="account_id" attrs="{'required':[('is_farm','=',True)]}"/>
+                    </xpath>
+
+                    <xpath expr="//notebook[@groups='stock.group_adv_location']" position="before">
+                        <group attrs="{'invisible':[('is_farm','!=',True)]}" colspan="4" col="2">
+                            <H1><label for="cycle_ids"/></H1>
+                            <newline />
+                            <field name="cycle_ids" nolabel="1" >
+                                <tree string="Cycle History" editable="top">
+                                    <field name="name"/>
+                                    <field name="date_start"/>
+                                    <field name="date_end"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </xpath>
+
                 </data>
             </field>
         </record>

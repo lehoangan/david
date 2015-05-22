@@ -31,8 +31,12 @@ class mrp_request_form(osv.osv):
     _columns ={        
         'name': fields.char('Ref', 100, readonly=True, states={'draft': [('readonly', False)]}),
         'description': fields.char('Notas', 100, readonly=True, states={'draft': [('readonly', False)]}),
-        'warehouse_id': fields.many2one('stock.warehouse', 'Código de Granja', required=True, readonly=True, states={'draft': [('readonly', False)]}),
-        'warehouse_to_id': fields.many2one('stock.warehouse', 'Receive Request', required=True, readonly=True, states={'draft': [('readonly', False)]}),
+        'warehouse_id': fields.many2one('stock.warehouse', 'Código de Granja', required=True,
+                                        domain=[('state', '=', 'open')],
+                                        readonly=True, states={'draft': [('readonly', False)]}),
+        'warehouse_to_id': fields.many2one('stock.warehouse', 'Receive Request', required=True,
+                                           domain=[('state', '=', 'open')],
+                                           readonly=True, states={'draft': [('readonly', False)]}),
         'date': fields.date('Fecha de Pedido', required=True, readonly=True, states={'draft': [('readonly', False)]}),
         'user_id': fields.many2one('res.users', 'Create By', readonly=True),
         'validate_date': fields.date('Date Validate', readonly=True),
@@ -83,7 +87,7 @@ class mrp_request_form(osv.osv):
                 raise osv.except_osv(_("Invalid Action!"), _("Selected the same receive place."))
             for line in obj.line_ids:
                 q = product_uom_obj._compute_qty(cr, uid, line.uom_id.id, line.qty_unit, line.product_id.uom_id.id)
-                name = '%s:%s'%(obj.name, obj.ref)
+                name = '%s:%s'%(obj.name, obj.description)
                 if line.product_id.id not in dict_product.keys():
                     dict_product.update({line.product_id.id: [q, [name], line.product_id.uom_id.id]})
                 else:

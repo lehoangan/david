@@ -128,12 +128,14 @@ class Parser(report_sxw.rml_parse):
                         INNER JOIN account_invoice inv on (inv.id = inv_l.invoice_id)
                 '''
                 where_str = '%s %s'%(where_str, ''' AND inv.state not in ('draft', 'cancel') ''')
-
+        context = {}
         if form['date_from']:
             where_str = '%s %s'%(where_str, ''' AND s.date_order::date >= '%s' '''%form['date_from'])
+            context.update({'date_to':form['date_from']})
 
         if form['date_to']:
             where_str = '%s %s'%(where_str, ''' AND s.date_order::date <= '%s' '''%form['date_to'])
+            # context.update({'date_to':form['date_to']})
 
         if state_id:
             if state_id['id']:
@@ -160,7 +162,7 @@ class Parser(report_sxw.rml_parse):
         total = 0
         partner_obj = self.pool.get('res.partner')
         for part in res:
-            total += partner_obj.browse(self.cr, self.uid, part['partner_id']).debit
+            total += partner_obj.browse(self.cr, self.uid, part['partner_id'], context).debit
         return total
 
     def get_detail(self, form, state_id):
@@ -272,12 +274,14 @@ class Parser(report_sxw.rml_parse):
                         INNER JOIN account_invoice inv on (inv.id = inv_l.invoice_id)
                 '''
                 where_str = '%s %s'%(where_str, ''' AND inv.state not in ('draft', 'cancel') ''')
-
+        context = {}
         if form['date_from']:
             where_str = '%s %s'%(where_str, ''' AND s.date_order::date >= '%s' '''%form['date_from'])
+            context.update({'date_to':form['date_from']})
 
         if form['date_to']:
             where_str = '%s %s'%(where_str, ''' AND s.date_order::date <= '%s' '''%form['date_to'])
+            #context.update({'date_to':form['date_to']})
 
         if form['product_ids']:
             prod_ids = form['product_ids']
@@ -321,9 +325,9 @@ class Parser(report_sxw.rml_parse):
             total = 0
             partner_obj = self.pool.get('res.partner')
             for part in res1:
-                total += partner_obj.browse(self.cr, self.uid, part['partner_id']).debit
+                total += partner_obj.browse(self.cr, self.uid, part['partner_id'], context).debit
 
-            res[0].update({'payable': total})
+            res[0].update({'payable': total + res[0]['amount']})
 
         return res
         
