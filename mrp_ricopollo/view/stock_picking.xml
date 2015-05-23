@@ -8,7 +8,10 @@
             <field name="inherit_id" ref="stock.view_picking_form"/>
             <field name="arch" type="xml">
 	            <xpath expr="//button[@name='%(stock.act_stock_return_picking)d']" position="after">
-                    <button name="make_cost_price_journal_entry" string="Make Cost Price Entries" type="object"/>
+                    <button name="make_cost_price_journal_entry" string="Make Cost Price Entries" type="object" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='backorder_id']" position="after">
+                    <field name="mrp_id"/>
                 </xpath>
             </field>
         </record>

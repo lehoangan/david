@@ -2,12 +2,13 @@
 
 from openerp.osv import osv, fields
 from openerp.tools.translate import _
+import time
 
 class stock_picking(osv.osv):
    
     _inherit = "stock.picking"    
     _columns = {
-
+        'mrp_id': fields.many2one('mrp.production', 'MO', states={'done': [('readonly', True)], 'cancel': [('readonly', True)]}),
     }
 
     def get_account(self, cr, uid, move, context={}):
@@ -30,7 +31,7 @@ class stock_picking(osv.osv):
         return account_credit_id, account_debit_id
 
     def create_account_move(self, cr, uid, journal_id, name, period_obj, date, lst_accout_move_line, context):
-        import time
+
         move_pool = self.pool.get('account.move')
         journal_description = context.get('description', '')
         journal_description = journal_description and journal_description + ' ' + name or name
@@ -57,7 +58,7 @@ class stock_picking(osv.osv):
             # move line credit
             debit1 = 0
             credit1 = round(amount_cost_price*(quantity or 1),0)
-            product_name = '[%s]%s'%(product_obj.default_code, product_obj.name)
+            product_name = product_obj.default_code and '[%s]%s'%(product_obj.default_code, product_obj.name) or product_obj.name
             name = name and '%s: %s'%(name, product_name) or product_name
             move_line1 = {
                 'name'                  : name,
@@ -111,30 +112,91 @@ class stock_picking(osv.osv):
     def get_cost_price(self, cr, uid, prod_id, date, account_id, context={}):
 
         date = date[:10]
+        stk_move_ids = context.get('stock_move_ids', [])
+        if stk_move_ids:
+            return self.get_finish_price(cr, uid, prod_id, date, account_id, context)
+
         sql = '''
             SELECT coalesce(SUM(debit-credit),0) as amount, coalesce(SUM(CASE
                                                       WHEN debit > 0 THEN quantity
                                                       ELSE -quantity
                                                     END),0) as qty
                     FROM account_move_line
-                    WHERE account_id = %s AND product_id = %s AND date <= '%s'
-        '''%(account_id, prod_id, date)
+                    WHERE account_id = %s AND date <= '%s' AND product_id = %s
+        '''%(account_id, date, prod_id)
         cr.execute(sql)
         data = cr.dictfetchone()
         price = data['qty'] and data['amount']/data['qty'] or 0
         return price
 
+    def get_finish_price(self, cr, uid, prod_id, date, account_id, context={}):
+
+        date = date[:10]
+        stk_move_ids = context.get('stock_move_ids', [])
+        old_stock_move_ids = context.get('old_stock_move_ids', [])
+        produce_qty = context.get('produce_qty', [])
+        move_condition = ' AND stock_move_id in %s '%str(tuple(stk_move_ids+[-1,-1]))
+        old_move_condition = ' AND stock_move_id in %s '%str(tuple(old_stock_move_ids+[-1,-1]))
+        dict_material = context.get('dict_material', {})
+        amount = 0
+        if dict_material:
+            for material_id in dict_material.keys():
+                sql = '''
+                    SELECT coalesce(SUM(debit-credit),0) as amount, coalesce(SUM(CASE
+                                                              WHEN debit > 0 THEN quantity
+                                                              ELSE -quantity
+                                                            END),0) as qty
+                            FROM account_move_line
+                            WHERE account_id = %s AND date <= '%s' %s  AND product_id = %s
+                '''%(account_id, date, move_condition, material_id)
+                cr.execute(sql)
+                data = cr.dictfetchone()
+                amount += data['qty'] and dict_material[material_id] * data['amount']/data['qty'] or 0
+        else:
+            sql = '''
+                    SELECT coalesce(SUM(debit-credit),0) as amount
+                            FROM account_move_line
+                            WHERE account_id = %s AND date <= '%s' %s
+                    '''%(account_id, date, move_condition)
+            cr.execute(sql)
+            data = cr.dictfetchone()
+            amount = data['amount']
+            sql = '''
+                    SELECT coalesce(SUM(debit-credit),0) as amount
+                            FROM account_move_line
+                            WHERE account_id = %s AND date <= '%s' %s AND product_id = %s
+                    '''%(account_id, date, old_move_condition, prod_id)
+            cr.execute(sql)
+            data = cr.dictfetchone()
+            amount += data['amount']
+        price = produce_qty and amount/produce_qty or 0
+        return price
+
     def make_cost_price_journal_entry(self, cr, uid, ids, context=None):
-        move_id = False
+        warehouse = self.pool.get('stock.warehouse')
         for pick in self.browse(cr, uid, ids, context):
             move_lines = []
+            stock_move_data = ''
             journal_id = False
             period_ids = self.pool.get('account.period').find(cr, uid, pick.date_done)
             if not period_ids:
                 raise osv.except_osv('Invalid Action', 'You havent defined period for date: %s'%move.date_done)
-            stock_move_data = ''
+
             for move in pick.move_lines:
-                if move.state != 'done':
+                if move.state != 'done' or move.location_dest_id == move.location_id:
+                    continue
+                warehouse_ids = warehouse.search(cr, uid, [('lot_stock_id','=', move.location_id.id),
+                                                                              ('is_farm', '=', True),
+                                                                              ('state', '=', 'open')])
+
+                if warehouse_ids:
+                    warehouse_ids = warehouse.search(cr, uid, [('lot_stock_id','=', move.location_dest_id.id),
+                                                                              ('is_farm', '=', True),
+                                                                              ('state', '=', 'open')])
+                    if not warehouse_ids and not pick.mrp_id:
+                        continue
+
+                elif not pick.mrp_id:
                     continue
                 if not journal_id:
                     journal_id = move.product_id.categ_id.property_stock_journal and \
@@ -153,9 +215,20 @@ class stock_picking(osv.osv):
                                     '''%(cost_price, account_debit, account_credit, move.id)
             if move_lines:
                 period_obj = self.pool.get('account.period').browse(cr, uid, period_ids[0])
-                move_id = self.create_account_move(cr, uid, journal_id, '%s:%s'%(pick.name,pick.origin), \
+                move_id = self.create_account_move(cr, uid, journal_id, pick.origin and '%s:%s'%(pick.name,pick.origin or '') or pick.name, \
                                                    period_obj, pick.date_done, move_lines, \
                                                    dict(context, note_picking=pick.note))
                 self.pool.get('account.move').button_validate(cr, uid, [move_id], context)
             stock_move_data and cr.execute(stock_move_data)
         return True
+
+    def _create_backorder(self, cr, uid, picking, backorder_moves=[], context=None):
+        res = super(stock_picking, self)._create_backorder(cr, uid, picking, backorder_moves, context)
+        if picking.state == 'done':
+            self.make_cost_price_journal_entry(cr, uid, [picking.id], context)
+            if picking.mrp_id and picking.mrp_id.state not in ('draft', 'cancel', 'done'):
+                sql = ''
+                for move in picking.move_lines:
+                    if not move.raw_material_production_id:
+                        move.write({'raw_material_production_id': picking.mrp_id.id})
+        return res

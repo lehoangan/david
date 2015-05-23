@@ -26,7 +26,7 @@
     'description': """
             1. Make request form for farm to FAB
     """,
-    'depends': ["mrp"],
+    'depends': ["mrp", "stock"],
     'demo': [],
     'data': [
         'view/mrp_sequence.xml',
