@@ -172,7 +172,8 @@ class Parser(report_sxw.rml_parse):
                         s.name as so,
                         part.name as partner,
                         s.user_id as user_id,
-                        s.state
+                        s.state,
+                        s.is_ok
                 FROM (
                     sale_order_line l
                           join sale_order s on (l.order_id=s.id)
@@ -194,7 +195,8 @@ class Parser(report_sxw.rml_parse):
                         s.user_id,
                         s.state,
                         s.name,
-                        t.uos_id
+                        t.uos_id,
+                        s.is_ok
                 order by part.name, t.name) as foo
         """%where_str
         self.cr.execute(select_str)

@@ -28,6 +28,7 @@ class res_partner(osv.osv):
     _inherit = "res.partner"
 
     _columns = {
+        'warning_invoice': fields.integer('Aviso de Límite de Boletas'),
         'sale_journal_id': fields.many2one('account.journal', 'Sale Journal', domain="[('type','=','sale')]"),
         'purchase_journal_id': fields.many2one('account.journal', 'Purchase Journal', domain="[('type','=','purchase')]"),
         }

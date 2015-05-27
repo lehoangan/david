@@ -8,6 +8,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='credit_limit']" position="after">
                     <field name="sale_journal_id" />
+                    <field name="warning_invoice" />
                 </xpath>
                 <xpath expr="//field[@name='debit']" position="after">
                     <field name="purchase_journal_id" />

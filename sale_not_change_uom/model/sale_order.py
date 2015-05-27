@@ -26,6 +26,13 @@ import openerp.addons.decimal_precision as dp
 class sale_order(osv.osv):
 
     _inherit = "sale.order"
+    _columns = {
+        'is_ok': fields.boolean('Producto Despachado'),
+    }
+
+    defaults={
+        'is_ok': False,
+    }
 
     def _prepare_invoice(self, cr, uid, order, lines, context=None):
         invoice_vals = super(sale_order, self)._prepare_invoice(cr, uid, order, lines, context)

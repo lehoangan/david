@@ -6,6 +6,9 @@
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_shipping_id']" position="after">
+                    <field name="is_ok" />
+                </xpath>
                 <xpath expr="//form/group/group/field[@name='price_unit']" position="after">
                     <field name="discount_kg" class="oe_inline" groups="sale.group_discount_per_so_line"/>
                 </xpath>
