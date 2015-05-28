@@ -228,7 +228,7 @@ class Parser(report_sxw.rml_parse):
                           left join res_partner_category categ on (rel.category_id=categ.id))
                 %s
 
-                order by inv.date_invoice,inv.number desc
+                order by inv.date_invoice desc
         """%where_str
         self.cr.execute(select_str)
         res = self.cr.dictfetchall()
@@ -262,7 +262,11 @@ class Parser(report_sxw.rml_parse):
             else:
                 result[inv['id']]['name'] = '%s - %s'%(result[inv['id']]['name'], inv['name'])
         result = result.values()
-        result = sorted(result, key=lambda k: k['no'])
+        result = sorted(result, key=lambda k: k['date_invoice'])
+        if result:
+            result.reverse()
+            for i in range(0, len(result)):
+                result[i]['no'] = i + 1
         return result
 
     def get_detail(self, form, inv):
