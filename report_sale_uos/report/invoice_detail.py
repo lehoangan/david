@@ -228,7 +228,7 @@ class Parser(report_sxw.rml_parse):
                           left join res_partner_category categ on (rel.category_id=categ.id))
                 %s
 
-                order by inv.number, s.name
+                order by inv.date_invoice,inv.number desc
         """%where_str
         self.cr.execute(select_str)
         res = self.cr.dictfetchall()
