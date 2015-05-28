@@ -30,7 +30,7 @@ class account_invoice(models.Model):
     def invoice_validate(self):
         if self.type == 'out_invoice':
             old_ids = self.search([('partner_id', '=', self.partner_id.id), ('state', '=', 'open')])
-            if len(old_ids) >= self.partner_id.warning_invoice:
+            if self.partner_id.warning_invoice and len(old_ids) >= self.partner_id.warning_invoice:
                 raise Warning(_('Alerta: Sobrepaso de límite de Boletas Permitido.'))
         return super(account_invoice, self).invoice_validate()
 
