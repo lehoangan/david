@@ -18,10 +18,10 @@
 #
 ##############################################################################
 {
-    'name': 'Vehicle Transport',
+    'name': 'R - Vehicle Transport',
     'version': '1.0',
-    'author': 'OpenERPVN',
-    'category': 'Vehicle Transport Management',
+    'author': 'Anle<lehoangan1988@gmail.com>',
+    'category': 'Rico',
     'website': 'https://www.odoo.com',
     'description': """
             Vehicle Transport

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data noupdate="0">
+
+    <record id="base.not_create_and_edit_customer" model="res.groups">
+        <field name="name">Not create and edit customer</field>
+        <field name="category_id" ref="base.module_category_hidden"/>
+    </record>
+
+    <record id="base.not_create_and_edit_supplier" model="res.groups">
+        <field name="name">Not create and edit supplier</field>
+        <field name="category_id" ref="base.module_category_hidden"/>
+    </record>
+
+    <record id="base.not_create_and_edit_product" model="res.groups">
+        <field name="name">Not create and edit product</field>
+        <field name="category_id" ref="base.module_category_hidden"/>
+    </record>
+</data>
+</openerp>

@@ -22,8 +22,8 @@
 {
     "name": "Purchase order lines with discounts", 
     "version": "1.0", 
-    "author": "OEVN", 
-    "category": "VN", 
+    'author': 'Anle<lehoangan1988@gmail.com>',
+    'category': 'Rico',
     "description": """
     It allows to define a discount per line in the purchase orders. This
     discount can be also negative, interpreting it as an increment.

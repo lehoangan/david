@@ -18,10 +18,10 @@
 #
 ##############################################################################
 {
-    'name': 'Tracking Change',
+    'name': 'R - Tracking Change',
     'version': '1.0',
-    'author': 'OpenERPVN',
-    'category': 'Sales Management',
+    'author': 'Anle<lehoangan1988@gmail.com>',
+    'category': 'Rico',
     'website': 'https://www.odoo.com',
     'description': """
             Tracking Change

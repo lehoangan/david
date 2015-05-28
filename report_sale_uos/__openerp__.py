@@ -20,9 +20,10 @@
 ##############################################################################
 
 {
-    'name': 'Edit UoM Quantity',
+    'name': 'R - Full Report',
     'version': '1.0',
-    'category': 'OpenERP VN',
+    'author': 'Anle<lehoangan1988@gmail.com>',
+    'category': 'Rico',
     'sequence': 12,
     'description': """
         Not change UoS quantity when change UoM quanity

@@ -25,34 +25,24 @@ from openerp.osv import fields, osv
 from openerp import SUPERUSER_ID, api
 from openerp.tools.translate import _
 
-class res_partner(osv.Model):
+class product_product(osv.Model):
 
-    _inherit = "res.partner"
-
-    _columns = {
-        'warning_invoice': fields.integer('Aviso de Límite de Boletas'),
-        'sale_journal_id': fields.many2one('account.journal', 'Sale Journal', domain="[('type','=','sale')]"),
-        'purchase_journal_id': fields.many2one('account.journal', 'Purchase Journal', domain="[('type','=','purchase')]"),
-        }
+    _inherit = "product.product"
     
-    @api.multi
-    def write(self, vals):
-        if (vals.get('customer', False) or self.customer) and \
-                self.env['res.users'].has_group('base.not_create_and_edit_customer'):
+    def write(self, cr, uid, ids, vals, context=None):
+        if self.pool['res.users'].has_group(cr, uid, 'base.not_create_and_edit_product'):
             raise openerp.exceptions.AccessError(_("You is not allowed for edit or create"))
+        return super(product_product, self).write(cr, uid, ids, vals, context)
 
-        if (vals.get('supplier', False) or self.supplier) and \
-                self.env['res.users'].has_group('base.not_create_and_edit_supplier'):
+    def create(self, cr, uid, vals, context=None):
+        if self.pool['res.users'].has_group(cr, uid, 'base.not_create_and_edit_product'):
             raise openerp.exceptions.AccessError(_("You is not allowed for edit or create"))
-        return super(res_partner, self).write(vals)
+        return super(product_product, self).create(cr, uid, vals, context)
 
-    @api.model
-    def create(self, vals):
-        if vals.get('customer', False) and \
-                self.env['res.users'].has_group('base.not_create_and_edit_customer'):
-            raise openerp.exceptions.AccessError(_("You is not allowed for edit or create"))
+class product_template(osv.Model):
+    _inherit = 'product.template'
 
-        if vals.get('supplier', False) and \
-                self.env['res.users'].has_group('base.not_create_and_edit_supplier'):
+    def write(self, cr, uid, ids, vals, context=None):
+        if self.pool['res.users'].has_group(cr, uid, 'base.not_create_and_edit_product'):
             raise openerp.exceptions.AccessError(_("You is not allowed for edit or create"))
-        return super(res_partner, self).create(vals)
+        return super(product_template, self).write(cr, uid, ids, vals, context)

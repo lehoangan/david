@@ -20,8 +20,8 @@
 {
     'name': 'Set commission for UoM and UoS',
     'version': '1.0',
-    'author': 'OpenERPVN',
-    'category': 'Sales Management',
+    'author': 'Anle<lehoangan1988@gmail.com>',
+    'category': 'Rico',
     'website': 'https://www.odoo.com',
     'description': """
             To set commission for each product of each distributor.

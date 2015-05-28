@@ -20,8 +20,8 @@
 {
     'name': 'Quantity Discount',
     'version': '1.0',
-    'author': 'OpenERPVN',
-    'category': 'Sales Management',
+    'author': 'Anle<lehoangan1988@gmail.com>',
+    'category': 'Rico',
     'website': 'https://www.odoo.com',
     'description': """
             Allow discount quantity by category of saleman

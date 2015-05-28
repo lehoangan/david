@@ -18,10 +18,10 @@
 #
 ##############################################################################
 {
-    'name': 'MRP OF RICOPOLLOs',
+    'name': 'R - MRP',
     'version': '1.0',
-    'author': 'OpenERPVN',
-    'category': 'MRP',
+    'author': 'Anle<lehoangan1988@gmail.com>',
+    'category': 'Rico',
     'website': 'https://www.odoo.com',
     'description': """
             1. Make request form for farm to FAB
@@ -43,6 +43,7 @@
         'wizard/manufacture_request_report_wizard_view.xml'],
     'auto_install': False,
     'installable': True,
+    'application': True,
 }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

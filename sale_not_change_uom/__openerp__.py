@@ -20,9 +20,10 @@
 ##############################################################################
 
 {
-    'name': 'Edit UoM Quantity',
+    'name': 'R - SALE',
     'version': '1.0',
-    'category': 'OpenERP VN',
+    'author': 'Anle<lehoangan1988@gmail.com>',
+    'category': 'Rico',
     'sequence': 12,
     'description': """
         Not change UoS quantity when change UoM quanity
@@ -37,6 +38,7 @@
         'view/report_invoice.xml',
         'view/res_partner_view.xml',
         'report/sale_report_view.xml',
+        'rico_security.xml',
     ],
     'installable': True,
     'auto_install': False,

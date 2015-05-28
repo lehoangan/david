@@ -22,12 +22,12 @@
 {
     'name': 'Discount Amount on Purchase Order Line',
     'version': '1.0',
-    'author': 'OEVN',
+    'author': 'Anle<lehoangan1988@gmail.com>',
+    'category': 'Rico',
     'summary': 'Use Discount Amount instead of Percent on Purchase Order Line',
     'description': """
 
     """,
-    'category': 'Purchase Management',
     'website': 'http://www.openerp.com',
     'images': [],
     'depends': ['purchase', 'purchase_discount','sale_not_change_uom'],

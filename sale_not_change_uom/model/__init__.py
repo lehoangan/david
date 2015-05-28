@@ -21,4 +21,4 @@
 
 import sale_order_line
 import account_invoice_line
-import res_partner,sale_order,account_invoice
+import res_partner,sale_order,account_invoice,product_product
