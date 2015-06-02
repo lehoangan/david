@@ -31,6 +31,7 @@ class accounts_receivable_report(osv.osv_memory):
         'type': fields.selection([
             ('client', 'Solo Clientes'),
             ('product', 'Con Productos'),
+            ('market', 'Solo Mercados'),
             ], 'Mostrar'),
     }
     _defaults={

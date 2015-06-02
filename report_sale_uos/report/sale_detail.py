@@ -64,18 +64,18 @@ class Parser(report_sxw.rml_parse):
         select_str = """
                  SELECT
                         distinct (categ.id) as id,
-                        categ.name,
-                        part.city
+                        categ.name
                 FROM ( sale_order so
                           join res_partner part on (so.partner_id=part.id)
                           left join res_partner_res_partner_category_rel rel on (rel.partner_id=part.id)
                           left join res_partner_category categ on (rel.category_id=categ.id))
                 %s
-                GROUP BY categ.name,categ.id, part.city
+                GROUP BY categ.name,categ.id
                 order by categ.name
         """%where_str
         self.cr.execute(select_str)
         res = self.cr.dictfetchall()
+        
         for categ in res:
             if not categ['id']: continue
             result = self.pool.get('res.partner.category').name_get(self.cr, self.uid, categ['id'])

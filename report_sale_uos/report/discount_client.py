@@ -152,7 +152,8 @@ class Parser(report_sxw.rml_parse):
         no = 1
         for inv in res:
             obj = invoice_obj.browse(self.cr, self.uid, inv['client_id'])
-            inv.update({'limit_credit': obj.credit,
+            inv.update({'limit_credit': obj.credit_limit,
+                        'limit_invoice': obj.warning_invoice,
                         'term': obj.property_payment_term and obj.property_payment_term.name or '',
                         'no': no,
                     })
