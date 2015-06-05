@@ -7,22 +7,24 @@
             <field name="inherit_id" ref="stock.view_warehouse"/>
             <field name="arch" type="xml">
                 <data>
-                    <xpath expr="//div[@class='oe_right oe_button_box']" position="before">
-                        <header>
+	                <xpath expr="/form/*" position="before">
+					   	<header>
                             <button name="action_open_cycle" states="draft" string="Open Cycle" type="object" class="oe_highlight"/>
                             <button name="action_close_cycle" states="open" string="Close Cycle" type="object" class="oe_highlight"/>
-                            <field name="state" widget="statusbar" nolabel="1" />
-                        </header>
-                    </xpath>
+                           <field name="state" widget="statusbar" statusbar_visible="draft,open"/>
+                       </header>
+					</xpath>
+                        
                     <xpath expr="//field[@name='partner_id']" position="before">
                        <field name="manager_id" on_change="onchange_manager(manager_id,context)"/>
                     </xpath>
                     <xpath expr="//field[@name='partner_id']" position="after">
-                       <field name="capacity"/>
+                       <field name="capacity" attrs="{'required':[('is_farm','=',True)],'invisible':[('is_farm','!=',True)]}"/>
                     </xpath>
                     <xpath expr="//field[@name='code']" position="after">
                        <field name="is_farm"/>
-                        <field name="account_id" attrs="{'required':[('is_farm','=',True)]}"/>
+                       <field name="account_id" attrs="{'required':[('is_farm','=',True)],'invisible':[('is_farm','!=',True)]}"/>
+                       <field name="type" attrs="{'required':[('is_farm','=',True)],'invisible':[('is_farm','!=',True)]}"/>
                     </xpath>
 
                     <xpath expr="//notebook[@groups='stock.group_adv_location']" position="before">

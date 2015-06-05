@@ -26,6 +26,20 @@ from openerp import netsvc
 
 class mrp_production(osv.osv):
     _inherit = "mrp.production"
+    _columns ={
+        'chicken': fields.boolean('Tracking Chitkens', readonly=False, states={'done': [('readonly', True)]}),
+        'remain_qty': fields.float('Remain Quantity', required=True, readonly=True, states={'draft': [('readonly', False)]}),
+        'dead_ids': fields.one2many('dead.chickens.daily', 'mrp_id', 'Dead Chitkens', readonly=False, states={'done': [('readonly', True)]}),
+    }
+    def create(self, cr, uid, vals, context=None):
+        if vals.get('product_qty'):
+            vals.update({'remain_qty': vals['product_qty']})
+        return super(mrp_production, self).create(cr, uid, vals, context)
+    
+    def write(self, cr, uid, ids, vals, context=None, update=False):
+        if vals.get('product_qty'):
+            vals.update({'remain_qty': vals['product_qty']})
+        return super(mrp_production, self).write(cr, uid, ids, vals, context, update=False)
 
     def _make_production_internal_picking(self, cr, uid, mrp, context=None):
         stock_picking = self.pool.get('stock.picking')
@@ -54,32 +68,20 @@ class mrp_production(osv.osv):
         res = super(mrp_production, self).action_produce(cr, uid, production_id, production_qty, production_mode, wiz, context)
         brw = self.browse(cr, uid, production_id, context=context)
         picking_id = self._make_production_internal_picking(cr, uid, brw, context=context)
-        old_stock_move_ids = []
+        old_stock_move_ids = [] #old finished goods
         for line in brw.move_created_ids2:
+            if line.state != 'done' or line.location_dest_id.scrap_location: continue
             if not line.picking_id:
                 line.write({'picking_id': picking_id}, context=context)
             else:
                 old_stock_move_ids.append(line.id)
 
         #make entry
-        stock_move_ids = [mv.id for mv in brw.move_lines2]
-        dict_material = {}
-        if brw.state != 'done':
-            bom_obj = self.pool.get('mrp.bom')
-            uom_obj = self.pool.get('product.uom')
-            # get components and workcenter_lines from BoM structure
-            factor = uom_obj._compute_qty(cr, uid, brw.product_uom.id, production_qty, brw.bom_id.product_uom.id)
-            # product_lines, workcenter_lines
-            results, results2 = bom_obj._bom_explode(cr, uid, brw.bom_id, brw.product_id, factor / brw.bom_id.product_qty, {}, routing_id=brw.routing_id.id, context=context)
-
-            # reset product_lines in production order
-            for line in results:
-                print line
-                dict_material.update({line['product_id']: line['product_qty']})
+        stock_move_ids = [mv.id for mv in brw.move_lines2] #material in production
         self.pool.get('stock.picking').make_cost_price_journal_entry(cr, uid, [picking_id], dict(context, stock_move_ids=stock_move_ids, \
                                                                                                  old_stock_move_ids=old_stock_move_ids, \
-                                                                                                 produce_qty = production_qty, \
-                                                                                                 dict_material = dict_material))
+                                                                                                 remain_qty = brw.remain_qty))
+        brw.write({'remain_qty': brw.remain_qty-production_qty})
         return res
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

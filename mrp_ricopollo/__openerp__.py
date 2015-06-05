@@ -38,6 +38,7 @@
         'view/res_users_view.xml',
         'view/account_move.xml',
         'view/stock_picking.xml',
+        'view/mrp_production_view.xml',
         'wizard/merge_to_make_mo_view.xml',
         'wizard/approve_multi_request_form_view.xml',
         'wizard/manufacture_request_report_wizard_view.xml'],

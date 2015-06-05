@@ -2,3 +2,4 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_mrp_request_form,mrp.request.form,model_mrp_request_form,base.group_user,1,1,1,1
 access_mrp_request_form_line,mrp.request.form.line,model_mrp_request_form_line,base.group_user,1,1,1,1
 access_history_cycle_form,history.cycle.form,model_history_cycle_form,base.group_user,1,1,1,1
+access_dead_chickens_daily,dead.chickens.daily,model_dead_chickens_daily,base.group_user,1,1,1,1

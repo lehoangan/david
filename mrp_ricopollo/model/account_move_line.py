@@ -8,6 +8,7 @@ class account_move_line(osv.osv):
     _inherit = 'account.move.line'    
     _columns = { 
         'stock_move_id':fields.many2one('stock.move', 'Stock Move'),
+        'closed_cycle': fields.boolean('Closed Cycle'),
         'quantity': fields.float('Quantity', digits_compute= dp.get_precision('Product Unit of Measure'), help="The optional quantity expressed by this line, eg: number of product sold. The quantity is not a legal requirement but is very useful for some reports."),
     }
     _defaults={

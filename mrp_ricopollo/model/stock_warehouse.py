@@ -22,27 +22,32 @@
 
 from openerp.osv import fields, osv
 from openerp.tools.translate import _
+from openerp.exceptions import except_orm, Warning, RedirectWarning
 import time
 
 class stock_warehouse(osv.osv):
     _inherit = 'stock.warehouse'
 
     _columns ={
-        'code': fields.char('Farm Code', 64),
-        'manager_id': fields.many2one('res.users', 'Manager'),
-        'capacity': fields.integer('Maximum Capacity'),
-        'is_farm': fields.boolean('Is Farm'),
-        'account_id': fields.many2one('account.account', 'Farm Account', domain=[('type', '!=', 'view')]),
+        'code': fields.char('Farm Code', 64, readonly=True, states={'draft': [('readonly', False)]}),
+        'manager_id': fields.many2one('res.users', 'Manager', readonly=True, states={'draft': [('readonly', False)]}),
+        'capacity': fields.integer('Maximum Capacity', readonly=True, states={'draft': [('readonly', False)]}),
+        'is_farm': fields.boolean('Is Farm', readonly=True, states={'draft': [('readonly', False)]}),
+        'account_id': fields.many2one('account.account', 'Farm Account', domain=[('type', '!=', 'view')], readonly=True, states={'draft': [('readonly', False)]}),
         'cycle_ids': fields.one2many('history.cycle.form', 'warehouse_id', 'History Cycle'),
-        'state': fields.selection([('draft', 'Close'), ('open', 'Open')])
+        'type': fields.selection([('Male', 'Macho'), ('female', 'Hembra'), ('mixed', 'Mixto')], 'Type', readonly=True, states={'draft': [('readonly', False)]}),
+        'state': fields.selection([('draft', 'Close'), ('open', 'Open')], 'State'),
     }
 
     _defaults={
-        'state': 'draft'
+        'state': 'draft',
+        'type': 'mixed',
     }
 
     def action_open_cycle(self, cr, uid, ids, context=None):
         for obj in self.browse(cr, uid, ids, context):
+            if not obj.account_id:
+                raise Warning(_('Please set account before'))
             name = self.pool.get('ir.sequence').get(cr, uid, 'history.cycle.form', context=None)
             self.pool.get('history.cycle.form').create(cr, uid, {'name': name,
                                                                  'warehouse_id': obj.id,
@@ -51,8 +56,13 @@ class stock_warehouse(osv.osv):
 
     def action_close_cycle(self, cr, uid, ids, context=None):
         for obj in self.browse(cr, uid, ids, context):
+            if not obj.account_id:
+                raise Warning(_('Please set account before'))
+            if obj.account_id.balance != 0:
+                raise Warning(_('Account balance = %s. You must transfer it.'%obj.account_id.balance))
             if obj.cycle_ids:
                 obj.cycle_ids[len(obj.cycle_ids)-1].write({'date_end': time.strftime('%Y-%m-%d')})
+            cr.execute('UPDARTE account_move_line set closed_cycle=TRUE where (closed_cycle is null or closed_cycle = FALSE) AND account_id = %s'%obj.account_id.id)
         return self.write(cr, uid, ids, {'state': 'draft'}, context)
 
     def create(self, cr, uid, vals, context=None):

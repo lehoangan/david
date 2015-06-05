@@ -19,5 +19,5 @@
 ##############################################################################
 
 import mrp_request_form,mrp_request_form_line
-import mrp_production
+import mrp_production,dead_chickens_daily
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

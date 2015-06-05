@@ -10,6 +10,28 @@ class stock_picking(osv.osv):
     _columns = {
         'mrp_id': fields.many2one('mrp.production', 'MO', states={'done': [('readonly', True)], 'cancel': [('readonly', True)]}),
     }
+    
+    def action_revert_done(self, cr, uid, ids, context=None):
+        if not len(ids):
+            return False
+
+        from openerp import netsvc
+        for picking in self.browse(cr, uid, ids, context):
+            for line in picking.move_lines:
+                if self.has_valuation_moves(cr, uid, line):
+                    raise osv.except_osv(_('Error'),
+                        _('Line %s has valuation moves (%s). Remove them first')
+                        % (line.name, line.picking_id.name))
+                line.write({'state': 'draft'})
+            self.write(cr, uid, [picking.id], {'state': 'draft'})
+            wf_service = netsvc.LocalService("workflow")
+            # Deleting the existing instance of workflow
+            wf_service.trg_delete(uid, 'stock.picking', picking.id, cr)
+            wf_service.trg_create(uid, 'stock.picking', picking.id, cr)
+        for (id,name) in self.name_get(cr, uid, ids):
+            message = _("The stock picking '%s' has been set in draft state.") %(name,)
+            self.log(cr, uid, id, message)
+        return True
 
     def get_account(self, cr, uid, move, context={}):
         account_debit_id, account_credit_id = False, False
@@ -122,7 +144,7 @@ class stock_picking(osv.osv):
                                                       ELSE -quantity
                                                     END),0) as qty
                     FROM account_move_line
-                    WHERE account_id = %s AND date <= '%s' AND product_id = %s
+                    WHERE account_id = %s AND date <= '%s' AND product_id = %s AND (closed_cycle is null OR closed_cycle = FALSE)
         '''%(account_id, date, prod_id)
         cr.execute(sql)
         data = cr.dictfetchone()
@@ -134,42 +156,26 @@ class stock_picking(osv.osv):
         date = date[:10]
         stk_move_ids = context.get('stock_move_ids', [])
         old_stock_move_ids = context.get('old_stock_move_ids', [])
-        produce_qty = context.get('produce_qty', [])
+        remain_qty = context.get('remain_qty', [])
         move_condition = ' AND stock_move_id in %s '%str(tuple(stk_move_ids+[-1,-1]))
         old_move_condition = ' AND stock_move_id in %s '%str(tuple(old_stock_move_ids+[-1,-1]))
-        dict_material = context.get('dict_material', {})
-        amount = 0
-        if dict_material:
-            for material_id in dict_material.keys():
-                sql = '''
-                    SELECT coalesce(SUM(debit-credit),0) as amount, coalesce(SUM(CASE
-                                                              WHEN debit > 0 THEN quantity
-                                                              ELSE -quantity
-                                                            END),0) as qty
-                            FROM account_move_line
-                            WHERE account_id = %s AND date <= '%s' %s  AND product_id = %s
-                '''%(account_id, date, move_condition, material_id)
-                cr.execute(sql)
-                data = cr.dictfetchone()
-                amount += data['qty'] and dict_material[material_id] * data['amount']/data['qty'] or 0
-        else:
-            sql = '''
-                    SELECT coalesce(SUM(debit-credit),0) as amount
-                            FROM account_move_line
-                            WHERE account_id = %s AND date <= '%s' %s
-                    '''%(account_id, date, move_condition)
-            cr.execute(sql)
-            data = cr.dictfetchone()
-            amount = data['amount']
-            sql = '''
-                    SELECT coalesce(SUM(debit-credit),0) as amount
-                            FROM account_move_line
-                            WHERE account_id = %s AND date <= '%s' %s AND product_id = %s
-                    '''%(account_id, date, old_move_condition, prod_id)
-            cr.execute(sql)
-            data = cr.dictfetchone()
-            amount += data['amount']
-        price = produce_qty and amount/produce_qty or 0
+        sql = '''
+                SELECT coalesce(SUM(debit-credit),0) as amount
+                        FROM account_move_line
+                        WHERE account_id = %s AND date <= '%s' %s AND (closed_cycle is null OR closed_cycle = FALSE)
+                '''%(account_id, date, move_condition)
+        cr.execute(sql)
+        data = cr.dictfetchone()
+        amount = data['amount']#material fee
+        sql = '''
+                SELECT coalesce(SUM(debit-credit),0) as amount
+                        FROM account_move_line
+                        WHERE account_id = %s AND date <= '%s' %s AND product_id = %s AND (closed_cycle is null OR closed_cycle = FALSE)
+                '''%(account_id, date, old_move_condition, prod_id)
+        cr.execute(sql)
+        data = cr.dictfetchone()
+        amount += data['amount']#deduct fee transferred to finished goods
+        price = remain_qty and amount/remain_qty or 0
         return price
 
     def make_cost_price_journal_entry(self, cr, uid, ids, context=None):
@@ -180,7 +186,7 @@ class stock_picking(osv.osv):
             journal_id = False
             period_ids = self.pool.get('account.period').find(cr, uid, pick.date_done)
             if not period_ids:
-                raise osv.except_osv('Invalid Action', 'You havent defined period for date: %s'%move.date_done)
+                raise osv.except_osv('Invalid Action', 'You havent defined period for date: %s'%pick.date_done)
 
             for move in pick.move_lines:
                 if move.state != 'done' or move.location_dest_id == move.location_id:
@@ -227,7 +233,6 @@ class stock_picking(osv.osv):
         if picking.state == 'done':
             self.make_cost_price_journal_entry(cr, uid, [picking.id], context)
             if picking.mrp_id and picking.mrp_id.state not in ('draft', 'cancel', 'done'):
-                sql = ''
                 for move in picking.move_lines:
                     if not move.raw_material_production_id:
                         move.write({'raw_material_production_id': picking.mrp_id.id})
