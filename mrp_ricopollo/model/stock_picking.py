@@ -209,6 +209,9 @@ class stock_picking(osv.osv):
                                                     move.product_id.categ_id.property_stock_journal.id or False
                 account_credit, account_debit = self.get_account(cr, uid, move, context)
                 cost_price = self.get_cost_price(cr, uid, move.product_id.id, move.date, account_credit, context)
+                if not cost_price:
+                    cost_price = self.get_latest_purchase_price(cr, uid, move.product_id.id, move.date, move.product_uom)
+                if not cost_price: continue
                 line = self._prepare_account_move_line(cr, uid, journal_id, move.product_id, \
                                                            move.product_qty, move.product_uom.id, \
                                                            cost_price, period_ids[0], \
