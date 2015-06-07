@@ -41,9 +41,18 @@ class mrp_production(osv.osv):
             vals.update({'remain_qty': vals['product_qty']})
         return super(mrp_production, self).write(cr, uid, ids, vals, context, update=False)
 
-    def _make_production_internal_picking(self, cr, uid, mrp, context=None):
+    def _make_production_internal_picking(self, cr, uid, mrp, move_ids, context=None):
         stock_picking = self.pool.get('stock.picking')
+        stock_warehouse = self.pool.get('stock.warehouse')
         obj_data = self.pool.get('ir.model.data')
+        int_type_id = False
+        for move in move_ids:
+            if not move.scrapped:
+                location_id = move.location_id.usage == 'internal' and move.location_id.id or move.location_dest_id.id
+                warehouse_ids = stock_warehouse.search(cr, uid, [('lot_stock_id','=', location_id)])
+                if warehouse_ids:
+                    warehouse = stock_warehouse.browse(cr, uid, warehouse_ids[0])
+                    int_type_id = warehouse.int_type_id and warehouse.int_type_id.id or False
         picking_type_id = obj_data.get_object_reference(cr, uid, 'stock','picking_type_internal') and obj_data.get_object_reference(cr, uid, 'stock','picking_type_internal')[1] or False
         picking_id = stock_picking.create(cr, uid, {
                                                     'origin': mrp.name,
@@ -51,13 +60,14 @@ class mrp_production(osv.osv):
                                                     'move_type': 'direct',
                                                     'mrp_id': mrp.id,
                                                     'auto_picking': True,
+                                                    'picking_type_id': int_type_id,
                                                 }, context=context)
         return picking_id
 
     def action_confirm(self, cr, uid, ids, context=None):
         res = super(mrp_production, self).action_confirm(cr, uid, ids, context)
         for mrp in self.browse(cr, uid, ids, context):
-            picking_id = self._make_production_internal_picking(cr, uid, mrp, context)
+            picking_id = self._make_production_internal_picking(cr, uid, mrp, mrp.move_lines, context)
             for move in mrp.move_lines:
                 move.write({'picking_id': picking_id})
         return res
@@ -67,7 +77,7 @@ class mrp_production(osv.osv):
             context = {}
         res = super(mrp_production, self).action_produce(cr, uid, production_id, production_qty, production_mode, wiz, context)
         brw = self.browse(cr, uid, production_id, context=context)
-        picking_id = self._make_production_internal_picking(cr, uid, brw, context=context)
+        picking_id = self._make_production_internal_picking(cr, uid, brw, brw.move_created_ids2, context=context)
         old_stock_move_ids = [] #old finished goods
         for line in brw.move_created_ids2:
             if line.state != 'done' or line.location_dest_id.scrap_location: continue
