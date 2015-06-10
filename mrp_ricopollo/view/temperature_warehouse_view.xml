@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+		<record id="temperature_warehouse_form_search_view" model="ir.ui.view">
+            <field name="name">temperature.warehouse.search</field>
+            <field name="model">temperature.warehouse</field>
+            <field name="arch" type="xml">
+                <search string="Temperature">
+                    <field name="name"/>
+                    <field name="warehouse_id"/>
+                    <field name="cycle_id"/>
+                    <field name="date"/>
+                    <field name="user_id"/>
+                    <field name="state" />
+                </search>
+            </field>
+        </record>
+        
+        <record id="temperature_warehouse_form_tree_view" model="ir.ui.view">
+            <field name="name">temperature.warehouse.tree</field>
+            <field name="model">temperature.warehouse</field>
+            <field name="arch" type="xml">
+                <tree string="Temperature">
+                    <field name="name"/>
+                    <field name="warehouse_id"/>
+                    <field name="cycle_id"/>
+                    <field name="date"/>
+                    <field name="user_id"/>
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="temperature_warehouse_form_form_view" model="ir.ui.view">
+            <field name="name">temperature.warehouse.form</field>
+            <field name="model">temperature.warehouse</field>
+            <field name="arch" type="xml">
+                <form string="Temperature">
+					<header>
+                        <button name="action_cancel" states="draft,approve,mo" type="object" string="Cancel"/>
+                        <button name="action_approve" states="draft" type="object" string="Approve"/>
+                        <button name="action_set_to_draft" states="cancel" type="object" string="Set To Draft"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,done" />
+					</header>
+                    <group col="4" colspan="4">
+                        <field name="name"/>
+						<field name="warehouse_id" />
+						<field name="cycle_id"/>
+						<field name="date"/>
+                        <field name="user_id"/>
+						<field name="description"/>
+                    </group>
+                    <group col="4" colspan="4">
+                        <group col="2" colspan="2">
+                            <separator string="Galpón Interno (C)" colspan="4"/>
+                             <field name="in_morning"/>
+                             <field name="in_afternoon"/>
+                             <field name="in_night"/>
+                        </group>
+                        <group col="2" colspan="2">
+                            <separator string="Galpón Externo (C)" colspan="4"/>
+                             <field name="out_morning"/>
+                             <field name="out_afternoon"/>
+                             <field name="out_night"/>
+                        </group>
+                    </group>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_temperature_warehouse_form" model="ir.actions.act_window">
+            <field name="name">Temperature</field>
+            <field name="res_model">temperature.warehouse</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="temperature_warehouse_form_tree_view"/>
+        </record>
+        <menuitem name="Temperature" action="action_temperature_warehouse_form" id="menu_action_temperature_warehouse_form"
+            parent="mrp.menu_mrp_manufacturing" sequence="1"/>
+
+    </data>
+</openerp>

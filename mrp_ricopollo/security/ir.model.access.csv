@@ -3,3 +3,7 @@ access_mrp_request_form,mrp.request.form,model_mrp_request_form,base.group_user,
 access_mrp_request_form_line,mrp.request.form.line,model_mrp_request_form_line,base.group_user,1,1,1,1
 access_history_cycle_form,history.cycle.form,model_history_cycle_form,base.group_user,1,1,1,1
 access_dead_chickens_daily,dead.chickens.daily,model_dead_chickens_daily,base.group_user,1,1,1,1
+access_daily_consumption,daily.consumption,model_daily_consumption,base.group_user,1,1,1,1
+access_daily_consumption_material,daily.consumption.material,model_daily_consumption_material,base.group_user,1,1,1,1
+access_daily_consumption_dead,daily.consumption.dead,model_daily_consumption_dead,base.group_user,1,1,1,1
+access_temperature_warehouse,temperature.warehouse,model_temperature_warehouse,base.group_user,1,1,1,1
