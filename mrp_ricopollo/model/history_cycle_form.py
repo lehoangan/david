@@ -30,6 +30,7 @@ class history_cycle_form(osv.osv):
 
     _columns = {
         'name': fields.char('Cylce No', 100),
+        'type': fields.selection([('Male', 'Macho'), ('female', 'Hembra'), ('mixed', 'Mixto')], 'Type'),
         'date_start': fields.date('Date Start', required=True, readonly=True),
         'date_end': fields.date('Date End', readonly=True),
         'warehouse_id':fields.many2one('stock.warehouse', 'Parent', ondelete='cascade'),

@@ -23,8 +23,7 @@
                     </xpath>
                     <xpath expr="//field[@name='code']" position="after">
                        <field name="is_farm"/>
-                       <field name="account_id" attrs="{'required':[('is_farm','=',True)],'invisible':[('is_farm','!=',True)]}"/>
-                       <field name="type" attrs="{'required':[('is_farm','=',True)],'invisible':[('is_farm','!=',True)]}"/>
+                       <field name="account_id" attrs="{'required':[('is_farm','=',True)],'invisible':[('is_farm','!=',True)]}"/>                       
                     </xpath>
 
                     <xpath expr="//notebook[@groups='stock.group_adv_location']" position="before">
@@ -34,6 +33,7 @@
                             <field name="cycle_ids" nolabel="1" >
                                 <tree string="Cycle History" editable="top">
                                     <field name="name"/>
+                                    <field name="type" required="1"/>
                                     <field name="date_start"/>
                                     <field name="date_end"/>
                                 </tree>

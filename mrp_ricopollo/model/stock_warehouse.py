@@ -35,7 +35,6 @@ class stock_warehouse(osv.osv):
         'is_farm': fields.boolean('Is Farm', readonly=True, states={'draft': [('readonly', False)]}),
         'account_id': fields.many2one('account.account', 'Farm Account', domain=[('type', '!=', 'view')], readonly=True, states={'draft': [('readonly', False)]}),
         'cycle_ids': fields.one2many('history.cycle.form', 'warehouse_id', 'History Cycle'),
-        'type': fields.selection([('Male', 'Macho'), ('female', 'Hembra'), ('mixed', 'Mixto')], 'Type', readonly=True, states={'draft': [('readonly', False)]}),
         'state': fields.selection([('draft', 'Close'), ('open', 'Open')], 'State'),
     }
 
