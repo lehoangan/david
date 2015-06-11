@@ -27,9 +27,9 @@ from openerp import netsvc
 class mrp_production(osv.osv):
     _inherit = "mrp.production"
     _columns ={
-        'chicken': fields.boolean('Tracking Chitkens', readonly=False, states={'done': [('readonly', True)]}),
+        'chicken': fields.boolean('Tracking Chickens', readonly=False, states={'done': [('readonly', True)]}),
         'remain_qty': fields.float('Remain Quantity', required=True, readonly=True, states={'draft': [('readonly', False)]}),
-        'dead_ids': fields.one2many('dead.chickens.daily', 'mrp_id', 'Dead Chitkens', readonly=False, states={'done': [('readonly', True)]}),
+        'dead_ids': fields.one2many('dead.chickens.daily', 'mrp_id', 'Dead Chickens', readonly=False, states={'done': [('readonly', True)]}),
     }
     def create(self, cr, uid, vals, context=None):
         if vals.get('product_qty'):
