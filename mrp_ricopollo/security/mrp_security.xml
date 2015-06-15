@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data noupdate="1">
+
+    <record id="base.group_edit_date_history_cycle" model="res.groups">
+        <field name="name">Edit date on cyle of farmer</field>
+    </record>
+    
+</data>
+</openerp>

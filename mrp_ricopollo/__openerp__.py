@@ -31,6 +31,7 @@
     'data': [
         'view/mrp_sequence.xml',
         'security/ir.model.access.csv',
+        'security/mrp_security.xml',
         'view/mrp_request_form_view.xml',
         'report/report_define.xml',
         'view/stock_warehouse_view.xml',

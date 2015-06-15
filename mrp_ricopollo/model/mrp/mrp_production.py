@@ -53,10 +53,8 @@ class mrp_production(osv.osv):
                 if warehouse_ids:
                     warehouse = stock_warehouse.browse(cr, uid, warehouse_ids[0])
                     int_type_id = warehouse.int_type_id and warehouse.int_type_id.id or False
-        picking_type_id = obj_data.get_object_reference(cr, uid, 'stock','picking_type_internal') and obj_data.get_object_reference(cr, uid, 'stock','picking_type_internal')[1] or False
         picking_id = stock_picking.create(cr, uid, {
                                                     'origin': mrp.name,
-                                                    'picking_type_id': picking_type_id,
                                                     'move_type': 'direct',
                                                     'mrp_id': mrp.id,
                                                     'auto_picking': True,

@@ -22,7 +22,6 @@
 
 import openerp
 from openerp.osv import fields, osv
-from openerp import SUPERUSER_ID, api
 from openerp.tools.translate import _
 
 class product_product(osv.Model):
