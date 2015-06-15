@@ -30,7 +30,7 @@ class history_cycle_form(osv.osv):
     _inherit = ['mail.thread']
 
     _columns = {
-        'name': fields.char('Cylce No', 100),
+        'name': fields.char('Cylce No', 100, required=True),
         'type': fields.selection([('Male', 'Macho'), ('female', 'Hembra'), ('mixed', 'Mixto')], 'Type'),
         'date_start': fields.date('Date Start', required=True),
         'date_end': fields.date('Date End'),

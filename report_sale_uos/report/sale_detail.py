@@ -148,10 +148,6 @@ class Parser(report_sxw.rml_parse):
             where_str = '%s %s'%(where_str, ''' AND s.date_order::date <= '%s' '''%form['date_to'])
 
         if state_id:
-            # if state_id['city']:
-            #     where_str = '%s %s'%(where_str, ''' AND part.city = '%s' '''%state_id['city'])
-            # else:
-            #     where_str = '%s %s'%(where_str, ''' AND part.city is null ''')
             if state_id['id']:
                 where_str = '%s %s'%(where_str, ''' AND categ.id = %s '''%state_id['id'])
             else:
@@ -164,11 +160,10 @@ class Parser(report_sxw.rml_parse):
                         t.name,
                         p.id as prod_id,
                         t.uos_id as product_uos,
-                        --sum(l.product_uos_qty / us.factor * us2.factor) as product_uos_qty,
                         sum(l.product_uos_qty) as product_uos_qty,
                         t.uom_id as product_uom,
                         sum(l.product_uom_qty / u.factor * u2.factor) as product_uom_qty,
-                        sum((l.product_uom_qty-l.discount_kg) * l.price_unit * (100.0-l.discount) / 100.0) as price_total,
+                        sum(l.product_uom_qty * l.price_unit) as price_total,
                         s.name as so,
                         part.name as partner,
                         s.user_id as user_id,
@@ -232,7 +227,7 @@ class Parser(report_sxw.rml_parse):
                         p.id as id,
                         sum(l.product_uos_qty) as product_uos_qty,
                         sum(l.product_uom_qty / u.factor * u2.factor) as product_uom_qty,
-                        sum((l.product_uom_qty-l.discount_kg) * l.price_unit * (100.0-l.discount) / 100.0) as price_total
+                        sum(l.product_uom_qty * l.price_unit) as price_total
                 FROM (
                     sale_order_line l
                           join sale_order s on (l.order_id=s.id)
@@ -276,7 +271,7 @@ class Parser(report_sxw.rml_parse):
                  SELECT
                         sum(l.product_uos_qty) as product_uos_qty,
                         sum(l.product_uom_qty / u.factor * u2.factor) as product_uom_qty,
-                        sum((l.product_uom_qty-l.discount_kg) * l.price_unit * (100.0-l.discount) / 100.0) as price_total
+                        sum(l.product_uom_qty * l.price_unit) as price_total
                 FROM (
                     sale_order_line l
                           join sale_order s on (l.order_id=s.id)
