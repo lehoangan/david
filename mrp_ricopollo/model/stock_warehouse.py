@@ -40,7 +40,6 @@ class stock_warehouse(osv.osv):
 
     _defaults={
         'state': 'draft',
-        'type': 'mixed',
     }
 
     def action_open_cycle(self, cr, uid, ids, context=None):
@@ -59,7 +58,7 @@ class stock_warehouse(osv.osv):
                 raise Warning(_('Please set account before'))
             if obj.account_id.balance != 0:
                 raise Warning(_('Account balance = %s. You must transfer it.'%obj.account_id.balance))
-            if obj.cycle_ids:
+            if obj.cycle_ids and not obj.cycle_ids[len(obj.cycle_ids)-1].date_end:
                 obj.cycle_ids[len(obj.cycle_ids)-1].write({'date_end': time.strftime('%Y-%m-%d')})
             cr.execute('UPDATE account_move_line set closed_cycle=TRUE where (closed_cycle is null or closed_cycle = FALSE) AND account_id = %s'%obj.account_id.id)
         return self.write(cr, uid, ids, {'state': 'draft'}, context)

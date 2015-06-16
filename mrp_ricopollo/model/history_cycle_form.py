@@ -30,7 +30,7 @@ class history_cycle_form(osv.osv):
     _inherit = ['mail.thread']
 
     _columns = {
-        'name': fields.char('Cylce No', 100, required=True),
+        'name': fields.char('Cylce No', 100, readonly=True),
         'type': fields.selection([('Male', 'Macho'), ('female', 'Hembra'), ('mixed', 'Mixto')], 'Type'),
         'date_start': fields.date('Date Start', required=True),
         'date_end': fields.date('Date End'),
@@ -38,12 +38,13 @@ class history_cycle_form(osv.osv):
     }
 
     _defaults= {
-        'date': time.strftime('%Y-%m-%d'),
+        'date_start': time.strftime('%Y-%m-%d'),
+        'type': 'mixed',
     }
 
     def write(self, cr, uid, ids, vals, context=None):
         for obj in self.browse(cr, uid, ids, context):
-            if obj.date_state and vals.get('date_start', False) and \
+            if obj.date_start and vals.get('date_start', False) and \
                     not self.pool['res.users'].has_group(cr, uid, 'base.group_edit_date_history_cycle'):
                 raise openerp.exceptions.AccessError(_("You is not allowed for edit date start"))
             elif obj.date_end and vals.get('date_end', False) and \

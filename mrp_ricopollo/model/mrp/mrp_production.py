@@ -20,9 +20,8 @@
 ##############################################################################
 
 from openerp.osv import fields, osv
-import openerp.addons.decimal_precision as dp
-from openerp import netsvc
-
+from openerp.tools.translate import _
+import openerp
 
 class mrp_production(osv.osv):
     _inherit = "mrp.production"
@@ -53,6 +52,9 @@ class mrp_production(osv.osv):
                 if warehouse_ids:
                     warehouse = stock_warehouse.browse(cr, uid, warehouse_ids[0])
                     int_type_id = warehouse.int_type_id and warehouse.int_type_id.id or False
+                    if int_type_id: break
+        if not int_type_id:
+            raise openerp.exceptions.AccessError(_("Not find warehouse for location"))
         picking_id = stock_picking.create(cr, uid, {
                                                     'origin': mrp.name,
                                                     'move_type': 'direct',
