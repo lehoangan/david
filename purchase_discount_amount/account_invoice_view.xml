@@ -12,6 +12,10 @@
                     <field name="new_discount" on_change="onchange_new_discount(new_discount,discount_amount)"/>
                 </xpath>
 
+                <xpath expr="//tree/field[@name='price_subtotal']" position="before">
+                    <field name="discount_total" />
+                </xpath>
+
                 <xpath expr="//tree/field[@name='discount']" position="attributes">
                     <attribute name="invisible">True</attribute>
                 </xpath>

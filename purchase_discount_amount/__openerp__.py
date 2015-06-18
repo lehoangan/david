@@ -20,7 +20,7 @@
 ##############################################################################
 
 {
-    'name': 'Discount Amount on Purchase Order Line',
+    'name': 'R - Discount Amount on Purchase Order Line',
     'version': '1.0',
     'author': 'Anle<lehoangan1988@gmail.com>',
     'category': 'Rico',

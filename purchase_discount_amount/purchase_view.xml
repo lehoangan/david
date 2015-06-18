@@ -10,7 +10,8 @@
                	<data>
 	                <field name="discount" position="before">
 		                <field name="discount_amount" on_change="onchange_discount_amount(discount_amount, price_unit)"/>
-	                </field>   
+						<field name="discount_total"/>
+	                </field>
 	                <field name="discount" position="attributes">
 	                	<attribute name="invisible">True</attribute>
 	                </field>	                	    
@@ -26,7 +27,10 @@
                	<data>
 	                <field name="discount" position="before">
 		                <field name="discount_amount" on_change="onchange_discount_amount(discount_amount, price_unit)"/>
-	                </field>   
+	                </field>
+					<field name="price_subtotal" position="before">
+		                <field name="discount_total"/>
+	                </field>
 	                <field name="discount" position="attributes">
 	                	<attribute name="invisible">True</attribute>
 	                </field>	                	    
@@ -42,7 +46,10 @@
                	<data>
 	                <field name="discount" position="before">
 		                <field name="discount_amount" on_change="onchange_discount_amount(discount_amount, price_unit)"/>
-	                </field>   
+	                </field>
+					<field name="price_subtotal" position="before">
+		                <field name="discount_total"/>
+	                </field>
 	                <field name="discount" position="attributes">
 	                	<attribute name="invisible">True</attribute>
 	                </field>	                	    
