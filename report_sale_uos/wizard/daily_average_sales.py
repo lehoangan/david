@@ -52,6 +52,8 @@ class daily_average_sales(osv.osv_memory):
         date_to = data['form']['date_to']
         date_from = datetime.datetime.strptime(date_from, DEFAULT_SERVER_DATE_FORMAT)
         date_to = datetime.datetime.strptime(date_to, DEFAULT_SERVER_DATE_FORMAT)
+        print '============',date_from, date_to
+        print '============',date_from.strftime("%a"), date_to.strftime("%a")
         if date_from.strftime("%a") != 'Mon':
             raise osv.except_osv(_('User Error!'), _('Date start must be monday.'))
         if date_to.strftime("%a") != 'Sun':
