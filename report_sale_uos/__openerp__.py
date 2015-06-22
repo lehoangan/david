@@ -40,6 +40,7 @@
         'wizard/collector_payment_detail_view.xml',
         'wizard/sale_analysis_view.xml',
         'wizard/accounts_receivable_report.xml',
+        'wizard/daily_average_sales_view.xml',
         
         'view/config_report_rico_view.xml',
         'report/report_define.xml',

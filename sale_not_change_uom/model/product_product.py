@@ -45,3 +45,21 @@ class product_template(osv.Model):
         if self.pool['res.users'].has_group(cr, uid, 'base.not_create_and_edit_product'):
             raise openerp.exceptions.AccessError(_("You is not allowed for edit or create"))
         return super(product_template, self).write(cr, uid, ids, vals, context)
+
+class product_uom(osv.osv):
+    _inherit = 'product.uom'
+
+    def write(self, cr, uid, ids, vals, context=None):
+        if self.pool['res.users'].has_group(cr, uid, 'base.allow_create_edit_delete_uom'):
+            return super(product_uom, self).write(cr, uid, ids, vals, context)
+        raise openerp.exceptions.AccessError(_("You is not allowed for edit or create"))
+
+    def create(self, cr, uid, vals, context=None):
+        if self.pool['res.users'].has_group(cr, uid, 'base.allow_create_edit_delete_uom'):
+            return super(product_uom, self).create(cr, uid, vals, context)
+        raise openerp.exceptions.AccessError(_("You is not allowed for edit or create"))
+
+    def unlink(self, cr, uid, ids, context=None):
+        if self.pool['res.users'].has_group(cr, uid, 'base.allow_create_edit_delete_uom'):
+            return super(product_uom, self).unlink(cr, uid, ids, context)
+        raise openerp.exceptions.AccessError(_("You is not allowed for edit or create"))

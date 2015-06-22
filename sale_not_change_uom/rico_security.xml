@@ -16,5 +16,9 @@
         <field name="name">Not create and edit product</field>
         <field name="category_id" ref="base.module_category_hidden"/>
     </record>
+
+    <record id="base.allow_create_edit_delete_uom" model="res.groups">
+        <field name="name">Allow create - edit - delete UOM</field>
+    </record>
 </data>
 </openerp>

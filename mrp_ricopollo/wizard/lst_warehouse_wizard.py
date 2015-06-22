@@ -19,5 +19,24 @@
 #
 ##############################################################################
 
-import manufacture_request,lst_wahouse
+from openerp.osv import osv,fields
+from openerp.tools.translate import _
+
+class lst_warehouse_wizard(osv.osv_memory):
+
+    _name = "lst.warehouse.wizard"
+
+    _columns = {
+    }
+    _defaults={
+    }
+
+    def print_report(self, cr, uid, ids, context=None):
+        if context is None:
+            context = {}
+        data = {}
+        data['form'] = self.read(cr, uid, ids, ['date','state'])[0]
+        return self.pool['report'].get_action(cr, uid, [], 'lst_warehouse_report', data=data, context=context)
+
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+

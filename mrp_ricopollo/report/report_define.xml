@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <openerp>
-<data noupdate="1">
+<data noupdate="0">
 
     <record id="aeroo_manufacture_request_id" model="ir.actions.report.xml">
         <field name="name">MRP Request Report</field>
@@ -11,6 +11,19 @@
         <field name="in_format">oo-ods</field>
         <field name="parser_loc">mrp_ricopollo/report/manufacture_request.py</field>
         <field name="report_rml">mrp_ricopollo/report/manufacture_request.ods</field>
+        <field name="parser_state">loc</field>
+        <field name="tml_source">file</field>
+    </record>
+
+    <record id="aeroo_lst_warehouse_id" model="ir.actions.report.xml">
+        <field name="name">List Warehouse</field>
+        <field name="type">ir.actions.report.xml</field>
+        <field name="model">lst.warehouse.wizard</field>
+        <field name="report_name">lst_warehouse_report</field>
+        <field name="report_type">aeroo</field>
+        <field name="in_format">oo-ods</field>
+        <field name="parser_loc">mrp_ricopollo/report/lst_wahouse.py</field>
+        <field name="report_rml">mrp_ricopollo/report/lst_warehouse.ods</field>
         <field name="parser_state">loc</field>
         <field name="tml_source">file</field>
     </record>

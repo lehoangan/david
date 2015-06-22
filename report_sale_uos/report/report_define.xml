@@ -158,6 +158,19 @@
     <record id="action_report_so_receipt2" model="ir.actions.report.xml">
         <field name="paperformat_id" ref="paperformat_so_receipt"/>
     </record>
+    
+    <record id="aeroo_daily_average_sales_report_id" model="ir.actions.report.xml">
+        <field name="name">Daily Average Sales</field>
+        <field name="type">ir.actions.report.xml</field>
+        <field name="model">daily.average.sales</field>
+        <field name="report_name">daily_average_sales_report</field>
+        <field name="report_type">aeroo</field>
+        <field name="in_format">oo-ods</field>
+        <field name="parser_loc">report_sale_uos/report/daily_average_sales.py</field>
+        <field name="report_rml">report_sale_uos/report/daily_average_sales.ods</field>
+        <field name="parser_state">loc</field>
+        <field name="tml_source">file</field>
+    </record>
 
 </data>
 </openerp>

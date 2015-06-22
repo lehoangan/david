@@ -19,4 +19,4 @@
 #
 ##############################################################################
 import sale_detail, sale_sumary, invoice_detail, payment_detail, discount_client, collector_payment_detail
-import sale_analysis, accounts_receivable_report
+import sale_analysis, accounts_receivable_report,daily_average_sales
