@@ -56,7 +56,7 @@ class daily_average_sales(osv.osv_memory):
         if date_from.strftime("%a") not in ('Mon', 'mon', 'lun', 'Lun'):
             raise osv.except_osv(_('User Error!'), _('%s start must be monday.(%s)'%(date_from, date_from.strftime("%a"))))
         if date_to.strftime("%a") not in ('Sun', 'sun', 'Dom', 'dom'):
-            raise osv.except_osv(_('User Error!'), _('%s start must be sunday.(%s)'%(date_to, date_to.strftime("%a"))))
+            raise osv.except_osv(_('User Error!'), _('%s stop must be sunday.(%s)'%(date_to, date_to.strftime("%a"))))
         lst_date = []
         while date_from < date_to:
             lst_date.append([date_from.strftime(DEFAULT_SERVER_DATE_FORMAT),(date_from +datetime.timedelta(days=6)).strftime(DEFAULT_SERVER_DATE_FORMAT)])

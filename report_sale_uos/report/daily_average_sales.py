@@ -219,7 +219,7 @@ class Parser(report_sxw.rml_parse):
                 count = 1
                 date = datetime.datetime.strptime(tmp['date_invoice'], DEFAULT_SERVER_DATE_FORMAT)
                 date_old_qty = []
-                while count < 4:
+                while count <= 4:
                     count += 1
                     date = date - datetime.timedelta(days=7)
                     date_old_qty += ['%s'%date.strftime(DEFAULT_SERVER_DATE_FORMAT)]
@@ -240,11 +240,10 @@ class Parser(report_sxw.rml_parse):
                             product['product_id'])
                 self.cr.execute(select_str)
                 old = self.cr.dictfetchone()
-                old_qty = tmp['unit_qty']
+                old_qty = 0
                 if old and old['unit_qty']:
                     old_qty += old['unit_qty']
                 dict_date.update({tmp['date_invoice']: [round(old_qty/4, 2), tmp['unit_qty']]})
-
 
             result.append({
                 'name': product_name,
