@@ -26,11 +26,11 @@ class account_invoice_line(models.Model):
     _inherit = 'account.invoice.line'
 
     @api.one
-    @api.depends('price_unit', 'discount', 'invoice_line_tax_id', 'quantity',
+    @api.depends('price_unit', 'discount', 'invoice_line_tax_id', 'quantity', 'discount_total',
         'product_id', 'invoice_id.partner_id', 'invoice_id.currency_id')
     def _compute_price(self):
         price = self.price_unit * (1 - (self.discount or 0.0) / 100.0)
-        taxes = self.invoice_line_tax_id.compute_all(price, self.quantity, product=self.product_id, partner=self.invoice_id.partner_id)
+        taxes = self.invoice_line_tax_id.compute_all(price, self.quantity-self.discount_kg, product=self.product_id, partner=self.invoice_id.partner_id)
         self.price_subtotal = taxes['total'] - self.discount_total
         if self.invoice_id:
             self.price_subtotal = self.invoice_id.currency_id.round(self.price_subtotal)
@@ -45,13 +45,6 @@ class account_invoice_line(models.Model):
         default=0.0)
     price_subtotal = fields.Float(string='Amount', digits= dp.get_precision('Account'),
         store=True, readonly=True, compute='_compute_price')
-
-    # _columns = {
-    #     'discount_amount': fields.float('Discount Amount', digits_compute=dp.get_precision('Discount')),
-    #     'discount_total': fields.float('Discount On Total', digits_compute=dp.get_precision('Discount')),
-    #     'new_discount': fields.float('Discount (%)', digits=(16, 2)),
-    #     'discount': fields.float('Discount (%)', digits=(16, 12)),
-    # }
 
     def onchange_discount_amount(self, cr, uid, ids, discount_amount, price_unit, new_discount, context=None):
         val = {}
