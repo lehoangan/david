@@ -26,7 +26,7 @@ class account_invoice_line(models.Model):
     _inherit = 'account.invoice.line'
 
     @api.one
-    @api.depends('price_unit', 'discount', 'invoice_line_tax_id', 'quantity', 'discount_total',
+    @api.depends('price_unit', 'discount','discount_kg','discount_amount', 'invoice_line_tax_id', 'quantity', 'discount_total',
         'product_id', 'invoice_id.partner_id', 'invoice_id.currency_id')
     def _compute_price(self):
         price = self.price_unit * (1 - (self.discount or 0.0) / 100.0)
