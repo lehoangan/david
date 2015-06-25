@@ -41,7 +41,7 @@ class account_invoice_line(models.Model):
         default=0.0)
     new_discount = fields.Float(string='Discount (%)', digits=(16, 2),
         default=0.0)
-    discount = fields.Float(string='Discount (%)', digits=(16, 2),
+    discount = fields.Float(string='Discount (%)', digits=(16, 12),
         default=0.0)
     price_subtotal = fields.Float(string='Amount', digits= dp.get_precision('Account'),
         store=True, readonly=True, compute='_compute_price')
