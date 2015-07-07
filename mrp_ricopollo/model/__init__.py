@@ -25,4 +25,5 @@ import stock_move, stock_picking
 import account_move_line
 import purchase
 import mrp
+import product_product
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

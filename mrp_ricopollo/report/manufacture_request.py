@@ -66,8 +66,7 @@ class Parser(report_sxw.rml_parse):
                         sum(req.qty_chicken) as chicken,
                         sum(req.qty_qq) as qty
                 FROM 
-                    (select *, (select SUM(qty_qq) FROM mrp_request_form_line where request_id = mrp_request_form.id) as qty_qq
-                    FROM mrp_request_form) req 
+                    mrp_request_form req
                     join stock_warehouse w on (req.warehouse_id = w.id)
                     
                 %s
@@ -122,18 +121,16 @@ class Parser(report_sxw.rml_parse):
 
         if farm and farm['id']:
             where_str = '%s %s'%(where_str, ''' AND req.warehouse_id = %s '''%farm['id'])
-           
 
         select_str = """
                  SELECT
-                        reql.product_id as prod,
-                        sum(reql.qty_qq) as qty
+                        req.product_id as prod,
+                        sum(req.qty_qq) as qty
                 FROM 
-                    mrp_request_form_line reql
-                    join mrp_request_form req on (reql.request_id = req.id)
-                    
+                    mrp_request_form req
+
                 %s
-                GROUP BY reql.product_id
+                GROUP BY req.product_id
         """%where_str
         self.cr.execute(select_str)
         res = self.cr.dictfetchall()
@@ -156,8 +153,7 @@ class Parser(report_sxw.rml_parse):
                         sum(req.qty_chicken) as chicken,
                         sum(req.qty_qq) as qty
                 FROM 
-                    (select *, (select SUM(qty_qq) FROM mrp_request_form_line where request_id = mrp_request_form.id) as qty_qq
-                    FROM mrp_request_form) req 
+                    mrp_request_form req
                     join stock_warehouse w on (req.warehouse_id = w.id)
                     
                 %s
@@ -178,14 +174,13 @@ class Parser(report_sxw.rml_parse):
 
         select_str = """
                  SELECT
-                        reql.product_id as prod,
-                        sum(reql.qty_qq) as qty
+                        req.product_id as prod,
+                        sum(req.qty_qq) as qty
                 FROM 
-                    mrp_request_form_line reql
-                    join mrp_request_form req on (reql.request_id = req.id)
-                    
+                    mrp_request_form req
+
                 %s
-                GROUP BY reql.product_id
+                GROUP BY req.product_id
         """%where_str
         self.cr.execute(select_str)
         res = self.cr.dictfetchall()

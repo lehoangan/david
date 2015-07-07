@@ -6,13 +6,11 @@
             <field name="model">mrp.request.form</field>
             <field name="arch" type="xml">
                 <search string="Solicitud de Alimentos">
-                    <field name="name"/>
-                    <field name="description"/>
-                    <field name="warehouse_id"/>
-                    <field name="cycle_id"/>
-                    <field name="warehouse_to_id"/>
                     <field name="date"/>
-                    <field name="user_id"/>
+                    <field name="cycle_id"/>
+                    <field name="warehouse_id"/>
+                    <field name="cycle_start_date"/>
+                    <field name="product_id"/>
                     <field name="state" />
                 </search>
             </field>
@@ -23,14 +21,14 @@
             <field name="model">mrp.request.form</field>
             <field name="arch" type="xml">
                 <tree string="Solicitud de Alimentos">
-                    <field name="name"/>
-                    <field name="description"/>
-                    <field name="warehouse_id"/>
-                    <field name="cycle_id"/>
-                    <field name="warehouse_to_id"/>
-					<field name="qty_chicken"/>
                     <field name="date"/>
-                    <field name="user_id"/>
+                    <field name="cycle_id"/>
+                    <field name="warehouse_id"/>
+                    <field name="qty_chicken"/>
+                    <field name="cycle_start_date"/>
+                    <field name="age"/>
+                    <field name="product_id"/>
+                    <field name="qty_qq"/>
                     <field name="state" />
                 </tree>
             </field>
@@ -52,25 +50,18 @@
                         <field name="name"/>
 						<field name="description"/>
 						<field name="warehouse_id" on_change="onchange_warehouse_id(warehouse_id)"/>
-                        <field name="cycle_id"/>
-						<field name="warehouse_to_id"/>
-						<field name="date"/>
+                        <field name="cycle_id" on_change="onchange_age(date, cycle_id, context)"/>
+						<field name="date" on_change="onchange_age(date, cycle_id, context)"/>
 						<field name="qty_chicken"/>
+                        <field name="cycle_start_date"/>
+                        <field name="age"/>
 						<field name="user_id" invisible="1"/>
-						<field name="validate_date" invisible="1"/>
-						<field name="validate_user_id" invisible="1"/>
                     </group>
                     <group col="4" colspan="4">
-                        <group>
-                            <field name="line_ids" nolabel="1">
-                                 <tree string="Detail" editable="top">
-                                    <field name="product_id" on_change="onchange_product_id(product_id,qty_qq,context)"/>
-                                    <field name="qty_qq" on_change="onchange_product_id(product_id,qty_qq,context)"/>
-                                    <field name="qty_unit"/>
-                                    <field name="uom_id"/>
-                                </tree>
-                            </field>
-                        </group>
+                        <field name="product_id" on_change="onchange_product_id(product_id,qty_qq,context)"/>
+                        <field name="qty_qq" on_change="onchange_product_id(product_id,qty_qq,context)"/>
+                        <field name="qty_unit"/>
+                        <field name="uom_id"/>
                     </group>
                     <div class="oe_chatter">
                         <field name="message_follower_ids" widget="mail_followers"/>

@@ -21,6 +21,6 @@
 import mrp_request_form,mrp_request_form_line
 import mrp_production,dead_chickens_daily
 import daily_consumption_form,daily_consumption_detail
-import temperature_warehouse
+import temperature_warehouse,standard_production
 #temperature_warehouse_detail
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

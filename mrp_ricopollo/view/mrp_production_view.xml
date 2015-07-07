@@ -29,7 +29,7 @@
 	                    <group>
 	                    	<field name="remain_qty"/>
                     	</group>
-                        <field name="dead_ids">
+                        <field name="dead_ids" options='{"reload_on_button": true}'>
                         	<tree string='Dead Chitkens' editable="top">
                         		<field name="date"/>
                     			<field name="quantity"/> 

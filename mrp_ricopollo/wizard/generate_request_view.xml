@@ -1,0 +1,39 @@
+<openerp>
+    <data>
+
+        <record id="generate_request_view" model="ir.ui.view">
+            <field name="name">generate.request.form</field>
+            <field name="model">generate.request</field>
+            <field name="arch" type="xml">
+                <form string="Request Generate">
+                    <group col="4" colspan="4">
+                        <field name="date"/>
+                    </group>
+                    <group col="2" colspan="4">
+                        <field name="warehouse_ids" />
+                    </group>
+                    <footer>
+                        <button string="Generate" name="action_generate" type="object" default_focus="1" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_generate_request" model="ir.actions.act_window">
+            <field name="name">Request Generate</field>
+            <field name="res_model">generate.request</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="generate_request_view"/>
+            <field name="target">new</field>
+        </record>
+        
+        <menuitem name="Request Generate" action="action_generate_request"
+        	id="menu_action_generate_request"
+            parent="mrp.menu_mrp_manufacturing" sequence="1"/>
+
+    </data>
+</openerp>

@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+		<record id="standard_production_search_view" model="ir.ui.view">
+            <field name="name">standard.production.search</field>
+            <field name="model">standard.production</field>
+            <field name="arch" type="xml">
+                <search string="Standard Production">
+                    <field name="type"/>
+                    <field name="date"/>
+                    <field name="chicken_weight"/>
+                    <field name="daily_weight"/>
+                    <field name="average_weight"/>
+                    <field name="food_consumption" />
+                    <field name="acumulated_consumption"/>
+                    <field name="rate" />
+                    <group expand="0" string="Group By">
+                        <filter string="Type" name="type" context="{'group_by':'type'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        
+        <record id="standard_production_tree_view" model="ir.ui.view">
+            <field name="name">standard.production.tree</field>
+            <field name="model">standard.production</field>
+            <field name="arch" type="xml">
+                <tree string="Standard Production" editable="top">
+                    <field name="type"/>
+                    <field name="date"/>
+                    <field name="chicken_weight"/>
+                    <field name="daily_weight"/>
+                    <field name="average_weight"/>
+                    <field name="food_consumption" />
+                    <field name="acumulated_consumption"/>
+                    <field name="rate" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="standard_production_form_view" model="ir.ui.view">
+            <field name="name">standard.production.form</field>
+            <field name="model">standard.production</field>
+            <field name="arch" type="xml">
+                <form string="Standard Production">
+                    <group col="4" colspan="4">
+                        <field name="type"/>
+                        <field name="date"/>
+                        <field name="chicken_weight"/>
+                        <field name="daily_weight"/>
+                        <field name="average_weight"/>
+                        <field name="food_consumption" />
+                        <field name="acumulated_consumption"/>
+                        <field name="rate" />
+                    </group>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_standard_production" model="ir.actions.act_window">
+            <field name="name">Standard Production</field>
+            <field name="res_model">standard.production</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="standard_production_tree_view"/>
+        </record>
+        <menuitem name="Standard Production" action="action_standard_production" id="menu_action_standard_production"
+            parent="mrp.menu_mrp_manufacturing" sequence="1"/>
+
+    </data>
+</openerp>

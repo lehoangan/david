@@ -1,0 +1,304 @@
+module,type,name,res_id,src,value
+mrp_ricopollo,model,"ir.actions.act_window,name",mrp_ricopollo.action_approve_multi_request_form,Approve Multi Request,Approve Multi Request
+mrp_ricopollo,model,"ir.actions.act_window,name",mrp_ricopollo.action_daily_consumption_form,Daily Consumptions,Consuno Diario Granjas
+mrp_ricopollo,model,"ir.actions.act_window,name",mrp_ricopollo.action_manufacture_request_report_wizard,Hoja Producción Alimento,Hoja Producción Alimento
+mrp_ricopollo,model,"ir.actions.act_window,name",mrp_ricopollo.action_merge_to_make_mo,Merge and Make MOs,Merge and Make MOs
+mrp_ricopollo,model,"ir.actions.act_window,name",mrp_ricopollo.action_mrp_request_form,Solicitud de Alimentos,Solicitud de Alimentos
+mrp_ricopollo,model,"ir.actions.act_window,name",mrp_ricopollo.action_temperature_warehouse_form,Temperature,Temperature
+mrp_ricopollo,aeroo,manufacture_request_report,0,Pedido de Producción Alimento Balanceado,Pedido de Producción Alimento Balanceado
+mrp_ricopollo,aeroo,manufacture_request_report,0,Fecha de pedido:,Fecha de pedido:
+mrp_ricopollo,aeroo,manufacture_request_report,0,Tipo:,Tipo:
+mrp_ricopollo,aeroo,manufacture_request_report,0,Nr.,Nr.
+mrp_ricopollo,aeroo,manufacture_request_report,0,Granja,Granja
+mrp_ricopollo,aeroo,manufacture_request_report,0,Nombre Granjero,Nombre Granjero
+mrp_ricopollo,aeroo,manufacture_request_report,0,Total Pollos,Total Pollos
+mrp_ricopollo,aeroo,manufacture_request_report,0,Tipo de Alimento,Tipo de Alimento
+mrp_ricopollo,aeroo,manufacture_request_report,0,Cantidad (qq),Cantidad (qq)
+mrp_ricopollo,aeroo,manufacture_request_report,0,Observaciones,Observaciones
+mrp_ricopollo,aeroo,manufacture_request_report,0,Totales,Totales
+mrp_ricopollo,aeroo,manufacture_request_report,0,Totales por tipo de Alimento,Totales por tipo de Alimento
+mrp_ricopollo,aeroo,manufacture_request_report,0,Tipo de Alimento,Tipo de Alimento
+mrp_ricopollo,aeroo,manufacture_request_report,0,Totales,Totales
+mrp_ricopollo,aeroo,manufacture_request_report,0, $(, $(
+mrp_ricopollo,aeroo,manufacture_request_report,0, $-, $-
+mrp_ricopollo,aeroo,manufacture_request_report,0,???,???
+mrp_ricopollo,aeroo,manufacture_request_report,0,Page ,Page 
+mrp_ricopollo,aeroo,manufacture_request_report,0,???,???
+mrp_ricopollo,aeroo,manufacture_request_report,0,???,???
+mrp_ricopollo,aeroo,manufacture_request_report,0,00/00/0000,00/00/0000
+mrp_ricopollo,aeroo,manufacture_request_report,0,00:00:00,00:00:00
+mrp_ricopollo,aeroo,manufacture_request_report,0,Page ,Page 
+mrp_ricopollo,aeroo,manufacture_request_report,0,99,99
+mrp_ricopollo,model,"ir.actions.report.xml,name",mrp_ricopollo.aeroo_manufacture_request_id,MRP Request Report,MRP Request Report
+mrp_ricopollo,model,"ir.model,name",mrp_ricopollo.model_account_move_line,Journal Items,Elementos del Diario
+mrp_ricopollo,model,"ir.model,name",mrp_ricopollo.model_approve_multi_request_form,approve.multi.request.form,approve.multi.request.form
+mrp_ricopollo,model,"ir.model,name",mrp_ricopollo.model_daily_consumption,Email Thread,Hilo de Mensajes
+mrp_ricopollo,model,"ir.model,name",mrp_ricopollo.model_daily_consumption_dead,daily.consumption.dead,daily.consumption.dead
+mrp_ricopollo,model,"ir.model,name",mrp_ricopollo.model_daily_consumption_material,daily.consumption.material,daily.consumption.material
+mrp_ricopollo,model,"ir.model,name",mrp_ricopollo.model_dead_chickens_daily,dead.chickens.daily,dead.chickens.daily
+mrp_ricopollo,model,"ir.model,name",mrp_ricopollo.model_history_cycle_form,Email Thread,Hilo de Mensajes
+mrp_ricopollo,model,"ir.model,name",mrp_ricopollo.model_manufacture_request_report_wizard,manufacture.request.report.wizard,manufacture.request.report.wizard
+mrp_ricopollo,model,"ir.model,name",mrp_ricopollo.model_merge_to_make_mo,merge.to.make.mo,merge.to.make.mo
+mrp_ricopollo,model,"ir.model,name",mrp_ricopollo.model_mrp_production,Manufacturing Order,Orden de Producción
+mrp_ricopollo,model,"ir.model,name",mrp_ricopollo.model_mrp_product_produce,Product Produce,Producir producto
+mrp_ricopollo,model,"ir.model,name",mrp_ricopollo.model_mrp_request_form,Email Thread,Hilo de Mensajes
+mrp_ricopollo,model,"ir.model,name",mrp_ricopollo.model_mrp_request_form_line,mrp.request.form.line,mrp.request.form.line
+mrp_ricopollo,model,"ir.model,name",mrp_ricopollo.model_purchase_order,Purchase Order,Orden de Compra
+mrp_ricopollo,model,"ir.model,name",mrp_ricopollo.model_res_users,Users,Usuarios
+mrp_ricopollo,model,"ir.model,name",mrp_ricopollo.model_stock_location,Inventory Locations,Ubicaciones de inventario
+mrp_ricopollo,model,"ir.model,name",mrp_ricopollo.model_stock_move,Stock Move,Movimiento de Stock
+mrp_ricopollo,model,"ir.model,name",mrp_ricopollo.model_stock_picking,Picking List,Lista de Remitos
+mrp_ricopollo,model,"ir.model,name",mrp_ricopollo.model_stock_warehouse,Warehouse,Almacén
+mrp_ricopollo,model,"ir.model,name",mrp_ricopollo.model_temperature_warehouse,Email Thread,Hilo de Mensajes
+mrp_ricopollo,model,"ir.model,name",mrp_ricopollo.model_temperature_warehouse_detail,temperature.warehouse.detail,temperature.warehouse.detail
+mrp_ricopollo,field,"account.move.line,closed_cycle",0,Closed Cycle,Closed Cycle
+mrp_ricopollo,field,"account.move.line,stock_move_id",0,Stock Move,Stock Move
+mrp_ricopollo,field,"approve.multi.request.form,create_date",0,Created on,Created on
+mrp_ricopollo,field,"approve.multi.request.form,create_uid",0,Created by,Created by
+mrp_ricopollo,field,"approve.multi.request.form,id",0,ID,ID
+mrp_ricopollo,field,"approve.multi.request.form,write_date",0,Last Updated on,Last Updated on
+mrp_ricopollo,field,"approve.multi.request.form,write_uid",0,Last Updated by,Last Updated by
+mrp_ricopollo,field,"daily.consumption,consumption_line_ids",0,Consumption Material,Consumption Material
+mrp_ricopollo,field,"daily.consumption,create_date",0,Created on,Created on
+mrp_ricopollo,field,"daily.consumption,create_uid",0,Created by,Creado Por
+mrp_ricopollo,field,"daily.consumption,cycle_id",0,Cylce No,Nr. Ciclo
+mrp_ricopollo,field,"daily.consumption,date",0,Fecha,Fecha
+mrp_ricopollo,field,"daily.consumption.dead,consumption_id",0,Consumption,Consumo
+mrp_ricopollo,field,"daily.consumption.dead,create_date",0,Created on,Created on
+mrp_ricopollo,field,"daily.consumption.dead,create_uid",0,Created by,Created by
+mrp_ricopollo,field,"daily.consumption.dead,female_qty",0,Hembra Qty,Hembra Qty
+mrp_ricopollo,field,"daily.consumption.dead,id",0,ID,ID
+mrp_ricopollo,field,"daily.consumption,dead_line_ids",0,Chicken Dead,Chicken Dead
+mrp_ricopollo,field,"daily.consumption.dead,male_qty",0,Macho Qty,Macho Qty
+mrp_ricopollo,field,"daily.consumption.dead,name",0,Ref,Ref
+mrp_ricopollo,field,"daily.consumption.dead,product_id",0,Chicken,Pollos
+mrp_ricopollo,field,"daily.consumption.dead,total_qty",0,Total Qty,Total Qty
+mrp_ricopollo,field,"daily.consumption.dead,uom_id",0,UoM,UoM
+mrp_ricopollo,field,"daily.consumption.dead,write_date",0,Last Updated on,Last Updated on
+mrp_ricopollo,field,"daily.consumption.dead,write_uid",0,Last Updated by,Last Updated by
+mrp_ricopollo,field,"daily.consumption,description",0,Notas,Notas
+mrp_ricopollo,field,"daily.consumption,id",0,ID,ID
+mrp_ricopollo,field,"daily.consumption.material,consumption_id",0,Consumption,Consumption
+mrp_ricopollo,field,"daily.consumption.material,create_date",0,Created on,Created on
+mrp_ricopollo,field,"daily.consumption.material,create_uid",0,Created by,Created by
+mrp_ricopollo,field,"daily.consumption.material,id",0,ID,ID
+mrp_ricopollo,field,"daily.consumption.material,name",0,Ref,Ref
+mrp_ricopollo,field,"daily.consumption.material,product_id",0,Material,Alimento
+mrp_ricopollo,field,"daily.consumption.material,quantity",0,Quantity,Cantidad
+mrp_ricopollo,field,"daily.consumption.material,uom_id",0,UoM,UoM
+mrp_ricopollo,field,"daily.consumption.material,write_date",0,Last Updated on,Last Updated on
+mrp_ricopollo,field,"daily.consumption.material,write_uid",0,Last Updated by,Last Updated by
+mrp_ricopollo,field,"daily.consumption,message_follower_ids",0,Followers,Followers
+mrp_ricopollo,field,"daily.consumption,message_ids",0,Messages,Messages
+mrp_ricopollo,help,"daily.consumption,message_ids",0,Messages and communication history,Messages and communication history
+mrp_ricopollo,field,"daily.consumption,message_is_follower",0,Is a Follower,Is a Follower
+mrp_ricopollo,field,"daily.consumption,message_last_post",0,Last Message Date,Last Message Date
+mrp_ricopollo,help,"daily.consumption,message_last_post",0,Date of the last message posted on the record.,Date of the last message posted on the record.
+mrp_ricopollo,field,"daily.consumption,message_summary",0,Summary,Summary
+mrp_ricopollo,help,"daily.consumption,message_summary",0,"Holds the Chatter summary (number of messages, ...). This summary is directly in html format in order to be inserted in kanban views.","Holds the Chatter summary (number of messages, ...). This summary is directly in html format in order to be inserted in kanban views."
+mrp_ricopollo,field,"daily.consumption,message_unread",0,Unread Messages,Unread Messages
+mrp_ricopollo,help,"daily.consumption,message_unread",0,If checked new messages require your attention.,If checked new messages require your attention.
+mrp_ricopollo,field,"daily.consumption,name",0,Ref,Ref
+mrp_ricopollo,field,"daily.consumption,state",0,Status,Status
+mrp_ricopollo,selection,"daily.consumption,state",0,Borrador,Borrador
+mrp_ricopollo,selection,"daily.consumption,state",0,Aprobar,Aprobar
+mrp_ricopollo,selection,"daily.consumption,state",0,Cancelar,Cancelar
+mrp_ricopollo,field,"daily.consumption,user_id",0,Create By,Creado Por
+mrp_ricopollo,field,"daily.consumption,warehouse_id",0,Código de Granja,Código de Granja
+mrp_ricopollo,field,"daily.consumption,website_message_ids",0,Website Messages,Website Messages
+mrp_ricopollo,help,"daily.consumption,website_message_ids",0,Website communication history,Website communication history
+mrp_ricopollo,field,"daily.consumption,write_date",0,Last Updated on,Last Updated on
+mrp_ricopollo,field,"daily.consumption,write_uid",0,Last Updated by,Last Updated by
+mrp_ricopollo,field,"dead.chickens.daily,create_date",0,Created on,Created on
+mrp_ricopollo,field,"dead.chickens.daily,create_uid",0,Created by,Created by
+mrp_ricopollo,field,"dead.chickens.daily,date",0,Date,Date
+mrp_ricopollo,field,"dead.chickens.daily,id",0,ID,ID
+mrp_ricopollo,field,"dead.chickens.daily,mrp_id",0,MO,MO
+mrp_ricopollo,field,"dead.chickens.daily,quantity",0,Quintales,Quintales
+mrp_ricopollo,field,"dead.chickens.daily,state",0,State,State
+mrp_ricopollo,selection,"dead.chickens.daily,state",0,Draft,Draft
+mrp_ricopollo,selection,"dead.chickens.daily,state",0,Confirm,Confirm
+mrp_ricopollo,selection,"dead.chickens.daily,state",0,Cancel,Cancel
+mrp_ricopollo,field,"dead.chickens.daily,stock_move_id",0,Scrap Move,Scrap Move
+mrp_ricopollo,field,"dead.chickens.daily,write_date",0,Last Updated on,Last Updated on
+mrp_ricopollo,field,"dead.chickens.daily,write_uid",0,Last Updated by,Last Updated by
+mrp_ricopollo,field,"history.cycle.form,create_date",0,Created on,Created on
+mrp_ricopollo,field,"history.cycle.form,create_uid",0,Created by,Created by
+mrp_ricopollo,field,"history.cycle.form,date_end",0,Date End,Fecha Final
+mrp_ricopollo,field,"history.cycle.form,date_start",0,Date Start,Fecha Inicial
+mrp_ricopollo,field,"history.cycle.form,id",0,ID,ID
+mrp_ricopollo,field,"history.cycle.form,message_follower_ids",0,Followers,Followers
+mrp_ricopollo,field,"history.cycle.form,message_ids",0,Messages,Messages
+mrp_ricopollo,help,"history.cycle.form,message_ids",0,Messages and communication history,Messages and communication history
+mrp_ricopollo,field,"history.cycle.form,message_is_follower",0,Is a Follower,Is a Follower
+mrp_ricopollo,field,"history.cycle.form,message_last_post",0,Last Message Date,Last Message Date
+mrp_ricopollo,help,"history.cycle.form,message_last_post",0,Date of the last message posted on the record.,Date of the last message posted on the record.
+mrp_ricopollo,field,"history.cycle.form,message_summary",0,Summary,Summary
+mrp_ricopollo,help,"history.cycle.form,message_summary",0,"Holds the Chatter summary (number of messages, ...). This summary is directly in html format in order to be inserted in kanban views.","Holds the Chatter summary (number of messages, ...). This summary is directly in html format in order to be inserted in kanban views."
+mrp_ricopollo,field,"history.cycle.form,message_unread",0,Unread Messages,Unread Messages
+mrp_ricopollo,help,"history.cycle.form,message_unread",0,If checked new messages require your attention.,If checked new messages require your attention.
+mrp_ricopollo,field,"history.cycle.form,name",0,Cylce No,Ciclo Nr.
+mrp_ricopollo,field,"history.cycle.form,type",0,Type,Sexo de Pollos
+mrp_ricopollo,selection,"history.cycle.form,type",0,Macho,Macho
+mrp_ricopollo,selection,"history.cycle.form,type",0,Hembra,Hembra
+mrp_ricopollo,selection,"history.cycle.form,type",0,Mixto,Mixto
+mrp_ricopollo,field,"history.cycle.form,warehouse_id",0,Parent,Parent
+mrp_ricopollo,field,"history.cycle.form,website_message_ids",0,Website Messages,Website Messages
+mrp_ricopollo,help,"history.cycle.form,website_message_ids",0,Website communication history,Website communication history
+mrp_ricopollo,field,"history.cycle.form,write_date",0,Last Updated on,Last Updated on
+mrp_ricopollo,field,"history.cycle.form,write_uid",0,Last Updated by,Last Updated by
+mrp_ricopollo,field,"manufacture.request.report.wizard,create_date",0,Created on,Created on
+mrp_ricopollo,field,"manufacture.request.report.wizard,create_uid",0,Created by,Created by
+mrp_ricopollo,field,"manufacture.request.report.wizard,date",0,Fecha,Fecha
+mrp_ricopollo,field,"manufacture.request.report.wizard,id",0,ID,ID
+mrp_ricopollo,field,"manufacture.request.report.wizard,state",0,Tipo,Tipo
+mrp_ricopollo,selection,"manufacture.request.report.wizard,state",0,Borrador,Borrador
+mrp_ricopollo,selection,"manufacture.request.report.wizard,state",0, Aprovado, Aprovado
+mrp_ricopollo,field,"manufacture.request.report.wizard,write_date",0,Last Updated on,Last Updated on
+mrp_ricopollo,field,"manufacture.request.report.wizard,write_uid",0,Last Updated by,Last Updated by
+mrp_ricopollo,field,"merge.to.make.mo,create_date",0,Created on,Created on
+mrp_ricopollo,field,"merge.to.make.mo,create_uid",0,Created by,Created by
+mrp_ricopollo,field,"merge.to.make.mo,id",0,ID,ID
+mrp_ricopollo,field,"merge.to.make.mo,write_date",0,Last Updated on,Last Updated on
+mrp_ricopollo,field,"merge.to.make.mo,write_uid",0,Last Updated by,Last Updated by
+mrp_ricopollo,field,"mrp.production,chicken",0,Tracking Chickens,Tracking Chickens
+mrp_ricopollo,field,"mrp.production,dead_ids",0,Dead Chickens,Dead Chickens
+mrp_ricopollo,field,"mrp.production,remain_qty",0,Remain Quantity,Remain Quantity
+mrp_ricopollo,field,"mrp.request.form,create_date",0,Created on,Created on
+mrp_ricopollo,field,"mrp.request.form,create_uid",0,Created by,Created by
+mrp_ricopollo,field,"mrp.request.form,date",0,Fecha de Pedido,Fecha de Pedido
+mrp_ricopollo,field,"mrp.request.form,description",0,Notas,Notas
+mrp_ricopollo,field,"mrp.request.form,id",0,ID,ID
+mrp_ricopollo,field,"mrp.request.form.line,create_date",0,Created on,Created on
+mrp_ricopollo,field,"mrp.request.form.line,create_uid",0,Created by,Created by
+mrp_ricopollo,field,"mrp.request.form.line,id",0,ID,ID
+mrp_ricopollo,field,"mrp.request.form,line_ids",0,Detail Request,Detail Request
+mrp_ricopollo,field,"mrp.request.form.line,product_id",0,Producto Solicitado,Producto Solicitado
+mrp_ricopollo,field,"mrp.request.form.line,qty_qq",0,Quintales (qq),Quintales (qq)
+mrp_ricopollo,field,"mrp.request.form.line,qty_unit",0,Kilogramos,Kilogramos
+mrp_ricopollo,field,"mrp.request.form.line,request_id",0,Parent,Parent
+mrp_ricopollo,field,"mrp.request.form.line,uom_id",0,UoM,UoM
+mrp_ricopollo,field,"mrp.request.form.line,write_date",0,Last Updated on,Last Updated on
+mrp_ricopollo,field,"mrp.request.form.line,write_uid",0,Last Updated by,Last Updated by
+mrp_ricopollo,field,"mrp.request.form,message_follower_ids",0,Followers,Followers
+mrp_ricopollo,field,"mrp.request.form,message_ids",0,Messages,Messages
+mrp_ricopollo,help,"mrp.request.form,message_ids",0,Messages and communication history,Messages and communication history
+mrp_ricopollo,field,"mrp.request.form,message_is_follower",0,Is a Follower,Is a Follower
+mrp_ricopollo,field,"mrp.request.form,message_last_post",0,Last Message Date,Last Message Date
+mrp_ricopollo,help,"mrp.request.form,message_last_post",0,Date of the last message posted on the record.,Date of the last message posted on the record.
+mrp_ricopollo,field,"mrp.request.form,message_summary",0,Summary,Summary
+mrp_ricopollo,help,"mrp.request.form,message_summary",0,"Holds the Chatter summary (number of messages, ...). This summary is directly in html format in order to be inserted in kanban views.","Holds the Chatter summary (number of messages, ...). This summary is directly in html format in order to be inserted in kanban views."
+mrp_ricopollo,field,"mrp.request.form,message_unread",0,Unread Messages,Unread Messages
+mrp_ricopollo,help,"mrp.request.form,message_unread",0,If checked new messages require your attention.,If checked new messages require your attention.
+mrp_ricopollo,field,"mrp.request.form,name",0,Ref,Ref
+mrp_ricopollo,field,"mrp.request.form,qty_chicken",0,Capacidad Pollos,Capacidad Pollos
+mrp_ricopollo,field,"mrp.request.form,state",0,Status,Status
+mrp_ricopollo,selection,"mrp.request.form,state",0,Borrador,Borrador
+mrp_ricopollo,selection,"mrp.request.form,state",0,Aprobar,Aprobar
+mrp_ricopollo,selection,"mrp.request.form,state",0,Cancelar,Cancelar
+mrp_ricopollo,selection,"mrp.request.form,state",0,MO Created,MO Created
+mrp_ricopollo,field,"mrp.request.form,user_id",0,Create By,Creado Por
+mrp_ricopollo,field,"mrp.request.form,validate_date",0,Date Validate,Date Validate
+mrp_ricopollo,field,"mrp.request.form,validate_user_id",0,Validate By,Validate By
+mrp_ricopollo,field,"mrp.request.form,warehouse_id",0,Código de Granja,Código de Granja
+mrp_ricopollo,field,"mrp.request.form,warehouse_to_id",0,Receive Request,Receive Request
+mrp_ricopollo,field,"mrp.request.form,website_message_ids",0,Website Messages,Website Messages
+mrp_ricopollo,help,"mrp.request.form,website_message_ids",0,Website communication history,Website communication history
+mrp_ricopollo,field,"mrp.request.form,write_date",0,Last Updated on,Last Updated on
+mrp_ricopollo,field,"mrp.request.form,write_uid",0,Last Updated by,Last Updated by
+mrp_ricopollo,field,"res.users,warehouse_id",0,Farm,Farm
+mrp_ricopollo,field,"stock.location,account_id",0,Farm Account,Farm Account
+mrp_ricopollo,field,"stock.move,account_credit_id",0,Account Crebit,Account Crebit
+mrp_ricopollo,field,"stock.move,account_debit_id",0,Account Debit,Account Debit
+mrp_ricopollo,field,"stock.move,cost_price",0,Cost Price,Cost Price
+mrp_ricopollo,field,"stock.move,dead_chicken",0,Dead Chicken,Dead Chicken
+mrp_ricopollo,field,"stock.picking,mrp_id",0,MO,MO
+mrp_ricopollo,field,"stock.warehouse,account_id",0,Farm Account,Cuenta Contable
+mrp_ricopollo,field,"stock.warehouse,capacity",0,Maximum Capacity,Capacidad Máxima
+mrp_ricopollo,field,"stock.warehouse,cycle_ids",0,History Cycle,Historial de Ciclos
+mrp_ricopollo,field,"stock.warehouse,is_farm",0,Is Farm,Es Galpón
+mrp_ricopollo,field,"stock.warehouse,manager_id",0,Manager,Responsable
+mrp_ricopollo,field,"stock.warehouse,state",0,State,State
+mrp_ricopollo,selection,"stock.warehouse,state",0,Close,Close
+mrp_ricopollo,selection,"stock.warehouse,state",0,Open,Open
+mrp_ricopollo,field,"temperature.warehouse,create_date",0,Created on,Created on
+mrp_ricopollo,field,"temperature.warehouse,create_uid",0,Created by,Creado Por
+mrp_ricopollo,field,"temperature.warehouse,cycle_id",0,Cylce No,Nr. Ciclo
+mrp_ricopollo,field,"temperature.warehouse,date",0,Fecha,Fecha
+mrp_ricopollo,field,"temperature.warehouse,description",0,Notas,Notas
+mrp_ricopollo,field,"temperature.warehouse,id",0,ID,ID
+mrp_ricopollo,field,"temperature.warehouse,in_afternoon",0,Tarde,Tarde
+mrp_ricopollo,field,"temperature.warehouse,in_morning",0,Mañana,Mañana
+mrp_ricopollo,field,"temperature.warehouse,in_night",0,Noche,Noche
+mrp_ricopollo,field,"temperature.warehouse,message_follower_ids",0,Followers,Followers
+mrp_ricopollo,field,"temperature.warehouse,message_ids",0,Messages,Messages
+mrp_ricopollo,help,"temperature.warehouse,message_ids",0,Messages and communication history,Messages and communication history
+mrp_ricopollo,field,"temperature.warehouse,message_is_follower",0,Is a Follower,Is a Follower
+mrp_ricopollo,field,"temperature.warehouse,message_last_post",0,Last Message Date,Last Message Date
+mrp_ricopollo,help,"temperature.warehouse,message_last_post",0,Date of the last message posted on the record.,Date of the last message posted on the record.
+mrp_ricopollo,field,"temperature.warehouse,message_summary",0,Summary,Summary
+mrp_ricopollo,help,"temperature.warehouse,message_summary",0,"Holds the Chatter summary (number of messages, ...). This summary is directly in html format in order to be inserted in kanban views.","Holds the Chatter summary (number of messages, ...). This summary is directly in html format in order to be inserted in kanban views."
+mrp_ricopollo,field,"temperature.warehouse,message_unread",0,Unread Messages,Unread Messages
+mrp_ricopollo,help,"temperature.warehouse,message_unread",0,If checked new messages require your attention.,If checked new messages require your attention.
+mrp_ricopollo,field,"temperature.warehouse,name",0,Ref,Ref
+mrp_ricopollo,field,"temperature.warehouse,out_afternoon",0,Tarde,Tarde
+mrp_ricopollo,field,"temperature.warehouse,out_morning",0,Mañana,Mañana
+mrp_ricopollo,field,"temperature.warehouse,out_night",0,Noche,Noche
+mrp_ricopollo,field,"temperature.warehouse,state",0,Status,Status
+mrp_ricopollo,selection,"temperature.warehouse,state",0,Borrador,Borrador
+mrp_ricopollo,selection,"temperature.warehouse,state",0,Aprobar,Aprobar
+mrp_ricopollo,selection,"temperature.warehouse,state",0,Cancelar,Cancelar
+mrp_ricopollo,field,"temperature.warehouse,user_id",0,Create By,Creado Por
+mrp_ricopollo,field,"temperature.warehouse,warehouse_id",0,Código de Granja,Código de Granja
+mrp_ricopollo,field,"temperature.warehouse,website_message_ids",0,Website Messages,Website Messages
+mrp_ricopollo,help,"temperature.warehouse,website_message_ids",0,Website communication history,Website communication history
+mrp_ricopollo,field,"temperature.warehouse,write_date",0,Last Updated on,Last Updated on
+mrp_ricopollo,field,"temperature.warehouse,write_uid",0,Last Updated by,Last Updated by
+mrp_ricopollo,model,"ir.ui.menu,name",mrp_ricopollo.menu_action_daily_consumption_form,Daily Consumptions,Consuno Diario Granjas
+mrp_ricopollo,model,"ir.ui.menu,name",mrp_ricopollo.menu_action_manufacture_request_report_wizard,Hoja Producción Alimento,Hoja Producción Alimento
+mrp_ricopollo,model,"ir.ui.menu,name",mrp_ricopollo.menu_action_mrp_request_form,Solicitud de Alimentos,Solicitud de Alimentos
+mrp_ricopollo,model,"ir.ui.menu,name",mrp_ricopollo.menu_action_temperature_warehouse_form,Temperature,Temperature
+mrp_ricopollo,model,"ir.ui.menu,name",mrp_ricopollo.menu_mrp_reporting_extend,Reporting,Informes
+mrp_ricopollo,view,approve.multi.request.form,0,Approve Multi Request,Approve Multi Request
+mrp_ricopollo,view,approve.multi.request.form,0,or,or
+mrp_ricopollo,view,approve.multi.request.form,0,Approve,Approve
+mrp_ricopollo,view,approve.multi.request.form,0,Cancel,Cancel
+mrp_ricopollo,view,daily.consumption,0,Daily Consumptions,Consuno Diario Granjas
+mrp_ricopollo,view,daily.consumption,0,Cancel,Cancel
+mrp_ricopollo,view,daily.consumption,0,Approve,Aprobar
+mrp_ricopollo,view,daily.consumption,0,Set To Draft,Set To Draft
+mrp_ricopollo,view,daily.consumption,0,Detail Consumption,Consumo
+mrp_ricopollo,view,daily.consumption,0,Detail Dead Chitkens,Pollos Muertos
+mrp_ricopollo,view,daily.consumption,0,Detail Deads,Pollos Muertos
+mrp_ricopollo,view,stock.picking,0,Make Cost Price Entries,Make Cost Price Entries
+mrp_ricopollo,view,manufacture.request.report.wizard,0,Hoja Producción Alimento,Hoja Producción Alimento
+mrp_ricopollo,view,manufacture.request.report.wizard,0,or,or
+mrp_ricopollo,view,manufacture.request.report.wizard,0,Print,Print
+mrp_ricopollo,view,manufacture.request.report.wizard,0,Cancel,Cancel
+mrp_ricopollo,view,merge.to.make.mo,0,Make MOs,Make MOs
+mrp_ricopollo,view,merge.to.make.mo,0,or,or
+mrp_ricopollo,view,merge.to.make.mo,0,Make,Make
+mrp_ricopollo,view,merge.to.make.mo,0,Cancel,Cancel
+mrp_ricopollo,view,mrp.production,0,Tracking Dead Chitkens,Tracking Dead Chitkens
+mrp_ricopollo,view,mrp.production,0,Dead Chitkens,Dead Chitkens
+mrp_ricopollo,view,mrp.production,0,Confirm,Confirm
+mrp_ricopollo,view,mrp.production,0,Cancel,Cancelar
+mrp_ricopollo,view,mrp.request.form,0,Solicitud de Alimentos,Solicitud de Alimentos
+mrp_ricopollo,view,mrp.request.form,0,Cancel,Cancel
+mrp_ricopollo,view,mrp.request.form,0,Approve,Approve
+mrp_ricopollo,view,mrp.request.form,0,Set To Draft,Set To Draft
+mrp_ricopollo,view,mrp.request.form,0,Make MO,Make MO
+mrp_ricopollo,view,mrp.request.form,0,Detail,Detail
+mrp_ricopollo,view,res.users,0,Farm,Farm
+mrp_ricopollo,view,stock.warehouse,0,Open Cycle,Open Cycle
+mrp_ricopollo,view,stock.warehouse,0,Close Cycle,Close Cycle
+mrp_ricopollo,view,stock.warehouse,0,Cycle History,Cycle History
+mrp_ricopollo,view,temperature.warehouse,0,Temperature,Temperature
+mrp_ricopollo,view,temperature.warehouse,0,Cancel,Cancel
+mrp_ricopollo,view,temperature.warehouse,0,Approve,Aprobar
+mrp_ricopollo,view,temperature.warehouse,0,Set To Draft,Set To Draft
+mrp_ricopollo,view,temperature.warehouse,0,Galpón Interno (C),Galpón Interno (C)
+mrp_ricopollo,view,temperature.warehouse,0,Galpón Externo (C),Galpón Externo (C)
+mrp_ricopollo,view,account.move,0,overflow-y: scroll,overflow-y: scroll
+mrp_ricopollo,view,account.move.line,0,Total Qty,Total Qty
+mrp_ricopollo,view,stock.move,0,"[('usage','<>','view')]","[('usage','<>','view')]"

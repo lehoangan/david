@@ -1,6 +1,21 @@
 <?xml version="1.0"?>
 <openerp>
     <data>
+        <record id="view_warehouse_tree_inherit_view" model="ir.ui.view">
+            <field name="name">stock.warehouse.tree</field>
+            <field name="model">stock.warehouse</field>
+            <field name="inherit_id" ref="stock.view_warehouse_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='lot_stock_id']" position="after">
+                   <field name="is_farm"/>
+                   <field name="account_id"/>
+                </xpath>
+                <xpath expr="//field[@name='partner_id']" position="after">
+                   <field name="state"/>
+                </xpath>
+            </field>
+        </record>
+
 		<record id="stock_warehouse_inherit_view" model="ir.ui.view">
             <field name="name">stock.warehouse.search</field>
             <field name="model">stock.warehouse</field>
@@ -31,12 +46,30 @@
                             <H1><label for="cycle_ids"/></H1>
                             <newline />
                             <field name="cycle_ids" nolabel="1" >
-                                <tree string="Cycle History" editable="top">
+                                <tree string="Cycle History">
                                     <field name="name"/>
                                     <field name="type" required="1"/>
                                     <field name="date_start"/>
                                     <field name="date_end"/>
                                 </tree>
+                                <form string="Cycle History">
+                                    <group col="4" colspan="4">
+                                        <field name="name"/>
+                                        <field name="type" required="1"/>
+                                        <field name="date_start"/>
+                                        <field name="date_end"/>
+                                    </group>
+                                    <group col="2" colspan="4">
+                                        <field name="food_type_ids" nolabel="1" >
+                                            <tree string="Food Type" editable="top">
+                                                <field name="product_id"/>
+                                                <field name="date_start"/>
+                                                <field name="date_end"/>
+                                            </tree>
+                                        </field>
+                                    </group>
+
+                                </form>
                             </field>
                         </group>
                     </xpath>

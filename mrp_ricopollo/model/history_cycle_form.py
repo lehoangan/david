@@ -35,6 +35,7 @@ class history_cycle_form(osv.osv):
         'date_start': fields.date('Date Start', required=True),
         'date_end': fields.date('Date End'),
         'warehouse_id':fields.many2one('stock.warehouse', 'Parent', ondelete='cascade'),
+        'food_type_ids': fields.one2many('cycle.food.type', 'cycle_id', 'Food Type Detail')
     }
 
     _defaults= {
@@ -51,3 +52,16 @@ class history_cycle_form(osv.osv):
                     not self.pool['res.users'].has_group(cr, uid, 'base.group_edit_date_history_cycle'):
                 raise openerp.exceptions.AccessError(_("You is not allowed for edit date stop"))
         return super(history_cycle_form, self).write(cr, uid, ids, vals, context)
+
+class cycle_food_type(osv.osv):
+    _name = 'cycle.food.type'
+    _columns = {
+        'date_start': fields.date('Initial Date', required=True),
+        'date_end': fields.date('Final Date', required=True),
+        'product_id':fields.many2one('product.product', 'Food Type', required=True, domain=[('food_type', '=', True)], ondelete='cascade'),
+        'cycle_id':fields.many2one('history.cycle.form', 'Parent', ondelete='cascade'),
+    }
+
+    _defaults= {
+        'date_start': time.strftime('%Y-%m-%d'),
+    }
