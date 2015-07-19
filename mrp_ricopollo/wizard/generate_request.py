@@ -36,6 +36,11 @@ class generate_request(osv.osv_memory):
         'date': time.strftime('%Y-%m-%d'),
     }
 
+    def action_generate_auto(self, cr, uid, ids=[], context=None):
+        new_id = self.create(cr. uid, {'date': time.strftime('%Y-%m-%d')})
+        self.action_generate(cr, uid, [new_id])
+        return True
+
     def action_generate(self, cr, uid, ids, context=None):
         if context is None:
             context = {}
