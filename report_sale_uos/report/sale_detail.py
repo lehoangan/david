@@ -56,11 +56,11 @@ class Parser(report_sxw.rml_parse):
         if form['partner_id']:
             where_str = '%s %s'%(where_str, ' AND so.partner_id = %s'%form['partner_id'][0])
 
-        if form['date_from']:
-            where_str = '%s %s'%(where_str, ''' AND so.date_order::date >= '%s' '''%form['date_from'])
+        if form['datetime_from']:
+            where_str = '%s %s'%(where_str, ''' AND so.date_order >= '%s' '''%form['datetime_from'])
 
-        if form['date_to']:
-            where_str = '%s %s'%(where_str, ''' AND so.date_order::date <= '%s' '''%form['date_to'])
+        if form['datetime_to']:
+            where_str = '%s %s'%(where_str, ''' AND so.date_order <= '%s' '''%form['datetime_to'])
         select_str = """
                  SELECT
                         distinct (categ.id) as id,
@@ -75,7 +75,7 @@ class Parser(report_sxw.rml_parse):
         """%where_str
         self.cr.execute(select_str)
         res = self.cr.dictfetchall()
-        
+
         for categ in res:
             if not categ['id']: continue
             result = self.pool.get('res.partner.category').name_get(self.cr, self.uid, categ['id'])
@@ -96,17 +96,13 @@ class Parser(report_sxw.rml_parse):
         if form['partner_id']:
             where_str = '%s %s'%(where_str, ' AND so.partner_id = %s'%form['partner_id'][0])
 
-        if form['date_from']:
-            where_str = '%s %s'%(where_str, ''' AND so.date_order::date >= '%s' '''%form['date_from'])
+        if form['datetime_from']:
+            where_str = '%s %s'%(where_str, ''' AND so.date_order >= '%s' '''%form['datetime_from'])
 
-        if form['date_to']:
-            where_str = '%s %s'%(where_str, ''' AND so.date_order::date <= '%s' '''%form['date_to'])
+        if form['datetime_to']:
+            where_str = '%s %s'%(where_str, ''' AND so.date_order <= '%s' '''%form['datetime_to'])
 
         if state_id:
-            # if state_id['city']:
-            #     where_str = '%s %s'%(where_str, ''' AND part.city = '%s' '''%state_id['city'])
-            # else:
-            #     where_str = '%s %s'%(where_str, ''' AND part.city is null ''')
             if state_id['id']:
                 where_str = '%s %s'%(where_str, ''' AND categ.id = %s '''%state_id['id'])
             else:
@@ -123,6 +119,7 @@ class Parser(report_sxw.rml_parse):
 
                 %s
         '''%where_str
+
         self.cr.execute(sql)
         res = self.cr.dictfetchall()
         return res
@@ -141,11 +138,11 @@ class Parser(report_sxw.rml_parse):
         if form['partner_id']:
             where_str = '%s %s'%(where_str, ' AND s.partner_id = %s'%form['partner_id'][0])
 
-        if form['date_from']:
-            where_str = '%s %s'%(where_str, ''' AND s.date_order::date >= '%s' '''%form['date_from'])
+        if form['datetime_from']:
+            where_str = '%s %s'%(where_str, ''' AND s.date_order >= '%s' '''%form['datetime_from'])
 
-        if form['date_to']:
-            where_str = '%s %s'%(where_str, ''' AND s.date_order::date <= '%s' '''%form['date_to'])
+        if form['datetime_to']:
+            where_str = '%s %s'%(where_str, ''' AND s.date_order <= '%s' '''%form['datetime_to'])
 
         if state_id:
             if state_id['id']:
@@ -194,6 +191,7 @@ class Parser(report_sxw.rml_parse):
                         s.is_ok
                 order by part.name, t.name) as foo
         """%where_str
+
         self.cr.execute(select_str)
         res = self.cr.dictfetchall()
         return res
@@ -215,11 +213,11 @@ class Parser(report_sxw.rml_parse):
         if form['partner_id']:
             where_str = '%s %s'%(where_str, ' AND s.partner_id = %s'%form['partner_id'][0])
 
-        if form['date_from']:
-            where_str = '%s %s'%(where_str, ''' AND s.date_order::date >= '%s' '''%form['date_from'])
+        if form['datetime_from']:
+            where_str = '%s %s'%(where_str, ''' AND s.date_order >= '%s' '''%form['datetime_from'])
 
-        if form['date_to']:
-            where_str = '%s %s'%(where_str, ''' AND s.date_order::date <= '%s' '''%form['date_to'])
+        if form['datetime_to']:
+            where_str = '%s %s'%(where_str, ''' AND s.date_order <= '%s' '''%form['datetime_to'])
 
         select_str = """
              SELECT ROW_NUMBER() OVER(ORDER BY id) AS no, * FROM (
@@ -261,11 +259,11 @@ class Parser(report_sxw.rml_parse):
         if form['partner_id']:
             where_str = '%s %s'%(where_str, ' AND s.partner_id = %s'%form['partner_id'][0])
 
-        if form['date_from']:
-            where_str = '%s %s'%(where_str, ''' AND s.date_order::date >= '%s' '''%form['date_from'])
+        if form['datetime_from']:
+            where_str = '%s %s'%(where_str, ''' AND s.date_order >= '%s' '''%form['datetime_from'])
 
-        if form['date_to']:
-            where_str = '%s %s'%(where_str, ''' AND s.date_order::date <= '%s' '''%form['date_to'])
+        if form['datetime_to']:
+            where_str = '%s %s'%(where_str, ''' AND s.date_order <= '%s' '''%form['datetime_to'])
 
         select_str = """
                  SELECT

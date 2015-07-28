@@ -22,21 +22,5 @@
             </field>
         </record>
 
-<!--        <record id="invoice_form_1" model="ir.ui.view">
-            <field name="name">account.invoice.form</field>
-            <field name="model">account.invoice</field>
-            <field name="inherit_id" ref="sale_not_change_uom.invoice_form_1"/>
-            <field name="arch" type="xml">
-                <xpath expr="//tree/field[@name='discount']" position="before">
-                    <field name="discount_amount" on_change="onchange_discount_amount(discount_amount, price_unit,new_discount)"/>
-                    <field name="new_discount" on_change="onchange_new_discount(new_discount,discount_amount)"/>
-                </xpath>
-
-                <xpath expr="//tree/field[@name='discount']" position="attributes">
-                    <attribute name="invisible">True</attribute>
-                </xpath>
-            </field>
-        </record>-->
-
     </data>
 </openerp>

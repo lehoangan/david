@@ -20,6 +20,11 @@
 ##############################################################################
 
 from openerp.osv import fields, osv
+from openerp.tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT
+from dateutil.relativedelta import relativedelta
+from datetime import datetime
+from pytz import timezone
+import pytz
 
 class sale_detail_report(osv.osv_memory):
     _name = "sale.detail.report"
@@ -38,11 +43,36 @@ class sale_detail_report(osv.osv_memory):
     'state': 'draft',
     }
 
+    def _get_tz(self, cr, uid, date, context=None):
+        print context
+        if context and context.get('tz'):
+            tz_name = context['tz']
+        else:
+            tz_name = self.pool.get('res.users').read(cr, 1, uid, ['tz'])['tz']
+        att_tz = timezone(tz_name)
+
+        attendance_dt = datetime.strptime(date, DEFAULT_SERVER_DATETIME_FORMAT)
+        att_tz_dt = pytz.utc.localize(attendance_dt)
+        att_tz_dt = att_tz_dt.astimezone(att_tz)
+        att_tz_date_str = datetime.strftime(att_tz_dt, DEFAULT_SERVER_DATETIME_FORMAT)
+        return att_tz_date_str
+
+    def remove_7_hours(self, cr, uid, date, context=None):
+        date = datetime.strptime(date, DEFAULT_SERVER_DATETIME_FORMAT)
+        date = date + relativedelta(hours=-7)
+        date = date.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+        return date
+
     def print_report(self, cr, uid, ids, context=None):
         if context is None:
             context = {}
         data = {}
         data['form'] = self.read(cr, uid, ids, ['date_from', 'date_to', 'partner_id','state','user_id'])[0]
+        datetime_from = self.remove_7_hours(cr, uid, data['form']['date_from'] + ' 00:00:00', context)
+        datetime_to = self.remove_7_hours(cr, uid, data['form']['date_to'] + ' 23:59:59', context)
+        data['form'].update({'datetime_from': datetime_from,
+                             'datetime_to': datetime_to})
+
         return self.pool['report'].get_action(cr, uid, [], 'sale_detail_report', data=data, context=context)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
