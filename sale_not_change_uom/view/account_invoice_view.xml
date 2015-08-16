@@ -16,6 +16,17 @@
                     <field name="product_uos_qty"/>
                     <field name="uom_id"/>
                 </xpath>
+
+                <button name="invoice_open" states="draft" string="Validate" class="oe_highlight" groups="base.group_user" position="replace">
+                    <button name="invoice_open" states="draft" string="Validate" invisible="1" class="oe_highlight" groups="base.group_user"/>
+                    <button name="action_invoice_open" states="draft" string="Validate" type="object" class="oe_highlight" groups="base.group_user"/>
+                </button>
+
+                <button name="invoice_open" states="proforma2" string="Validate" groups="base.group_user">
+                    <button name="invoice_open" states="proforma2" string="Validate" invisible="1" groups="base.group_user"/>
+                    <button name="action_invoice_open" states="proforma2" string="Validate"  type="object" groups="base.group_user"/>
+                </button>
+
             </field>
         </record>
 

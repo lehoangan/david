@@ -37,7 +37,7 @@ class generate_request(osv.osv_memory):
     }
 
     def action_generate_auto(self, cr, uid, ids=[], context=None):
-        new_id = self.create(cr. uid, {'date': time.strftime('%Y-%m-%d')})
+        new_id = self.pool.get('generate.request').create(cr, uid, {'date': time.strftime('%Y-%m-%d')})
         self.action_generate(cr, uid, [new_id])
         return True
 

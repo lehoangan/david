@@ -27,10 +27,10 @@ class account_invoice(models.Model):
     _inherit = "account.invoice"
 
     @api.multi
-    def invoice_validate(self):
+    def action_invoice_open(self):
         if self.type == 'out_invoice':
             old_ids = self.search([('partner_id', '=', self.partner_id.id), ('state', '=', 'open')])
             if self.partner_id.warning_invoice and len(old_ids) >= self.partner_id.warning_invoice:
                 raise Warning(_('Alerta: Sobrepaso de límite de Boletas Permitido.'))
-        return super(account_invoice, self).invoice_validate()
+        return self.signal_workflow('invoice_open')
 
