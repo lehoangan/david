@@ -43,6 +43,7 @@ class sale_order_line(osv.osv):
 
     _columns = {
         'discount_kg': fields.float('Discount(KG)', digits_compute= dp.get_precision('Product Price'), readonly=True, states={'draft': [('readonly', False)]}),
+        'discount_amount': fields.float('discount_amount)', digits_compute= dp.get_precision('Product Price'), readonly=True, states={'draft': [('readonly', False)]}),
         'price_subtotal': fields.function(_amount_line, string='Subtotal', digits_compute= dp.get_precision('Account')),
     }
 

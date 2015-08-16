@@ -66,11 +66,11 @@ class Parser(report_sxw.rml_parse):
                 '''
                 where_str = '%s %s'%(where_str, ''' AND inv.state not in ('draft', 'cancel') ''')
 
-        if form['date_from']:
-            where_str = '%s %s'%(where_str, ''' AND s.date_order::date >= '%s' '''%form['date_from'])
+        if form['datetime_from']:
+            where_str = '%s %s'%(where_str, ''' AND s.date_order >= '%s' '''%form['datetime_from'])
 
-        if form['date_to']:
-            where_str = '%s %s'%(where_str, ''' AND s.date_order::date <= '%s' '''%form['date_to'])
+        if form['datetime_to']:
+            where_str = '%s %s'%(where_str, ''' AND s.date_order <= '%s' '''%form['datetime_to'])
 
         if form['product_ids']:
             prod_ids = form['product_ids']
@@ -129,13 +129,13 @@ class Parser(report_sxw.rml_parse):
                 '''
                 where_str = '%s %s'%(where_str, ''' AND inv.state not in ('draft', 'cancel') ''')
         context = {}
-        if form['date_from']:
-            where_str = '%s %s'%(where_str, ''' AND s.date_order::date >= '%s' '''%form['date_from'])
-            context.update({'date_to':form['date_from']})
+        if form['datetime_from']:
+            where_str = '%s %s'%(where_str, ''' AND s.date_order >= '%s' '''%form['datetime_from'])
+            context.update({'date_to':form['datetime_from']})
 
-        if form['date_to']:
-            where_str = '%s %s'%(where_str, ''' AND s.date_order::date <= '%s' '''%form['date_to'])
-            # context.update({'date_to':form['date_to']})
+        if form['datetime_to']:
+            where_str = '%s %s'%(where_str, ''' AND s.date_order <= '%s' '''%form['datetime_to'])
+            # context.update({'date_to':form['datetime_to']})
 
         if state_id:
             if state_id['id']:
@@ -189,11 +189,11 @@ class Parser(report_sxw.rml_parse):
                 '''
                 where_str = '%s %s'%(where_str, ''' AND inv.state not in ('draft', 'cancel') ''')
 
-        if form['date_from']:
-            where_str = '%s %s'%(where_str, ''' AND s.date_order::date >= '%s' '''%form['date_from'])
+        if form['datetime_from']:
+            where_str = '%s %s'%(where_str, ''' AND s.date_order >= '%s' '''%form['datetime_from'])
 
-        if form['date_to']:
-            where_str = '%s %s'%(where_str, ''' AND s.date_order::date <= '%s' '''%form['date_to'])
+        if form['datetime_to']:
+            where_str = '%s %s'%(where_str, ''' AND s.date_order <= '%s' '''%form['datetime_to'])
 
         if state_id:
             if state_id['id']:
@@ -275,13 +275,13 @@ class Parser(report_sxw.rml_parse):
                 '''
                 where_str = '%s %s'%(where_str, ''' AND inv.state not in ('draft', 'cancel') ''')
         context = {}
-        if form['date_from']:
-            where_str = '%s %s'%(where_str, ''' AND s.date_order::date >= '%s' '''%form['date_from'])
-            context.update({'date_to':form['date_from']})
+        if form['datetime_from']:
+            where_str = '%s %s'%(where_str, ''' AND s.date_order >= '%s' '''%form['datetime_from'])
+            context.update({'date_to':form['datetime_from']})
 
-        if form['date_to']:
-            where_str = '%s %s'%(where_str, ''' AND s.date_order::date <= '%s' '''%form['date_to'])
-            #context.update({'date_to':form['date_to']})
+        if form['datetime_to']:
+            where_str = '%s %s'%(where_str, ''' AND s.date_order <= '%s' '''%form['datetime_to'])
+            #context.update({'date_to':form['datetime_to']})
 
         if form['product_ids']:
             prod_ids = form['product_ids']

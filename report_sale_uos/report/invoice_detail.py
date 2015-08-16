@@ -115,8 +115,9 @@ class Parser(report_sxw.rml_parse):
         sql = '''
             SELECT
                 sum(quantity) as quantity,
+                sum(product_uos_qty) as unit,
                 sum(discount_kg) as disc_kg,
-                sum(price_unit * ((100 -discount)/100)) as disc_amount
+                sum(price_unit * (discount/100 * (quantity - discount_kg) + discount_kg)) as disc_amount
             FROM
                 account_invoice_line
             WHERE
@@ -228,7 +229,7 @@ class Parser(report_sxw.rml_parse):
                           left join res_partner_category categ on (rel.category_id=categ.id))
                 %s
 
-                order by inv.date_invoice desc
+                order by inv.date_invoice asc
         """%where_str
         self.cr.execute(select_str)
         res = self.cr.dictfetchall()
@@ -246,7 +247,7 @@ class Parser(report_sxw.rml_parse):
                 for line in obj.invoice_line:
                     qty += line.quantity
                     disc_kg += line.discount_kg
-                    disc_amount += line.price_unit * (1-(line.discount or 0)/100)
+                    disc_amount += line.price_unit * ((line.discount/100) * (line.quantity - line.discount_kg) +  line.discount_kg)
                     
                 inv.update({'amount': total,
                             'paid': total - residual,
@@ -264,7 +265,7 @@ class Parser(report_sxw.rml_parse):
         result = result.values()
         result = sorted(result, key=lambda k: k['date_invoice'])
         if result:
-            result.reverse()
+            # result.reverse()
             for i in range(0, len(result)):
                 result[i]['no'] = i + 1
         return result
@@ -277,10 +278,11 @@ class Parser(report_sxw.rml_parse):
             res.append({
                 'no': no,
                 'prod': prod and prod[0] and prod[0][1] or line.product_id.name,
+                'unit': line.product_uos_qty,
                 'qty': line.quantity,
                 'price': line.price_unit,
                 'disc_kg': line.discount_kg,
-                'disc_amount': line.price_unit * (1-(line.discount or 0)/100),
+                'disc_amount': line.price_unit * ((line.discount/100) * (line.quantity - line.discount_kg) +  line.discount_kg),
                 'amount': line.price_subtotal,
             })
             no += 1
@@ -319,8 +321,9 @@ class Parser(report_sxw.rml_parse):
         sql = '''
             SELECT
                 sum(quantity) as quantity,
+                sum(product_uos_qty) as unit,
                 sum(discount_kg) as disc_kg,
-                sum(price_unit * ((100 -discount)/100)) as disc_amount
+                sum(price_unit * (discount/100 * (quantity - discount_kg) + discount_kg)) as disc_amount
             FROM
                 account_invoice_line
             WHERE
