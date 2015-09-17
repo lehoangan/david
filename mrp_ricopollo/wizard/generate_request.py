@@ -64,7 +64,7 @@ class generate_request(osv.osv_memory):
         for obj in self.browse(cr, uid, ids, context):
             warehouse_ids = [ware.id for ware in obj.warehouse_ids]
             if warehouse_ids:
-                sql += ' AND warehouse.id in %s '%tuple(warehouse_ids + [-1, -1])
+                sql += ' AND warehouse.id in %s '%str(tuple(warehouse_ids + [-1, -1]))
             sql += ''' AND food.date_start <= '%s' AND food.date_end >= '%s' '''%(obj.date, obj.date)
             cr.execute(sql)
             datas = cr.dictfetchall()
