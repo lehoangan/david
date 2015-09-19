@@ -19,5 +19,25 @@
             </field>
         </record>
 
+        <record id="product_visible_discount.view_order_form" model="ir.ui.view">
+            <field name="name">sale.order.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='discount']" position="replace">
+                        <div name="discount" groups="sale.group_discount_per_so_line">
+                        <field name="discount" invisible="1" on_change="onchange_origin_discount(discount, discount_amount, price_unit, context)"/>
+                        <field name="discount_amount" class="oe_inline" groups="sale.group_discount_per_so_line" on_change="onchange_discount_amount(discount_amount,price_unit)"/> Bs
+                    </div>
+                </xpath>
+
+                 <xpath expr="//tree/field[@name='discount']" position="replace">
+                    <field name="discount_amount" groups="sale.group_discount_per_so_line"/>
+                </xpath>
+
+            </field>
+        </record>
+
+
     </data>
 </openerp>

@@ -43,9 +43,25 @@ class sale_order_line(osv.osv):
 
     _columns = {
         'discount_kg': fields.float('Discount(KG)', digits_compute= dp.get_precision('Product Price'), readonly=True, states={'draft': [('readonly', False)]}),
-        'discount_amount': fields.float('discount_amount)', digits_compute= dp.get_precision('Product Price'), readonly=True, states={'draft': [('readonly', False)]}),
+        'discount_amount': fields.float('Discount Amount', digits_compute= dp.get_precision('Product Price'), readonly=True, states={'draft': [('readonly', False)]}),
+        'discount': fields.float('Discount (%)', digits=(16, 12)),
         'price_subtotal': fields.function(_amount_line, string='Subtotal', digits_compute= dp.get_precision('Account')),
     }
+
+    def onchange_origin_discount(self, cr, uid, ids, discount, discount_amount, price_unit, context=None):
+        if not discount or not price_unit:
+            return {'value': {}}
+
+        if discount and not discount_amount:
+            return {'value': {'discount_amount': discount * price_unit / 100}}
+        return {'value': {}}
+
+    def onchange_discount_amount(self, cr, uid, ids, discount_amount, price_unit, context=None):
+        val = {'discount': 0.0}
+        if price_unit:
+            discount = float(discount_amount) / float(price_unit) * 100
+            val['discount'] = discount
+        return {'value': val}
 
     def _prepare_order_line_invoice_line(self, cr, uid, line, account_id=False, context=None):
 
@@ -66,6 +82,7 @@ class sale_order_line(osv.osv):
     def product_id_change(self, cr, uid, ids, pricelist, product, qty=0,
             uom=False, qty_uos=0, uos=False, name='', partner_id=False,
             lang=False, update_tax=True, date_order=False, packaging=False, fiscal_position=False, flag=False, context=None):
+
         result = super(sale_order_line, self).product_id_change(cr, uid, ids, pricelist, product, qty,
             uom, qty_uos, uos, name, partner_id,
             lang, update_tax, date_order, packaging, fiscal_position, flag, context)

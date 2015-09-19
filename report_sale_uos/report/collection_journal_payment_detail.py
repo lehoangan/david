@@ -212,16 +212,19 @@ class Parser(report_sxw.rml_parse):
                 where_str = '%s %s'%(where_str, ''' AND categ.id is null''')
 
         sql = '''
-                 SELECT
-                        distinct (part.id) as id,
-                        part.name
-                FROM ( account_voucher vou
-                          join res_partner part on (vou.partner_id=part.id)
-                          left join res_partner_res_partner_category_rel rel on (rel.partner_id=part.id)
-                          left join res_partner_category categ on (rel.category_id=categ.id))
-                %s
-                GROUP BY part.name,part.id
-                order by part.name
+                 SELECT * FROM (
+                     SELECT
+                            distinct (part.id) as id,
+                            part.name,
+                            min(vou.reference) as ref
+                    FROM ( account_voucher vou
+                              join res_partner part on (vou.partner_id=part.id)
+                              left join res_partner_res_partner_category_rel rel on (rel.partner_id=part.id)
+                              left join res_partner_category categ on (rel.category_id=categ.id))
+                    %s
+                    GROUP BY part.name,part.id
+                ) as cus
+                ORDER BY cus.ref
         '''%where_str
         self.cr.execute(sql)
         res = self.cr.dictfetchall()
@@ -266,6 +269,8 @@ class Parser(report_sxw.rml_parse):
                       left join res_partner_res_partner_category_rel rel on (rel.partner_id=part.id)
                       left join res_partner_category categ on (rel.category_id=categ.id))
                 %s
+
+                ORDER BY vou.reference
 
         """%where_str
         self.cr.execute(select_str)
