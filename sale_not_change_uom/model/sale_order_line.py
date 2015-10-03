@@ -56,6 +56,15 @@ class sale_order_line(osv.osv):
             return {'value': {'discount_amount': discount * price_unit / 100}}
         return {'value': {}}
 
+    def onchange_price_unit(self, cr, uid, ids, price_unit, discount, discount_amount, context=None):
+        if not discount_amount or not price_unit:
+            return {'value': {}}
+
+        if discount * price_unit != discount_amount * 100:
+            return {'value': {'discount': discount_amount / price_unit * 100}}
+        return {'value': {}}
+
+
     def onchange_discount_amount(self, cr, uid, ids, discount_amount, price_unit, context=None):
         val = {'discount': 0.0}
         if price_unit:

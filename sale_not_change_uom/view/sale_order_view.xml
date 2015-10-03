@@ -12,6 +12,9 @@
                 <xpath expr="//form/group/group/field[@name='price_unit']" position="after">
                     <field name="discount_kg" class="oe_inline" groups="sale.group_discount_per_so_line"/>
                 </xpath>
+                <xpath expr="//form/group/group/field[@name='price_unit']" position="attributes">
+                    <attribute name="on_change">onchange_price_unit(price_unit, discount, discount_amount, context)</attribute>
+                </xpath>
                 <xpath expr="//tree/field[@name='tax_id']" position="replace">
                     <field name="tax_id" widget="many2many_tags" domain="[('parent_id','=',False),('type_tax_use','&lt;&gt;','purchase')]" invisible="1"/>
                     <field name="discount_kg" groups="sale.group_discount_per_so_line"/>
