@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+        <record id="product_pricelist_version_form_view" model="ir.ui.view">
+            <field name="name">product.pricelist.version.form</field>
+            <field name="model">product.pricelist.version</field>
+            <field name="inherit_id" ref="product.product_pricelist_version_form_view"/>
+            <field name="arch" type="xml">
+                <data>
+
+                  <notebook position="after">
+                       <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                       </div>
+                  </notebook>
+                </data>
+           </field>
+        </record>
+
+         <record id="product_pricelist_item_form_view" model="ir.ui.view">
+            <field name="name">product.pricelist.item.form</field>
+            <field name="model">product.pricelist.item</field>
+            <field name="inherit_id" ref="product.product_pricelist_item_form_view"/>
+             <field name="arch" type="xml">
+                 <data>
+                      <group col="6" colspan="5" position="after">
+                           <div class="oe_chatter">
+                            <field name="message_follower_ids" widget="mail_followers"/>
+                            <field name="message_ids" widget="mail_thread"/>
+                           </div>
+                      </group>
+                </data>
+           </field>
+        </record>
+
+    </data>
+</openerp>

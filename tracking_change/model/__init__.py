@@ -18,5 +18,5 @@
 #
 ##############################################################################
 
-import sale_order,product_product,history_delete,account_invoice,account_move
+import sale_order,product_product,history_delete,account_invoice,account_move,account_bank_statement
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

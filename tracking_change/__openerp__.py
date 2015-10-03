@@ -32,6 +32,8 @@
         'security/ir.model.access.csv',
         'view/history_delete_view.xml',
         'view/account_move_view.xml',
+        'view/account_bank_statement_view.xml',
+        'view/product_view.xml',
         ],
     'auto_install': False,
     'installable': True,
