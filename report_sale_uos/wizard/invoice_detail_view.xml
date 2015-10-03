@@ -13,6 +13,7 @@
                         <field name="partner_id"/>
                         <field name="type"/>
                         <field name="state"/>
+                        <field name="frial"/>
                         <field name="inv_state" attrs="{'invisible':[('state','=','draft')]}"/>
                     </group>
                     <footer>

@@ -51,7 +51,8 @@ class Parser(report_sxw.rml_parse):
                 where_str = ''' WHERE inv.state = '%s' AND inv.type = 'out_invoice' '''%form['inv_state']
             else:
                 where_str = ''' WHERE inv.state not in ('draft', 'cancel') AND inv.type = 'out_invoice' '''
-
+        if form['frial']:
+            where_str = '%s %s'%(where_str, ' AND part.frial = %s'%form['frial'])
         if form['partner_id']:
             where_str = '%s %s'%(where_str, ' AND inv.partner_id = %s'%form['partner_id'][0])
 
@@ -152,6 +153,8 @@ class Parser(report_sxw.rml_parse):
             else:
                 where_str = ''' WHERE inv.state not in ('draft', 'cancel') AND inv.type = 'out_invoice' '''
 
+        if form['frial']:
+            where_str = '%s %s'%(where_str, ' AND part.frial = %s'%form['frial'])
         if form['partner_id']:
             where_str = '%s %s'%(where_str, ' AND inv.partner_id = %s'%form['partner_id'][0])
 
@@ -298,6 +301,8 @@ class Parser(report_sxw.rml_parse):
             else:
                 where_str = ''' WHERE inv.state not in ('draft', 'cancel') AND inv.type = 'out_invoice' '''
 
+        if form['frial']:
+            where_str = '%s %s'%(where_str, ' AND part.frial = %s'%form['frial'])
         if form['partner_id']:
             where_str = '%s %s'%(where_str, ' AND inv.partner_id = %s'%form['partner_id'][0])
 
