@@ -24,10 +24,12 @@
             <field name="view_id" ref="lst_warehouse_wizard_view"/>
             <field name="target">new</field>
         </record>
+
+        <menuitem id="stock.menu_stock_reporting" name="Reporting" parent="stock.menu_stock_root" sequence="14"/>
         
         <menuitem name="Lista de Depositos" action="action_lst_warehouse_wizard"
         	id="menu_action_lst_warehouse_wizard"
-            parent="stock.menu_stock_configuration" sequence="1"/>
+            parent="stock.menu_stock_reporting" sequence="1"/>
 
     </data>
 </openerp>

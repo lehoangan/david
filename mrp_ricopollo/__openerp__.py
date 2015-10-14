@@ -49,6 +49,7 @@
         'wizard/manufacture_request_report_wizard_view.xml',
         'wizard/lst_warehouse_wizard_view.xml',
         'wizard/generate_request_view.xml',
+        'wizard/foodtype_per_cycle_wizard_view.xml',
 
 
         'data/schedule_action.xml',

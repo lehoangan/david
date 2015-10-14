@@ -22,4 +22,5 @@ import merge_to_make_mo,approve_multi_request_form
 import manufacture_request_report_wizard
 import mrp_product_produce,lst_warehouse_wizard
 import generate_request
+import foodtype_per_cycle_wizard
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

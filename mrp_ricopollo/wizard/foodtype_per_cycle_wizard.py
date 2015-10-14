@@ -19,5 +19,30 @@
 #
 ##############################################################################
 
-import manufacture_request,lst_wahouse,foodtype_per_cycle
+from openerp.osv import osv,fields
+from openerp.tools.translate import _
+import time
+
+class foodtype_per_cycle_wizard(osv.osv_memory):
+
+    _name = "foodtype.per.cycle.wizard"
+
+    _columns = {
+        'type': fields.selection([('close', 'Close'), ('active', 'Activos')], 'Type'),
+        'warehouse_id': fields.many2one('stock.warehouse', 'Farm', required=True, domain=[('is_farm', '=', True)]),
+        'year': fields.integer('Year', required=True),
+    }
+    _defaults={
+        'type': 'active',
+        'year': int(time.strftime('%Y')),
+    }
+
+    def print_report(self, cr, uid, ids, context=None):
+        if context is None:
+            context = {}
+        data = {}
+        data['form'] = self.read(cr, uid, ids, ['date','state'])[0]
+        return self.pool['report'].get_action(cr, uid, [], 'foodtype_per_cycle_report', data=data, context=context)
+
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+
