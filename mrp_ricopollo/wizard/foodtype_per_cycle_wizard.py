@@ -28,7 +28,7 @@ class foodtype_per_cycle_wizard(osv.osv_memory):
     _name = "foodtype.per.cycle.wizard"
 
     _columns = {
-        'type': fields.selection([('close', 'Close'), ('active', 'Activos')], 'Type'),
+        'type': fields.selection([('close', 'Cerrados'), ('active', 'Activos')], 'Type'),
         'warehouse_id': fields.many2one('stock.warehouse', 'Farm', required=True, domain=[('is_farm', '=', True)]),
         'year': fields.integer('Year', required=True),
     }
@@ -41,7 +41,7 @@ class foodtype_per_cycle_wizard(osv.osv_memory):
         if context is None:
             context = {}
         data = {}
-        data['form'] = self.read(cr, uid, ids, ['date','state'])[0]
+        data['form'] = self.read(cr, uid, ids, [])[0]
         return self.pool['report'].get_action(cr, uid, [], 'foodtype_per_cycle_report', data=data, context=context)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
