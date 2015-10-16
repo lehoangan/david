@@ -129,14 +129,13 @@ class Parser(report_sxw.rml_parse):
                  SELECT
                         distinct (categ.id) as id,
                         categ.name,
-                        part.city,
                         SUM(vou.amount) as total
                 FROM ( account_voucher vou
                           join res_partner part on (vou.partner_id=part.id)
                           left join res_partner_res_partner_category_rel rel on (rel.partner_id=part.id)
                           left join res_partner_category categ on (rel.category_id=categ.id))
                 %s
-                GROUP BY categ.name,categ.id, part.city
+                GROUP BY categ.name,categ.id
                 order by categ.name
         """%where_str
         self.cr.execute(select_str)
