@@ -29,7 +29,7 @@
     </record>
 
     <record id="aeroo_foodtype_per_cycle_id" model="ir.actions.report.xml">
-        <field name="name">List Warehouse</field>
+        <field name="name">Reporte de Alimentos Por Ciclo</field>
         <field name="type">ir.actions.report.xml</field>
         <field name="model">foodtype.per.cycle.wizard</field>
         <field name="report_name">foodtype_per_cycle_report</field>
