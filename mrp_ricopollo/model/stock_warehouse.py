@@ -47,7 +47,7 @@ class stock_warehouse(osv.osv):
             if not obj.account_id:
                 raise Warning(_('Please set account before'))
             name = self.pool.get('ir.sequence').get(cr, uid, 'history.cycle.form', context=None)
-            self.pool.get('history.cycle.form').create(cr, uid, {'name': name,
+            self.pool.get('history.cycle.form').create(cr, uid, {'name': '%s-%s'%(name, time.strftime('%d%m%y')),
                                                                  'warehouse_id': obj.id,
                                                                  'date_start': time.strftime('%Y-%m-%d')})
         return self.write(cr, uid, ids, {'state': 'open'}, context)
