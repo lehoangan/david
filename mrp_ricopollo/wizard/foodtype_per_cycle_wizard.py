@@ -29,7 +29,7 @@ class foodtype_per_cycle_wizard(osv.osv_memory):
 
     _columns = {
         'type': fields.selection([('close', 'Cerrados'), ('active', 'Activos')], 'Type'),
-        'warehouse_id': fields.many2one('stock.warehouse', 'Farm', required=True, domain=[('is_farm', '=', True)]),
+        'warehouse_id': fields.many2one('stock.warehouse', 'Farm', domain=[('is_farm', '=', True)]),
         'year': fields.integer('Year', required=True),
     }
     _defaults={

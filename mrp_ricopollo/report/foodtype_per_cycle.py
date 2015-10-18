@@ -75,7 +75,7 @@ class Parser(report_sxw.rml_parse):
         standard_obj = self.pool.get('standard.production')
         consumption_obj = self.pool.get('daily.consumption.material')
 
-        warehouse_id = form['warehouse_id'][0] or False
+        warehouse_id = form['warehouse_id'] and form['warehouse_id'][0] or False
         if warehouse_id:
             sql += ' AND warehouse.id = %s '%warehouse_id
         if form['year']:
