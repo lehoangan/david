@@ -44,6 +44,9 @@
         'view/temperature_warehouse_view.xml',
         'view/standard_production.xml',
         'view/product_product.xml',
+        'view/purchase_view.xml',
+
+
         'wizard/merge_to_make_mo_view.xml',
         'wizard/approve_multi_request_form_view.xml',
         'wizard/manufacture_request_report_wizard_view.xml',

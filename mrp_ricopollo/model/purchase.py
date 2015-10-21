@@ -26,6 +26,12 @@ import openerp.addons.decimal_precision as dp
 class purchase_order(osv.osv):
     _inherit = "purchase.order"
 
+    _columns = {
+        'picking_type_id': fields.many2one('stock.picking.type', 'Deliver To', help="This will determine picking type of incoming shipment", required=True,
+                                           domain=[('warehouse_id.is_farm', '=', False)],
+                                           states={'confirmed': [('readonly', True)], 'approved': [('readonly', True)], 'done': [('readonly', True)]}),
+    }
+
     def _prepare_inv_line(self, cr, uid, account_id, order_line, context=None):
         res = super(purchase_order, self)._prepare_inv_line(cr, uid, account_id, order_line, context)
         if order_line.order_id.location_id and order_line.order_id.location_id.account_id:
