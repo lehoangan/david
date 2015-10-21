@@ -51,20 +51,17 @@ class Parser(report_sxw.rml_parse):
 
         join_sql = ''
         if form['invoice_state']:
-            if form['invoice_state']== 'draft':
-                join_sql = '''
+            join_sql = '''
                         INNER JOIN sale_order_line_invoice_rel inv_rel on (inv_rel.order_line_id = l.id)
                         INNER JOIN account_invoice_line inv_l on (inv_l.id = inv_rel.invoice_id)
                         INNER JOIN account_invoice inv on (inv.id = inv_l.invoice_id)
-                '''
+            '''
+            if form['invoice_state'] == 'draft':
                 where_str = '%s %s'%(where_str, ''' AND inv.state = 'draft' ''')
-            else:
-                join_sql = '''
-                        INNER JOIN sale_order_line_invoice_rel inv_rel on (inv_rel.order_line_id = l.id)
-                        INNER JOIN account_invoice_line inv_l on (inv_l.id = inv_rel.invoice_id)
-                        INNER JOIN account_invoice inv on (inv.id = inv_l.invoice_id)
-                '''
+            elif form['invoice_state'] == 'done':
                 where_str = '%s %s'%(where_str, ''' AND inv.state not in ('draft', 'cancel') ''')
+            else:
+                where_str = '%s %s'%(where_str, ''' AND inv.state != 'cancel' ''')
 
         if form['datetime_from']:
             where_str = '%s %s'%(where_str, ''' AND s.date_order >= '%s' '''%form['datetime_from'])
@@ -114,20 +111,18 @@ class Parser(report_sxw.rml_parse):
 
         join_sql = ''
         if form['invoice_state']:
-            if form['invoice_state']== 'draft':
-                join_sql = '''
+            join_sql = '''
                         INNER JOIN sale_order_line_invoice_rel inv_rel on (inv_rel.order_line_id = l.id)
                         INNER JOIN account_invoice_line inv_l on (inv_l.id = inv_rel.invoice_id)
                         INNER JOIN account_invoice inv on (inv.id = inv_l.invoice_id)
-                '''
+            '''
+            if form['invoice_state'] == 'draft':
                 where_str = '%s %s'%(where_str, ''' AND inv.state = 'draft' ''')
-            else:
-                join_sql = '''
-                        INNER JOIN sale_order_line_invoice_rel inv_rel on (inv_rel.order_line_id = l.id)
-                        INNER JOIN account_invoice_line inv_l on (inv_l.id = inv_rel.invoice_id)
-                        INNER JOIN account_invoice inv on (inv.id = inv_l.invoice_id)
-                '''
+            elif form['invoice_state'] == 'done':
                 where_str = '%s %s'%(where_str, ''' AND inv.state not in ('draft', 'cancel') ''')
+            else:
+                where_str = '%s %s'%(where_str, ''' AND inv.state != 'cancel' ''')
+
         context = {}
         if form['datetime_from']:
             where_str = '%s %s'%(where_str, ''' AND s.date_order >= '%s' '''%form['datetime_from'])
@@ -174,20 +169,17 @@ class Parser(report_sxw.rml_parse):
 
         join_sql = ''
         if form['invoice_state']:
-            if form['invoice_state']== 'draft':
-                join_sql = '''
+            join_sql = '''
                         INNER JOIN sale_order_line_invoice_rel inv_rel on (inv_rel.order_line_id = l.id)
                         INNER JOIN account_invoice_line inv_l on (inv_l.id = inv_rel.invoice_id)
                         INNER JOIN account_invoice inv on (inv.id = inv_l.invoice_id)
-                '''
+            '''
+            if form['invoice_state'] == 'draft':
                 where_str = '%s %s'%(where_str, ''' AND inv.state = 'draft' ''')
-            else:
-                join_sql = '''
-                        INNER JOIN sale_order_line_invoice_rel inv_rel on (inv_rel.order_line_id = l.id)
-                        INNER JOIN account_invoice_line inv_l on (inv_l.id = inv_rel.invoice_id)
-                        INNER JOIN account_invoice inv on (inv.id = inv_l.invoice_id)
-                '''
+            elif form['invoice_state'] == 'done':
                 where_str = '%s %s'%(where_str, ''' AND inv.state not in ('draft', 'cancel') ''')
+            else:
+                where_str = '%s %s'%(where_str, ''' AND inv.state != 'cancel' ''')
 
         if form['datetime_from']:
             where_str = '%s %s'%(where_str, ''' AND s.date_order >= '%s' '''%form['datetime_from'])
@@ -260,20 +252,17 @@ class Parser(report_sxw.rml_parse):
 
         join_sql = ''
         if form['invoice_state']:
-            if form['invoice_state']== 'draft':
-                join_sql = '''
+            join_sql = '''
                         INNER JOIN sale_order_line_invoice_rel inv_rel on (inv_rel.order_line_id = l.id)
                         INNER JOIN account_invoice_line inv_l on (inv_l.id = inv_rel.invoice_id)
                         INNER JOIN account_invoice inv on (inv.id = inv_l.invoice_id)
-                '''
+            '''
+            if form['invoice_state'] == 'draft':
                 where_str = '%s %s'%(where_str, ''' AND inv.state = 'draft' ''')
-            else:
-                join_sql = '''
-                        INNER JOIN sale_order_line_invoice_rel inv_rel on (inv_rel.order_line_id = l.id)
-                        INNER JOIN account_invoice_line inv_l on (inv_l.id = inv_rel.invoice_id)
-                        INNER JOIN account_invoice inv on (inv.id = inv_l.invoice_id)
-                '''
+            elif form['invoice_state'] == 'done':
                 where_str = '%s %s'%(where_str, ''' AND inv.state not in ('draft', 'cancel') ''')
+            else:
+                where_str = '%s %s'%(where_str, ''' AND inv.state != 'cancel' ''')
         context = {}
         if form['datetime_from']:
             where_str = '%s %s'%(where_str, ''' AND s.date_order >= '%s' '''%form['datetime_from'])
@@ -327,7 +316,9 @@ class Parser(report_sxw.rml_parse):
             for part in res1:
                 total += partner_obj.browse(self.cr, self.uid, part['partner_id'], context).debit
 
-            res[0].update({'payable': total + res[0]['amount']})
+            if res[0] and res[0]['amount']:
+                total += res[0]['amount']
+            res[0].update({'payable': total})
 
         return res
         
