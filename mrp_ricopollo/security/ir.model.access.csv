@@ -9,3 +9,7 @@ access_daily_consumption_dead,daily.consumption.dead,model_daily_consumption_dea
 access_temperature_warehouse,temperature.warehouse,model_temperature_warehouse,base.group_user,1,1,1,1
 access_standard_production,standard.production,model_standard_production,base.group_user,1,1,1,1
 access_cycle_food_type,cycle.food.type,model_cycle_food_type,base.group_user,1,1,1,1
+access_slaughtery_chickens_daily,slaughtery.chickens.daily,model_slaughtery_chickens_daily,base.group_user,1,1,1,1
+access_chicken_is_processed,chicken.is.processed,model_chicken_is_processed,base.group_user,1,1,1,1
+access_final_products_for_sale,final.products.for.sale,model_final_products_for_sale,base.group_user,1,1,1,1
+access_final_products_for_sale_detail,final.products.for.sale.detail,model_final_products_for_sale_detail,base.group_user,1,1,1,1

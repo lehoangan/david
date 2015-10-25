@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+		<record id="slaughtery_chickens_daily_search_view" model="ir.ui.view">
+            <field name="name">slaughtery.chickens.daily.search</field>
+            <field name="model">slaughtery.chickens.daily</field>
+            <field name="arch" type="xml">
+                <search string="Recepción de Pollos">
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="time"/>
+                    <field name="warehouse_id"/>
+                    <field name="cycle_id"/>
+                    <field name="qty_qq"/>
+                    <field name="qty_kg"/>
+                    <field name="qty_dead"/>
+                    <field name="state" />
+                </search>
+            </field>
+        </record>
+        
+        <record id="slaughtery_chickens_daily_tree_view" model="ir.ui.view">
+            <field name="name">slaughtery.chickens.daily.tree</field>
+            <field name="model">slaughtery.chickens.daily</field>
+            <field name="arch" type="xml">
+                <tree string="Recepción de Pollos">
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="time" widget="float_time"/>
+                    <field name="warehouse_id"/>
+                    <field name="cycle_id"/>
+                    <field name="qty_qq"/>
+                    <field name="qty_kg"/>
+                    <field name="qty_dead"/>
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="slaughtery_chickens_daily_form_view" model="ir.ui.view">
+            <field name="name">slaughtery.chickens.daily.form</field>
+            <field name="model">slaughtery.chickens.daily</field>
+            <field name="arch" type="xml">
+                <form string="Recepción de Pollos">
+					<header>
+                        <button name="action_cancel" states="draft,confirm,mo" type="object" string="Cancel"/>
+                        <button name="action_approve" states="draft" type="object" string="Approve"/>
+                        <button name="action_set_to_draft" states="cancel" type="object" string="Set To Draft"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,done" />
+					</header>
+                    <sheet>
+                        <group col="4" colspan="4">
+                            <field name="date"/>
+                            <field name="time" widget="float_time"/>
+                            <field name="name"/>
+                            <field name="warehouse_id"/>
+                            <field name="cycle_id"/>
+                            <field name="product_id"/>
+                            <field name="qty_qq"/>
+                            <field name="qty_kg"/>
+                            <field name="qty_dead"/>
+                            <newline />
+                            <field name="note" colspan="4"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_slaughtery_chickens_daily" model="ir.actions.act_window">
+            <field name="name">Recepción de Pollos</field>
+            <field name="res_model">slaughtery.chickens.daily</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="slaughtery_chickens_daily_tree_view"/>
+        </record>
+
+        <menuitem name="Matadero" id="menu_matadero"
+            parent="base.menu_mrp_root" sequence="10"/>
+        <menuitem name="Recepción de Pollos"
+                  action="action_slaughtery_chickens_daily"
+                  id="menu_action_slaughtery_chickens_daily"
+                  parent="menu_matadero"/>
+
+    </data>
+</openerp>
