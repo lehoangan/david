@@ -28,8 +28,8 @@ class sale_sumary_report(osv.osv_memory):
     _name = "sale.sumary.report"
 
     _columns = {
-        'date_from': fields.date('Desde'),
-        'date_to': fields.date('Hasta'),
+        'date_from': fields.date('Desde', required=True),
+        'date_to': fields.date('Hasta', required=True),
         'product_ids': fields.many2many('product.product', 'report_sale_product',
                                         'sale_id', 'product_id', 'Product',
                                         domain=[('sale_ok', '=', True)]),
@@ -40,10 +40,11 @@ class sale_sumary_report(osv.osv_memory):
         'invoice_state': fields.selection([
             ('draft', 'Factura Borrador'),
             ('done', ' Factura'),
+            ('both', 'Ambos')
             ], 'Factura Tipo'),
     }
     _defaults={
-    'state': 'done',
+        'state': 'done',
     }
 
     def remove_7_hours(self, cr, uid, date, context=None):
