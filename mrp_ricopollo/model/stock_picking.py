@@ -18,10 +18,6 @@ class stock_picking(osv.osv):
         from openerp import netsvc
         for picking in self.browse(cr, uid, ids, context):
             for line in picking.move_lines:
-                if self.has_valuation_moves(cr, uid, line):
-                    raise osv.except_osv(_('Error'),
-                        _('Line %s has valuation moves (%s). Remove them first')
-                        % (line.name, line.picking_id.name))
                 line.write({'state': 'draft'})
             self.write(cr, uid, [picking.id], {'state': 'draft'})
             wf_service = netsvc.LocalService("workflow")
@@ -195,10 +191,11 @@ class stock_picking(osv.osv):
                                                                               ('is_farm', '=', True),
                                                                               ('state', '=', 'open')])
 
-                if warehouse_ids:
+                if not warehouse_ids:
                     warehouse_ids = warehouse.search(cr, uid, [('lot_stock_id','=', move.location_dest_id.id),
-                                                                              ('is_farm', '=', True),
-                                                                              ('state', '=', 'open')])
+                                                                              # ('is_farm', '=', True),
+                                                                              # ('state', '=', 'open')
+                                                               ])
                     if not warehouse_ids and not pick.mrp_id:
                         continue
 

@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+		<record id="final_products_for_sale_search_view" model="ir.ui.view">
+            <field name="name">final.products.for.sale.search</field>
+            <field name="model">final.products.for.sale</field>
+            <field name="arch" type="xml">
+                <search string="Área Limpia">
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="warehouse_id"/>
+                    <field name="cycle_id"/>
+                    <field name="state" />
+                </search>
+            </field>
+        </record>
+        
+        <record id="final_products_for_sale_tree_view" model="ir.ui.view">
+            <field name="name">final.products.for.sale.tree</field>
+            <field name="model">final.products.for.sale</field>
+            <field name="arch" type="xml">
+                <tree string="Área Limpia">
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="warehouse_id"/>
+                    <field name="cycle_id"/>
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="final_products_for_sale_form_view" model="ir.ui.view">
+            <field name="name">final.products.for.sale.form</field>
+            <field name="model">final.products.for.sale</field>
+            <field name="arch" type="xml">
+                <form string="Área Limpia">
+					<header>
+                        <button name="action_cancel" states="draft,confirm,mo" type="object" string="Cancel"/>
+                        <button name="action_approve" states="draft" type="object" string="Approve"/>
+                        <button name="action_set_to_draft" states="cancel" type="object" string="Set To Draft"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,done" />
+					</header>
+                    <sheet>
+                        <group col="4" colspan="4">
+                            <field name="slaughtery_id" on_change="onchange_slaughtery_id(slaughtery_id,context)"/>
+                            <field name="date"/>
+                            <field name="name" invisible="1"/>
+                            <field name="warehouse_id"/>
+                            <field name="cycle_id"/>
+
+                            <field name="qty_descarte"/>
+                            <field name="qty_descarte_kg"/>
+                            <field name="qty_patas"/>
+                            <field name="qty_patas_kg"/>
+                            <field name="qty_rojo"/>
+                            <field name="qty_rojo_kg"/>
+
+                            <field name="qty_rotas_rojas"/>
+                            <field name="qty_rotas_rojas_kg"/>
+                            <field name="qty_rotas_blancas"/>
+                            <field name="qty_rotas_blancas_kg"/>
+                            <field name="qty_pernas_rotas"/>
+                            <field name="qty_pernas_rotas_kg"/>
+
+                            <field name="qty_pernas_abiertas"/>
+                            <field name="qty_pernas_abiertas_kg"/>
+                            <field name="qty_producto_para_embutidos"/>
+                            <newline />
+                            <field name="note" colspan="4"/>
+                        </group>
+                        <field name="line_ids" colspan="4">
+                            <tree string="Details" editable="top">
+                                <field name="product_id"/>
+                                <field name="qty"/>
+                                <field name="weight"/>
+                            </tree>
+
+                        </field>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_final_products_for_sale" model="ir.actions.act_window">
+            <field name="name">Área Limpia</field>
+            <field name="res_model">final.products.for.sale</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="final_products_for_sale_tree_view"/>
+        </record>
+        <menuitem name="Área Limpia"
+                  action="action_final_products_for_sale"
+                  id="menu_action_final_products_for_sale"
+                  parent="menu_matadero"/>
+
+    </data>
+</openerp>

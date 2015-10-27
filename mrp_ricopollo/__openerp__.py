@@ -53,6 +53,9 @@
         'wizard/lst_warehouse_wizard_view.xml',
         'wizard/generate_request_view.xml',
         'wizard/foodtype_per_cycle_wizard_view.xml',
+        'view/slaughtery_chickens_daily_view.xml',
+        'view/chicken_is_processed_view.xml',
+        'view/final_products_for_sale_view.xml',
 
 
         'data/schedule_action.xml',
