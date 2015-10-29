@@ -17,24 +17,6 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-{
-    'name': 'R - Account',
-    'version': '1.0',
-    'author': 'Anle<lehoangan1988@gmail.com>',
-    'category': 'Rico',
-    'website': 'https://www.odoo.com',
-    'description': """
-            Tracking Change
-    """,
-    'depends': ["account","point_of_sale"],
-    'demo': [],
-    'data': [
-        'view/account_bank_statement_view.xml',
-        'report/template/define_report.xml',
-        'report/template/report_statement.xml',
-        ],
-    'auto_install': False,
-    'installable': True,
-}
 
+import report_statement
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

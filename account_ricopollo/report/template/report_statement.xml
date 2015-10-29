@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<template id="account_ricopollo.report_statement">
+    <t t-call="report.html_container">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="report.internal_layout">
+                <div class="page">
+                    <h2>Reporte de Caja</h2>
+
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <strong>Código de Reporte</strong>:<br/>
+                            <span t-field="o.name"/>
+                        </div>
+                        <div class="col-xs-3">
+                            <strong>Diario</strong>:<br/>
+                            <span t-field="o.journal_id"/>
+                        </div>
+                        <div class="col-xs-3">
+                            <strong>Company</strong>:<br/>
+                            <span t-field="o.company_id"/>
+                        </div>
+                        <div class="col-xs-3">
+                            <strong>Usuario</strong>:<br/>
+                            <span t-field="o.user_id"/>
+                        </div>
+                    </div>
+
+                    <div class="row mb32">
+                        <div class="col-xs-3">
+                            <strong>Fecha de Apertura</strong>:<br/>
+                            <span t-field="o.date"/>
+                        </div>
+                        <div class="col-xs-3">
+                            <strong>Fecha de Cierra</strong>:<br/>
+                            <span t-field="o.closing_date"/>
+                        </div>
+                        <div class="col-xs-3">
+                            <strong>Balance de Inicio</strong>:<br/>
+                            <span t-field="o.balance_start" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;res_company.currency_id&quot;}"/>
+                        </div>
+                        <div class="col-xs-3">
+                            <strong>Balance de Cierre</strong>:<br/>
+                            <span t-field="o.balance_end_real" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;res_company.currency_id&quot;}"/>
+                        </div>
+                    </div>
+
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Nr.</th>
+                                <th>Fecha</th>
+                                <th>Descripción</th>
+                                <th>Referencia</th>
+                                <th>Cuenta Asignada</th>
+                                <th class="text-right">Monto</th>
+                                 <th class="text-right">Acumulado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="o.line_ids" t-as="line">
+                                <td><span t-esc="get_no()"/></td>
+                                <td><span t-field="line.date"/></td>
+                                <td><span t-field="line.ref"/></td>
+                                <td><span t-esc="line.partner_id and line.partner_id.name or '' "/></td>
+                                <td><span t-esc="line.account_id and line.account_id.name or '' "/></td>
+                                <td class="text-right">
+                                    <span t-field="line.amount" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;res_company.currency_id&quot;}"/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-esc="get_total_line(line.amount)" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;res_company.currency_id&quot;}"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="row">
+                        <div class="col-xs-4 pull-right">
+                            <table class="table table-condensed">
+                                <tr class="border-black">
+                                    <td><strong>Total</strong></td>
+                                    <td class="text-right"><span t-esc="formatLang(get_total(o.line_ids), currency_obj=res_company.currency_id)"/></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row">
+						<table class="table table-condensed">
+							<tr>
+								<td style="width: 16%;border-top: 1.00pt solid #ffffff"></td>
+								<td style="width: 17%;border-top: 1pt solid #000000" class="text-right"><strong>Balance Inicial:</strong></td>
+								<td style="width: 17%;border-top: 1pt solid #000000" class="text-right"><span class="text-right" t-field="o.balance_start"/></td>
+								<td style="width: 16%;border-top: 1.00pt solid #ffffff"></td>
+								<td style="width: 17%;border-top: 1pt solid #000000" class="text-right"><strong>Balance de Cierre:</strong></td>
+								<td style="width: 17%;border-top: 1pt solid #000000" class="text-right"><span class="text-right" t-field="o.balance_end_real"/></td>
+							</tr>
+							<tr>
+								<td style="width: 16%;border-top: 1.00pt solid #ffffff"></td>
+								<td style="width: 17%;border-top: 1pt solid #ffffff" class="text-right"><strong>+Transacciones:</strong></td>
+								<td style="width: 17%;border-top: 1pt solid #ffffff" class="text-right"><span class="text-right" t-field="o.total_entry_encoding"/></td>
+								<td style="width: 16%;border-top: 1.00pt solid #ffffff"></td>
+								<td style="width: 17%;border-top: 1.00pt solid #ffffff"></td>
+								<td style="width: 17%;border-top: 1.00pt solid #ffffff"></td>
+							</tr>
+							<tr>
+								<td style="width: 16%;border-top: 1.00pt solid #ffffff"></td>
+								<td style="width: 17%;border-top: 1pt solid #ffffff" class="text-right"><strong>Balance de Cierre Teorético:</strong></td>
+								<td style="width: 17%;border-top: 1pt solid #ffffff" class="text-right"><span class="text-right" t-field="o.balance_end"/></td>
+								<td style="width: 16%;border-top: 1.00pt solid #ffffff"></td>
+								<td style="width: 17%;border-top: 1.00pt solid #ffffff"></td>
+								<td style="width: 17%;border-top: 1.00pt solid #ffffff"></td>
+							</tr>
+							<tr>
+								<td style="width: 16%;border-top: 1.00pt solid #ffffff"></td>
+								<td style="width: 17%;border-top: 1.00pt solid #ffffff"></td>
+								<td style="width: 17%;border-top: 1.00pt solid #ffffff"></td>
+								<td style="width: 16%;border-top: 1.00pt solid #ffffff"></td>
+								<td style="width: 17%;border-top: 1pt solid #000000" class="text-right"><strong>Diferencia:</strong></td>
+								<td style="width: 17%;border-top: 1pt solid #000000" class="text-right"><span class="text-right" t-field="o.difference"/></td>
+							</tr>
+						</table>
+
+                    </div>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+
+                    <div class="row">
+						<table class="table">
+							<tr>
+								<td style="width: 23%;border-top: 1.00pt solid #000000" class="text-center">Realizado Por</td>
+								<td style="width: 2%;border-top: 1.00pt solid #ffffff" class="text-center"></td>
+								<td style="width: 23%;border-top: 1.00pt solid #000000" class="text-center">Revizado Por</td>
+								<td style="width: 2%;border-top: 1.00pt solid #ffffff" class="text-center"></td>
+								<td style="width: 23%;border-top: 1.00pt solid #000000" class="text-center">Autorizado Por</td>
+								<td style="width: 2%;border-top: 1.00pt solid #ffffff" class="text-center"></td>
+								<td style="width: 24%;border-top: 1.00pt solid #000000" class="text-center">Pagado a / Recibido de</td>
+							</tr>
+						</table>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </t>
+</template>
+
+</data>
+</openerp>

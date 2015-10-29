@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<openerp>
+    <data>
+        <report
+            id="point_of_sale.action_report_account_statement"
+            model="account.bank.statement"
+            string="Statement"
+            name="account_ricopollo.report_statement"
+            file="account_ricopollo.report_statement"
+            report_type="qweb-pdf"
+        />
+
+    </data>
+</openerp>
