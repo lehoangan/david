@@ -109,7 +109,7 @@ class final_products_for_sale_detail(osv.osv):
         'parent_id': fields.many2one('final.products.for.sale', 'Parent'),
 
         'qty': fields.float('Cantidad', required=True),
-        'weight': fields.float('Peso Bruto', required=True),
+        'weight': fields.float('Peso Neto', required=True),
     }
 
  

@@ -204,6 +204,14 @@
                 </td>
                 <td colspan="9"></td>
             </tr>
+            <tr  class='celdaDetailTitulo'>
+                <td width='6%'>
+                    ${_("Detalle: ")}
+                </td>
+                <td width='94%'>
+                    <div>${o.narration or '' |entity}</div>
+                </td>
+            </tr>
             
         </table>
         %if len(loop._iterable) != 1 and loop.index != len(loop._iterable)-1:
