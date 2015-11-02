@@ -48,10 +48,20 @@ class sale_sumary_report(osv.osv_memory):
     }
 
     def remove_7_hours(self, cr, uid, date, context=None):
+        from openerp.osv.fields import datetime as datetime_field
         date = datetime.strptime(date, DEFAULT_SERVER_DATETIME_FORMAT)
-        date = date + relativedelta(hours=-7)
-        date = date.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
-        return date
+
+        new_date = datetime_field.context_timestamp(cr, uid,
+                                                    timestamp=date,
+                                                    context=context)
+        new_date = datetime.strptime(new_date.strftime(DEFAULT_SERVER_DATETIME_FORMAT), DEFAULT_SERVER_DATETIME_FORMAT)
+
+        duration = new_date - date
+        seconds = duration.total_seconds()
+        hours = seconds // 3600
+
+        date = date + relativedelta(hours=-hours)
+        return date.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
 
     def print_report(self, cr, uid, ids, context=None):
         if context is None:
