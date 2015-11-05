@@ -33,7 +33,8 @@ class slaughtery_chickens_daily(osv.osv):
         'date': fields.date('Date', required=True),
         'time': fields.float('Time', required=True),
         'name': fields.char('Ref', 100, required=True),
-        'warehouse_id': fields.many2one('stock.warehouse', 'Farm', required=True, domain=[('is_farm', '=', True)]),
+        'warehouse_id': fields.many2one('stock.warehouse', 'From Farm', required=True, domain=[('is_farm', '=', True)]),
+        'to_warehouse_id': fields.many2one('stock.warehouse', 'To Farm', domain=[('is_farm', '=', True)]),
         'product_id': fields.many2one('product.product', 'Product', required=True),
         'cycle_id': fields.many2one('history.cycle.form', 'Cycle', required=True, domain="[('warehouse_id','=', warehouse_id)]"),
         'picking_id': fields.many2one('stock.picking', 'Picking'),
@@ -52,23 +53,33 @@ class slaughtery_chickens_daily(osv.osv):
             return product_ids[0]
         return False
 
+    def _get_default_farm(self, cr, uid, context):
+        stock_warehouse = self.pool.get('stock.warehouse')
+        warehouse_to_ids = stock_warehouse.search(cr, uid, [('code', '=', 'MAT1-FAEN')])
+        if not warehouse_to_ids:
+            return False
+
+        return warehouse_to_ids[0]
+
     _defaults = {
         'date': lambda*a: time.strftime('%Y-%m-%d'),
         'state': 'draft',
         'product_id': _get_default_product,
+        'to_warehouse_id': _get_default_farm,
      }
 
     def action_approve(self, cr, uid, ids, context=None):
         stock_picking = self.pool.get('stock.picking')
         stock_warehouse = self.pool.get('stock.warehouse')
         stock_move_obj = self.pool.get('stock.move')
-        int_type_id = False
         obj = self.browse(cr, uid, ids, context)[0]
-        warehouse_to_ids = stock_warehouse.search(cr, uid, [('code', '=', 'MAT1-FAEN')])
-        if not warehouse_to_ids:
-            openerp.exceptions.AccessError(_("Not find warehouse for MAT1-FAEN location"))
+        warehouse = obj.to_warehouse_id
+        if not warehouse:
+            warehouse_to_ids = stock_warehouse.search(cr, uid, [('code', '=', 'MAT1-FAEN')])
+            if not warehouse_to_ids:
+                openerp.exceptions.AccessError(_("Not find warehouse for MAT1-FAEN location"))
 
-        warehouse = stock_warehouse.browse(cr, uid, warehouse_to_ids[0])
+            warehouse = stock_warehouse.browse(cr, uid, warehouse_to_ids[0])
         int_type_id = warehouse.int_type_id and warehouse.int_type_id.id or False
         location_dest_id = warehouse.lot_stock_id.id
 
