@@ -46,7 +46,7 @@
                 <form string="Recepción de Pollos">
 					<header>
                         <button name="action_cancel" states="draft,confirm,mo" type="object" string="Cancel"/>
-                        <button name="action_approve" states="draft" type="object" string="Approve"/>
+                        <button name="action_approve" states="draft" type="object" string="Aprobar"/>
                         <button name="action_set_to_draft" states="cancel" type="object" string="Set To Draft"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,done" />
 					</header>

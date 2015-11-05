@@ -30,20 +30,20 @@ class slaughtery_chickens_daily(osv.osv):
     _name = 'slaughtery.chickens.daily'
     _inherit = ['mail.thread']
     _columns ={
-        'date': fields.date('Date', required=True),
-        'time': fields.float('Time', required=True),
-        'name': fields.char('Ref', 100, required=True),
-        'warehouse_id': fields.many2one('stock.warehouse', 'From Farm', required=True, domain=[('is_farm', '=', True)]),
-        'to_warehouse_id': fields.many2one('stock.warehouse', 'To Farm', domain=[('is_farm', '=', True)]),
-        'product_id': fields.many2one('product.product', 'Product', required=True),
-        'cycle_id': fields.many2one('history.cycle.form', 'Cycle', required=True, domain="[('warehouse_id','=', warehouse_id)]"),
+        'date': fields.date('Fecha', required=True),
+        'time': fields.float('Hora', required=True),
+        'name': fields.char('Nr. Boleta', 100, required=True),
+        'warehouse_id': fields.many2one('stock.warehouse', 'From Galpón', required=True, domain=[('is_farm', '=', True)]),
+        'to_warehouse_id': fields.many2one('stock.warehouse', 'To Galpón', domain=[('is_farm', '=', True)]),
+        'product_id': fields.many2one('product.product', 'Producto', required=True),
+        'cycle_id': fields.many2one('history.cycle.form', 'Lote', required=True, domain="[('warehouse_id','=', warehouse_id)]"),
         'picking_id': fields.many2one('stock.picking', 'Picking'),
         'qty_qq': fields.float('Total Pollos', required=True),
         'qty_kg': fields.float('Total Kg', required=True),
-        'qty_dead': fields.float('Dead Chicken', required=True),
-        'note': fields.text('Note'),
-        'state': fields.selection([('draft', 'Draft'),
-                                   ('confirm', 'Confirm'),
+        'qty_dead': fields.float('Pollos Muertos', required=True),
+        'note': fields.text('Observaciones'),
+        'state': fields.selection([('draft', 'Borrador'),
+                                   ('confirm', 'Realozado'),
                                    ('cancel','Cancel')], 'State', readonly=True)
     }
 
