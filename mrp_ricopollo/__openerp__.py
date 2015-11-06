@@ -56,6 +56,7 @@
         'view/slaughtery_chickens_daily_view.xml',
         'view/chicken_is_processed_view.xml',
         'view/final_products_for_sale_view.xml',
+        'wizard/reporte_galponero_report_wizard_view.xml',
 
 
         'data/schedule_action.xml',

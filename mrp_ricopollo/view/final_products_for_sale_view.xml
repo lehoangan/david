@@ -41,10 +41,11 @@
                         <field name="state" widget="statusbar" statusbar_visible="draft,done" />
 					</header>
                     <sheet>
+                        <field name="name" invisible="1"/>
                         <group col="4" colspan="4">
                             <field name="slaughtery_id" on_change="onchange_slaughtery_id(slaughtery_id,context)"/>
                             <field name="date"/>
-                            <field name="name" invisible="1"/>
+                            <newline></newline>
                             <field name="warehouse_id"/>
                             <field name="cycle_id"/>
 

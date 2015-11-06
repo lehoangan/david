@@ -41,6 +41,19 @@
         <field name="tml_source">file</field>
     </record>
 
+    <record id="aeroo_reporte_galponero_id" model="ir.actions.report.xml">
+        <field name="name">Reporte Galponero</field>
+        <field name="type">ir.actions.report.xml</field>
+        <field name="model">reporte.galponero.report.wizard</field>
+        <field name="report_name">reporte_galponero_report</field>
+        <field name="report_type">aeroo</field>
+        <field name="in_format">oo-ods</field>
+        <field name="parser_loc">mrp_ricopollo/report/reporte_galponero.py</field>
+        <field name="report_rml">mrp_ricopollo/report/reporte_galponero.ods</field>
+        <field name="parser_state">loc</field>
+        <field name="tml_source">file</field>
+    </record>
+
 </data>
 </openerp>
 
