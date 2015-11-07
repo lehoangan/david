@@ -87,6 +87,10 @@ class Parser(report_sxw.rml_parse):
                  SELECT his.name as cycle_no, his.id as cycle_id,
                         ware.name as warehouse, ware.id as warehouse_id,
                         ware.capacity,his.date_start,
+                        (SELECT sum(dead.total_qty) as total
+                            FROM daily_consumption_dead dead
+                            JOIN daily_consumption parent on (parent.id = dead.consumption_id)
+                            WHERE parent.cycle_id = his.id) as qty_dead,
                         sum(detail.qty) as col5, sum(detail.weight) as col6, 0 as col7, sum(sl.qty_dead) as col8,
                         0 as col9, 0 as col10, sum(processed.qty) as col11, sum(detail.rojas) as col12, sum(detail.rojas_kg) as col13,
                         sum(detail.blancas) as col14, sum(detail.blancas_kg) as col15, sum(detail.rotas) as col16, sum(detail.rotas_kg) as col17
