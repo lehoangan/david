@@ -222,7 +222,8 @@ class Parser(report_sxw.rml_parse):
                         inv.id,
                         s.name,
                         inv.number,
-                        inv.date_invoice
+                        inv.date_invoice,
+                        s.client_order_ref as ref
                 FROM (
                     account_invoice inv
                     join sale_order_invoice_rel inv_rel on (inv_rel.invoice_id=inv.id)
