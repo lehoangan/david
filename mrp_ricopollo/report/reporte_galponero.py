@@ -41,6 +41,7 @@ class Parser(report_sxw.rml_parse):
             'get_rate': self.get_rate,
             'get_type': self.get_type,
             'get_time': self.get_time,
+            'number_of_date': self.number_of_date,
         })
     def get_time(self, a):
         a = str(a)
@@ -85,24 +86,29 @@ class Parser(report_sxw.rml_parse):
 
         select_str = """
                  SELECT his.name as cycle_no, his.id as cycle_id,
-                        ware.name as warehouse, ware.id as warehouse_id,
+                        ware.code as warehouse, ware.id as warehouse_id,
                         ware.capacity,his.date_start,
+
                         (SELECT sum(dead.total_qty) as total
                             FROM daily_consumption_dead dead
                             JOIN daily_consumption parent on (parent.id = dead.consumption_id)
                             WHERE parent.cycle_id = his.id) as qty_dead,
-                        sum(detail.qty) as col5, sum(detail.weight) as col6, 0 as col7, sum(sl.qty_dead) as col8,
-                        0 as col9, 0 as col10, sum(processed.qty) as col11, sum(detail.rojas) as col12, sum(detail.rojas_kg) as col13,
-                        sum(detail.blancas) as col14, sum(detail.blancas_kg) as col15, sum(detail.rotas) as col16, sum(detail.rotas_kg) as col17
 
-                                FROM slaughtery_chickens_daily sl
-                                JOIN stock_warehouse ware on (sl.warehouse_id = ware.id)
-                                JOIN history_cycle_form his on (sl.cycle_id = his.id)
-                                LEFT JOIN
+                        sum(detail.qty) as col5, sum(detail.weight) as col6, 0 as col7, sum(sl.qty_dead) as col8,
+                        sum(detail.qty_descarte) as col9, sum(detail.qty_descarte_kg) as col10, sum(processed.qty) as col11,
+                        sum(detail.rojas) as col12, sum(detail.rojas_kg) as col13,
+                        sum(detail.blancas) as col14, sum(detail.blancas_kg) as col15, sum(detail.rotas) as col16,
+                        sum(detail.rotas_kg) as col17
+
+                        FROM slaughtery_chickens_daily sl
+                        JOIN stock_warehouse ware on (sl.warehouse_id = ware.id)
+                        JOIN history_cycle_form his on (sl.cycle_id = his.id)
+                        LEFT JOIN
                         (SELECT sum(qty_rotas_rojas) rojas, sum(qty_rotas_rojas_kg) rojas_kg,
                         sum(qty_rotas_blancas) blancas, sum(qty_rotas_blancas_kg) blancas_kg,
                         sum(qty_pernas_rotas) rotas, sum(qty_pernas_rotas_kg) rotas_kg,
-                        sum(fdetail.qty) as qty, sum(fdetail.weight) as weight, final.slaughtery_id
+                        sum(fdetail.qty) as qty, sum(fdetail.weight) as weight, final.slaughtery_id,
+                        sum(final.qty_descarte) as qty_descarte, sum(final.qty_descarte_kg) as qty_descarte_kg
                         FROM final_products_for_sale_detail fdetail
                         JOIN final_products_for_sale final on (fdetail.parent_id = final.id)
                         GROUP BY final.slaughtery_id) as detail on (detail.slaughtery_id = sl.id)
@@ -113,7 +119,7 @@ class Parser(report_sxw.rml_parse):
 
                  %s
                  GROUP BY his.name, his.id,
-                        ware.name, ware.id, ware.capacity,his.date_start
+                        ware.code, ware.id, ware.capacity,his.date_start
         """%where_str
         self.cr.execute(select_str)
         res = self.cr.dictfetchall()
@@ -152,10 +158,10 @@ class Parser(report_sxw.rml_parse):
             where_str = '%s %s'%(where_str, ''' AND his.date_start = '%s' '''%parent['date_start'])
 
         select_str = """
-                 SELECT sl.id, his.name as cycle_no, ware.name as warehouse, ware.capacity,
+                 SELECT sl.id, his.name as cycle_no, his.date_start as date_start, ware.name as warehouse, ware.capacity,
                     his.date_start, sl.name as col1, sl.date as col2, sl.time as col3, his.type as col4,
                     detail.qty as col5, detail.weight as col6, 0 as col7, sl.qty_dead as col8,
-                    0 as col9, 0 as col10, processed.qty as col11, detail.rojas as col12, detail.rojas_kg as col13,
+                    detail.qty_descarte as col9, detail.qty_descarte_kg as col10, processed.qty as col11, detail.rojas as col12, detail.rojas_kg as col13,
                     detail.blancas as col14, detail.blancas_kg as col15, detail.rotas as col16, detail.rotas_kg as col17
                     FROM slaughtery_chickens_daily sl
                     JOIN stock_warehouse ware on (sl.warehouse_id = ware.id)
@@ -165,7 +171,8 @@ class Parser(report_sxw.rml_parse):
                         (SELECT sum(qty_rotas_rojas) rojas, sum(qty_rotas_rojas_kg) rojas_kg,
                         sum(qty_rotas_blancas) blancas, sum(qty_rotas_blancas_kg) blancas_kg,
                         sum(qty_pernas_rotas) rotas, sum(qty_pernas_rotas_kg) rotas_kg,
-                        sum(fdetail.qty) as qty, sum(fdetail.weight) as weight, final.slaughtery_id
+                        sum(fdetail.qty) as qty, sum(fdetail.weight) as weight, final.slaughtery_id,
+                        sum(final.qty_descarte) as qty_descarte, sum(final.qty_descarte_kg) as qty_descarte_kg
                         FROM final_products_for_sale_detail fdetail
                         JOIN final_products_for_sale final on (fdetail.parent_id = final.id)
                         GROUP BY final.slaughtery_id) as detail on (detail.slaughtery_id = sl.id)
@@ -174,10 +181,19 @@ class Parser(report_sxw.rml_parse):
                         FROM chicken_is_processed
                         GROUP BY slaughtery_id) as processed on (processed.slaughtery_id = sl.id)
                 %s
+                ORDER BY sl.name
         """%where_str
         self.cr.execute(select_str)
         res = self.cr.dictfetchall()
         return res
+
+    def number_of_date(self, date):
+        from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
+        from datetime import datetime
+
+        date = datetime.strptime(date, DEFAULT_SERVER_DATE_FORMAT)
+        day = (datetime.now() - date).days
+        return day
 
 
     

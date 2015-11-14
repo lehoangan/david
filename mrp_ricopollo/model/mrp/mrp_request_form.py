@@ -45,7 +45,7 @@ class mrp_request_form(osv.osv):
         'age': fields.integer('Age', readonly=True, states={'draft': [('readonly', False)]}),
 
         #product detail
-        'product_id': fields.many2one('product.product', 'Tipo Alimento', required=True, readonly=True, states={'draft': [('readonly', False)]}),
+        'product_id': fields.many2one('product.product', 'Tipo Alimento', domain="[('bom_ids','!=',False),('bom_ids.type','!=','phantom')]", required=True, readonly=True, states={'draft': [('readonly', False)]}),
         'qty_qq': fields.float('Cantidad (qq)', required=True, readonly=True, states={'draft': [('readonly', False)]}),
         'qty_unit': fields.float('Kilogramos', required=True, readonly=True, states={'draft': [('readonly', False)]}),
         'uom_id': fields.many2one('product.uom', 'UoM', required=True, readonly=True, states={'draft': [('readonly', False)]}),
