@@ -45,14 +45,13 @@ class generate_request(osv.osv_memory):
         if context is None:
             context = {}
         sql = '''
-            SELECT warehouse.id as warehouse_id, warehouse.capacity, cycle.id as cycle_id, mrp.remain_qty, cycle.date_start,
+            SELECT warehouse.id as warehouse_id, warehouse.capacity, cycle.id as cycle_id, cycle.date_start,
 	            cycle.type, food.product_id
                 FROM history_cycle_form cycle
                 JOIN stock_warehouse warehouse on (cycle.warehouse_id=warehouse.id)
                 JOIN cycle_food_type food on (cycle.id = food.cycle_id)
-                JOIN mrp_production mrp on (mrp.location_src_id = warehouse.lot_stock_id)
                 WHERE cycle.date_start is not null AND cycle.date_end is null
-                AND mrp.state not in ('draft','cancel') AND food.product_id is not null
+                AND warehouse.state not in ('draft','cancel', 'done') AND food.product_id is not null
         '''
         from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
         from datetime import datetime
@@ -76,7 +75,7 @@ class generate_request(osv.osv_memory):
                     age = (date - date_start).days
                 standard_ids = standard_obj.search(cr, uid, [('type', '=', data['type']), ('date', '=', age)])
                 for standard in standard_obj.browse(cr, uid, standard_ids, context):
-                    kg = (standard.food_consumption * data['remain_qty'])/1000
+                    kg = (standard.food_consumption * data['capacity'])/1000
                     qq = kg/46
                     request_id = request_obj.create(cr, uid, {
                         'date': obj.date,

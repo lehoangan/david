@@ -18,6 +18,12 @@
                     <field name="product_id"/>
                     <field name="user_id"/>
                     <field name="state" />
+                    <group expand="0" string="Group By">
+                    	<filter name="warehouse_id" string="Código de Granja" context="{'group_by':'warehouse_id'}"/>
+                        <filter string="Status" context="{'group_by':'state'}"/>
+                        <separator/>
+                        <filter string="Ciclo" context="{'group_by':'cycle_id'}"/>
+                    </group>
                 </search>
             </field>
         </record>
