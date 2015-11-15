@@ -27,6 +27,16 @@ class account_bank_statement(osv.Model):
 
     _inherit = 'account.bank.statement'
 
+    def _all_lines_reconciled(self, cr, uid, ids, name, args, context=None):
+        res = {}
+        for statement in self.browse(cr, uid, ids, context=context):
+            res[statement.id] = all([line.journal_entry_id.id or line.account_id.id for line in statement.line_ids])
+        return res
+
+    _columns = {
+        'all_lines_reconciled': fields.function(_all_lines_reconciled, string='All lines reconciled', type='boolean'),
+    }
+
 
 class account_bank_statement_line(osv.Model):
 
