@@ -9,11 +9,11 @@
                 	<group col="4">
                         <field name="report"/>
                         <newline />
-                        <field name="warehouse_id" attrs="{'invisible':[('report','in',('product','food'))]}" />
-                        <field name="cycle_id" attrs="{'invisible':[('report','in',('product','food'))]}"/>
+                        <field name="warehouse_id" attrs="{'invisible':[('report','in',('product','food'))], 'required':[('report','=','cycle')]}" />
+                        <field name="cycle_id" attrs="{'invisible':[('report','in',('product','food'))], 'required':[('report','=','cycle')]}"/>
                         <field name="date_from"/>
                         <field name="date_to"/>
-                        <field name="food_type_id" attrs="{'invisible':[('report','in', ('product','cycle'))]}"/>
+                        <field name="food_type_id" attrs="{'invisible':[('report','in', ('product','cycle'))], 'required':[('report','=','food')]}"/>
                         <field name="product_id" attrs="{'invisible':[('report','in',('food','cycle'))], 'required':[('report','=','product')]}"/>
                         <field name="state"/>
                     </group>

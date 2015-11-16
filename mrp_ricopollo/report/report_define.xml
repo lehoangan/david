@@ -55,7 +55,7 @@
     </record>
 
     <record id="aeroo_production_id" model="ir.actions.report.xml">
-        <field name="name">Reporte Galponero</field>
+        <field name="name">Reporte Production</field>
         <field name="type">ir.actions.report.xml</field>
         <field name="model">production.report.wizard</field>
         <field name="report_name">production_report</field>
@@ -66,6 +66,20 @@
         <field name="parser_state">loc</field>
         <field name="tml_source">file</field>
     </record>
+
+    <record id="aeroo_production_filter_id" model="ir.actions.report.xml">
+        <field name="name">Reporte Production Cylce or Food type filter</field>
+        <field name="type">ir.actions.report.xml</field>
+        <field name="model">production.report.wizard</field>
+        <field name="report_name">production_filter_report</field>
+        <field name="report_type">aeroo</field>
+        <field name="in_format">oo-ods</field>
+        <field name="parser_loc">mrp_ricopollo/report/production_filter_report.py</field>
+        <field name="report_rml">mrp_ricopollo/report/production_filter_report.ods</field>
+        <field name="parser_state">loc</field>
+        <field name="tml_source">file</field>
+    </record>
+
 
 </data>
 </openerp>

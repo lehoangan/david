@@ -53,7 +53,10 @@ class production_report_wizard(osv.osv_memory):
             context = {}
         data = {}
         data['form'] = self.read(cr, uid, ids, [])[0]
-        return self.pool['report'].get_action(cr, uid, [], 'production_report', data=data, context=context)
+        if data['form']['report'] == 'product':
+            return self.pool['report'].get_action(cr, uid, [], 'production_report', data=data, context=context)
+        else:
+            return self.pool['report'].get_action(cr, uid, [], 'production_filter_report', data=data, context=context)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
 
