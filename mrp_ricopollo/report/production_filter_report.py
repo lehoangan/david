@@ -40,13 +40,14 @@ class Parser(report_sxw.rml_parse):
         super(Parser, self).__init__(cr, uid, name, context)
         self.localcontext.update({
             'get_code_cycle': self.get_code_cycle,
+            'get_parent': self.get_parent,
             'get_detail': self.get_detail,
         })
 
     def get_code_cycle(self, cycle_id):
         return self.pool.get('history.cycle.form').browse(self.cr, self.uid, cycle_id).name
 
-    def _convert_timezone(self, cr, uid, date, context={}):
+    def _convert_timezone(self, cr, uid, date, plus=True, context={}):
         date = datetime.strptime(date, DEFAULT_SERVER_DATETIME_FORMAT)
 
         new_date = datetime_field.context_timestamp(cr, uid,
@@ -57,11 +58,14 @@ class Parser(report_sxw.rml_parse):
         duration = new_date - date
         seconds = duration.total_seconds()
         hours = seconds // 3600
+        if plus:
+            date = date + relativedelta(hours=hours)
+            return date.strftime(DEFAULT_SERVER_DATE_FORMAT)
+        else:
+            date = date + relativedelta(hours=-hours)
+            return date.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
 
-        date = date + relativedelta(hours=-hours)
-        return date.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
-
-    def get_detail(self, form):
+    def get_parent(self, form):
         where_str = ''
         if form['state'] == 'draft':
             where_str = ''' AND mrp.state not in ('draft', 'cancel', 'done') '''
@@ -76,18 +80,11 @@ class Parser(report_sxw.rml_parse):
             date_to = self._convert_timezone(self.cr, self.uid, form['date_to'] + ' 23:59:59')
             where_str = '%s %s'%(where_str, ''' AND consumed.date <= '%s' '''%date_to)
 
-        # if form['warehouse_id']:
-        #     where_str = '%s %s'%(where_str, ''' AND ware.id = %s '''%form['warehouse_id'][0])
-        #
-        # if form['cycle_id']:
-        #     where_str = '%s %s'%(where_str, ''' AND his.id = %s '''%form['cycle_id'][0])
-        #
-        # if form['slaughtery_id']:
-        #     where_str = '%s %s'%(where_str, ''' AND sl.id = %s '''%form['slaughtery_id'][0])
+        if form['food_type_id']:
+            where_str = '%s %s'%(where_str, ''' AND mrp.product_id = %s '''%form['food_type_id'][0])
 
-        #get from parent
-        if form['product_id']:
-            where_str = '%s %s'%(where_str, ''' AND mrp.product_id = %s '''%form['product_id'][0])
+        if form['cycle_id']:
+            where_str = '%s %s'%(where_str, ''' AND cl.id = %s '''%form['cycle_id'][0])
 
 
         select_str = """
@@ -96,9 +93,9 @@ class Parser(report_sxw.rml_parse):
                     coalesce(sum(waste_qty),0) as waste_qty, coalesce(avg(unit_cost),0) as unit_cost,
                     coalesce(sum(consumed_cost-waste_cost),0) as total_cost, location_id,
                     (SELECT coalesce(sum(total_qty),0) FROM (SELECT CASE WHEN (location_id = tmp.location_id)
-                                        THEN sum(-product_qty)
+                                        THEN sum(-product_uom_qty)
                                         WHEN (location_dest_id = tmp.location_id)
-                                        THEN sum(product_qty)
+                                        THEN sum(product_uom_qty)
                                         END as total_qty
                                         FROM stock_move
                                         WHERE product_id = tmp.product_id and state = 'done' and id < min(tmp.id)
@@ -111,24 +108,125 @@ class Parser(report_sxw.rml_parse):
                         CASE
                         WHEN (location.scrap_location <> TRUE)
                         THEN
-                        sum(consumed.product_qty)
+                        sum(consumed.product_uom_qty)
                         END as consumed_qty,
                         uom.name as uom,
                         CASE
                         WHEN (location.scrap_location = TRUE)
                         THEN
-                        sum(consumed.product_qty)
+                        sum(consumed.product_uom_qty)
                         END as waste_qty,
                         avg(consumed.cost_price) as unit_cost,
                         CASE
                         WHEN (location.scrap_location <> TRUE)
                         THEN
-                        sum(consumed.product_qty * consumed.cost_price)
+                        sum(consumed.product_uom_qty * consumed.cost_price)
                         END as consumed_cost,
                         CASE
                         WHEN (location.scrap_location = TRUE)
                         THEN
-                        sum(consumed.product_qty * consumed.cost_price)
+                        sum(consumed.product_uom_qty * consumed.cost_price)
+                        END as waste_cost,
+                        consumed.location_id, mrp.name as mrp_no, consumed.date
+
+                    FROM stock_move consumed
+                    JOIN mrp_production mrp on (mrp.id = consumed.raw_material_production_id)
+                    JOIN product_product prod on (prod.id = mrp.product_id)
+                    JOIN product_template tmp on (tmp.id = prod.product_tmpl_id)
+                    JOIN product_uom uom on (uom.id = consumed.product_uom)
+                    JOIN stock_location location on (consumed.location_dest_id = location.id)
+                    JOIN stock_warehouse warehouse on (mrp.location_src_id = warehouse.lot_stock_id)
+                    LEFT JOIN history_cycle_form cl on (cl.warehouse_id=warehouse.id)
+                    WHERE consumed.state = 'done' %s
+                    GROUP BY tmp.id, tmp.name, uom.name, location.scrap_location, consumed.location_id, prod.id, mrp.name, consumed.date
+                ) as tmp
+                GROUP BY product_id, product, uom, location_id, mrp_no, date
+        """%where_str
+        self.cr.execute(select_str)
+        res = self.cr.dictfetchall()
+
+        result = {}
+        no = 1
+        for data in res:
+            date_tz = self._convert_timezone(self.cr, self.uid, data['date'], True)
+            data['date'] = date_tz
+            key = (data['mrp_no'], date_tz)
+
+            if key not in result.keys():
+                data['no'] = no
+                result.update({key: data})
+                no += 1
+            else:
+                result[key]['consumed_qty'] += data['consumed_qty']
+                result[key]['waste_qty'] += data['waste_qty']
+                result[key]['total_cost'] += data['total_cost']
+                result[key]['total_qty'] += data['total_qty']
+        return sorted(result.values(), key=lambda k: k['no'])
+
+    def get_detail(self, form, mrp_no, date):
+        where_str = ''
+        if form['state'] == 'draft':
+            where_str = ''' AND mrp.state not in ('draft', 'cancel', 'done') '''
+        else:
+            where_str = ''' AND mrp.state = 'done' '''
+
+        if form['date_from']:
+            from_date = self._convert_timezone(self.cr, self.uid, form['date_from'] + ' 00:00:00')
+            where_str = '%s %s'%(where_str, ''' AND consumed.date >= '%s' '''%from_date)
+
+        if form['date_to']:
+            date_to = self._convert_timezone(self.cr, self.uid, form['date_to'] + ' 23:59:59')
+            where_str = '%s %s'%(where_str, ''' AND consumed.date <= '%s' '''%date_to)
+
+        if form['cycle_id']:
+            where_str = '%s %s'%(where_str, ''' AND cl.id = %s '''%form['cycle_id'][0])
+
+        #get from parent
+        if form['food_type_id']:
+            where_str = '%s %s'%(where_str, ''' AND mrp.product_id = %s '''%form['food_type_id'][0])
+        if mrp_no:
+            where_str = '%s %s'%(where_str, ''' AND mrp.name = '%s' '''%mrp_no)
+
+
+        select_str = """
+                 SELECT ROW_NUMBER() OVER(ORDER BY min(id)) AS no, min(id) as id, product_id, product,
+                    coalesce(sum(consumed_qty),0) as consumed_qty, uom, mrp_no, date,
+                    coalesce(sum(waste_qty),0) as waste_qty, coalesce(avg(unit_cost),0) as unit_cost,
+                    coalesce(sum(consumed_cost-waste_cost),0) as total_cost, location_id,
+                    (SELECT coalesce(sum(total_qty),0) FROM (SELECT CASE WHEN (location_id = tmp.location_id)
+                                        THEN sum(-product_uom_qty)
+                                        WHEN (location_dest_id = tmp.location_id)
+                                        THEN sum(product_uom_qty)
+                                        END as total_qty
+                                        FROM stock_move
+                                        WHERE product_id = tmp.product_id and state = 'done' and id < min(tmp.id)
+                                        GROUP BY location_dest_id, location_id) as inventory) as total_qty
+                FROM (
+                    SELECT
+                        min(consumed.id) as id,
+                        tmp.name as product,
+                        prod.id as product_id,
+                        CASE
+                        WHEN (location.scrap_location <> TRUE)
+                        THEN
+                        sum(consumed.product_uom_qty)
+                        END as consumed_qty,
+                        uom.name as uom,
+                        CASE
+                        WHEN (location.scrap_location = TRUE)
+                        THEN
+                        sum(consumed.product_uom_qty)
+                        END as waste_qty,
+                        avg(consumed.cost_price) as unit_cost,
+                        CASE
+                        WHEN (location.scrap_location <> TRUE)
+                        THEN
+                        sum(consumed.product_uom_qty * consumed.cost_price)
+                        END as consumed_cost,
+                        CASE
+                        WHEN (location.scrap_location = TRUE)
+                        THEN
+                        sum(consumed.product_uom_qty * consumed.cost_price)
                         END as waste_cost,
                         consumed.location_id, mrp.name as mrp_no, consumed.date
 
@@ -138,6 +236,8 @@ class Parser(report_sxw.rml_parse):
                     JOIN product_uom uom on (uom.id = consumed.product_uom)
                     JOIN mrp_production mrp on (mrp.id = consumed.raw_material_production_id)
                     JOIN stock_location location on (consumed.location_dest_id = location.id)
+                    JOIN stock_warehouse warehouse on (mrp.location_src_id = warehouse.lot_stock_id)
+                    LEFT JOIN history_cycle_form cl on (cl.warehouse_id=warehouse.id)
                     WHERE consumed.state = 'done' %s
                     GROUP BY tmp.id, tmp.name, uom.name, location.scrap_location, consumed.location_id, prod.id, mrp.name, consumed.date
                 ) as tmp
@@ -145,7 +245,26 @@ class Parser(report_sxw.rml_parse):
         """%where_str
         self.cr.execute(select_str)
         res = self.cr.dictfetchall()
-        return res
+        # print select_str
+
+        result = {}
+        no = 1
+        for data in res:
+            date_tz = self._convert_timezone(self.cr, self.uid, data['date'], True)
+            if date_tz != date: continue
+            data['date'] = date_tz
+            key = (data['product_id'], data['uom'])
+
+            if key not in result.keys():
+                data['no'] = no
+                result.update({key: data})
+                no += 1
+            else:
+                result[key]['consumed_qty'] += data['consumed_qty']
+                result[key]['waste_qty'] += data['waste_qty']
+                result[key]['total_cost'] += data['total_cost']
+                result[key]['total_qty'] += data['total_qty']
+        return sorted(result.values(), key=lambda k: k['no'])
 
     
 

@@ -46,7 +46,7 @@ class Parser(report_sxw.rml_parse):
     def get_code_cycle(self, cycle_id):
         return self.pool.get('history.cycle.form').browse(self.cr, self.uid, cycle_id).name
 
-    def _convert_timezone(self, cr, uid, date, context={}):
+    def _convert_timezone(self, cr, uid, date, plus=True, context={}):
         date = datetime.strptime(date, DEFAULT_SERVER_DATETIME_FORMAT)
 
         new_date = datetime_field.context_timestamp(cr, uid,
@@ -57,9 +57,12 @@ class Parser(report_sxw.rml_parse):
         duration = new_date - date
         seconds = duration.total_seconds()
         hours = seconds // 3600
-
-        date = date + relativedelta(hours=-hours)
-        return date.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+        if plus:
+            date = date + relativedelta(hours=hours)
+            return date.strftime(DEFAULT_SERVER_DATE_FORMAT)
+        else:
+            date = date + relativedelta(hours=-hours)
+            return date.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
 
     def get_detail(self, form):
         where_str = ''
@@ -96,9 +99,9 @@ class Parser(report_sxw.rml_parse):
                     coalesce(sum(waste_qty),0) as waste_qty, coalesce(avg(unit_cost),0) as unit_cost,
                     coalesce(sum(consumed_cost-waste_cost),0) as total_cost, location_id,
                     (SELECT coalesce(sum(total_qty),0) FROM (SELECT CASE WHEN (location_id = tmp.location_id)
-                                        THEN sum(-product_qty)
+                                        THEN sum(-product_uom_qty)
                                         WHEN (location_dest_id = tmp.location_id)
-                                        THEN sum(product_qty)
+                                        THEN sum(product_uom_qty)
                                         END as total_qty
                                         FROM stock_move
                                         WHERE product_id = tmp.product_id and state = 'done' and id < min(tmp.id)
@@ -111,24 +114,24 @@ class Parser(report_sxw.rml_parse):
                         CASE
                         WHEN (location.scrap_location <> TRUE)
                         THEN
-                        sum(consumed.product_qty)
+                        sum(consumed.product_uom_qty)
                         END as consumed_qty,
                         uom.name as uom,
                         CASE
                         WHEN (location.scrap_location = TRUE)
                         THEN
-                        sum(consumed.product_qty)
+                        sum(consumed.product_uom_qty)
                         END as waste_qty,
                         avg(consumed.cost_price) as unit_cost,
                         CASE
                         WHEN (location.scrap_location <> TRUE)
                         THEN
-                        sum(consumed.product_qty * consumed.cost_price)
+                        sum(consumed.product_uom_qty * consumed.cost_price)
                         END as consumed_cost,
                         CASE
                         WHEN (location.scrap_location = TRUE)
                         THEN
-                        sum(consumed.product_qty * consumed.cost_price)
+                        sum(consumed.product_uom_qty * consumed.cost_price)
                         END as waste_cost,
                         consumed.location_id, mrp.name as mrp_no, consumed.date
 
@@ -145,7 +148,23 @@ class Parser(report_sxw.rml_parse):
         """%where_str
         self.cr.execute(select_str)
         res = self.cr.dictfetchall()
-        return res
+        result = {}
+        no = 1
+        for data in res:
+            date_tz = self._convert_timezone(self.cr, self.uid, data['date'], True)
+            data['date'] = date_tz
+            key = (data['product_id'], data['uom'], date_tz)
+
+            if key not in result.keys():
+                data['no'] = no
+                result.update({key: data})
+                no += 1
+            else:
+                result[key]['consumed_qty'] += data['consumed_qty']
+                result[key]['waste_qty'] += data['waste_qty']
+                result[key]['total_cost'] += data['total_cost']
+                result[key]['total_qty'] += data['total_qty']
+        return sorted(result.values(), key=lambda k: k['no'])
 
     
 
