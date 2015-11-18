@@ -117,10 +117,11 @@ class mrp_request_form(osv.osv):
             elif warehouse_id != obj.warehouse_id:
                 raise osv.except_osv(_("Invalid Action!"), _("Selected the same receive place."))
 
-            q = product_uom_obj._compute_qty(cr, uid, obj.uom_id.id, obj.qty_unit, obj.product_id.uom_id.id)
+            # q = product_uom_obj._compute_qty(cr, uid, obj.uom_id.id, obj.qty_unit, obj.product_id.uom_id.id)
+            q = obj.qty_qq
             name = '%s:%s'%(obj.name, obj.description)
             if obj.product_id.id not in dict_product.keys():
-                dict_product.update({obj.product_id.id: [q, [name], obj.product_id.uom_id.id]})
+                dict_product.update({obj.product_id.id: [q, [name], obj.uom_id.id]})
             else:
                 dict_product[obj.product_id.id][0] += q
                 if name not in dict_product[obj.product_id.id][1]:
@@ -131,8 +132,9 @@ class mrp_request_form(osv.osv):
             if bom_id:
                 bom = bom_obj.browse(cr, uid, bom_id, context=context)
                 routing_id = bom.routing_id.id
+                origin = [str(x) for x in dict_product[product_id][1] if x]
                 produce_id = production_obj.create(cr, uid, {
-                    'origin': ','.join([str(x) for x in dict_product[product_id][1]]),
+                    'origin': ','.join(origin),
                     'product_id': product_id,
                     'product_qty': dict_product[product_id][0],
                     'product_uom': dict_product[product_id][2],
