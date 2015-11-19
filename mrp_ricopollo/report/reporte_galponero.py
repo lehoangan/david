@@ -187,12 +187,14 @@ class Parser(report_sxw.rml_parse):
         res = self.cr.dictfetchall()
         return res
 
-    def number_of_date(self, date):
+    def number_of_date(self, date, date2):
         from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
         from datetime import datetime
-
+        if not date or not date2:
+            return 0
         date = datetime.strptime(date, DEFAULT_SERVER_DATE_FORMAT)
-        day = (datetime.now() - date).days
+        date2 = datetime.strptime(date2, DEFAULT_SERVER_DATE_FORMAT)
+        day = (date2 - date).days
         return day
 
 

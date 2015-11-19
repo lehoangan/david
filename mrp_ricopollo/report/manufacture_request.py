@@ -63,7 +63,7 @@ class Parser(report_sxw.rml_parse):
                         w.name,
                         w.code,
                         w.id,
-                        sum(req.qty_chicken) as chicken,
+                        avg(req.qty_chicken) as chicken,
                         sum(req.qty_qq) as qty
                 FROM 
                     mrp_request_form req
