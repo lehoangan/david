@@ -72,8 +72,8 @@
                         <field name="line_ids" colspan="4">
                             <tree string="Details" editable="top">
                                 <field name="product_id"/>
-                                <field name="qty"/>
-                                <field name="weight"/>
+                                <field name="qty" sum="QTY"/>
+                                <field name="weight" sum="Weight"/>
                             </tree>
 
                         </field>
