@@ -196,12 +196,16 @@ class stock_picking(osv.osv):
                                                                               # ('is_farm', '=', True),
                                                                               # ('state', '=', 'open')
                                                                ])
-                    if not warehouse_ids and not pick.mrp_id:
+                    if not warehouse_ids: # and not pick.mrp_id:
                         continue
 
-                elif not pick.mrp_id:
-                    continue
-                if not journal_id:
+                # elif not pick.mrp_id:
+                #     continue
+
+                warehouse_obj = warehouse.browse(cr, uid, warehouse_ids[0])
+                if not journal_id and warehouse_obj.journal_id:
+                    journal_id = warehouse_obj.journal_id.id
+                elif not journal_id:
                     journal_id = move.product_id.categ_id.property_stock_journal and \
                                                     move.product_id.categ_id.property_stock_journal.id or False
                 account_credit, account_debit = self.get_account(cr, uid, move, context)

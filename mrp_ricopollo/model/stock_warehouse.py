@@ -36,6 +36,7 @@ class stock_warehouse(osv.osv):
         'account_id': fields.many2one('account.account', 'Farm Account', domain=[('type', '!=', 'view')], readonly=True, states={'draft': [('readonly', False)]}),
         'cycle_ids': fields.one2many('history.cycle.form', 'warehouse_id', 'History Cycle'),
         'state': fields.selection([('draft', 'Close'), ('open', 'Open')], 'State'),
+        'journal_id': fields.many2one('account.journal', 'Journal', domain=[('type', '=', 'general')]),
     }
 
     _defaults={
