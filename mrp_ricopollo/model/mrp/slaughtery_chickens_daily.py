@@ -36,7 +36,7 @@ class slaughtery_chickens_daily(osv.osv):
         'warehouse_id': fields.many2one('stock.warehouse', 'From Galpón', required=True, domain=[('is_farm', '=', True)]),
         'to_warehouse_id': fields.many2one('stock.warehouse', 'To Galpón', domain=[('is_farm', '=', True)]),
         'product_id': fields.many2one('product.product', 'Producto', required=True),
-        'cycle_id': fields.many2one('history.cycle.form', 'Lote', required=True, domain="[('warehouse_id','=', warehouse_id)]"),
+        'cycle_id': fields.many2one('history.cycle.form', 'Lote', required=True, domain="[('warehouse_id','=', warehouse_id),('date_end', '=', False)]"),
         'picking_id': fields.many2one('stock.picking', 'Picking'),
         'qty_qq': fields.float('Total Pollos', required=True),
         'qty_kg': fields.float('Total Kg', required=True),

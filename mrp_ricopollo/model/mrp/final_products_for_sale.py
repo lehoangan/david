@@ -38,7 +38,7 @@ class final_products_for_sale(osv.osv):
         readonly=True, states={'draft': [('readonly', False)]}),
         'product_id': fields.many2one('product.product', 'Product', required=True,
         readonly=True, states={'draft': [('readonly', False)]}),
-        'cycle_id': fields.many2one('history.cycle.form', 'Cycle', required=True, domain="[('warehouse_id','=', warehouse_id)]",
+        'cycle_id': fields.many2one('history.cycle.form', 'Cycle', required=True, domain="[('warehouse_id','=', warehouse_id),('date_end', '=', False)]",
         readonly=True, states={'draft': [('readonly', False)]}),
 
         'qty_descarte': fields.float('Pollo Descarte',
