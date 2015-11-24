@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="iclient_status_report_view" model="ir.ui.view">
+            <field name="name">Client Status Report</field>
+            <field name="model">client.status.report</field>
+            <field name="arch" type="xml">
+                <form string="Report Options">
+                    <footer>
+                        <button name="print_report" string="Imprimir" type="object" default_focus="1"
+                                class="oe_highlight"/>
+                        or
+                        <button string="Cancelar" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_iclient_status_report" model="ir.actions.act_window">
+            <field name="name">Reporte de Estado de Clientes</field>
+            <field name="res_model">client.status.report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="iclient_status_report_view"/>
+            <field name="target">new</field>
+        </record>
+        <menuitem icon="STOCK_PRINT" action="action_iclient_status_report" id="menu_iclient_status_report"
+                  parent="base.menu_sales" sequence="110"/>
+    </data>
+</openerp>
