@@ -165,7 +165,8 @@ class Parser(report_sxw.rml_parse):
                         part.name as partner,
                         s.user_id as user_id,
                         s.state,
-                        s.is_ok
+                        s.is_ok,
+                        part.r_type as type
                 FROM (
                     sale_order_line l
                           join sale_order s on (l.order_id=s.id)
@@ -188,7 +189,8 @@ class Parser(report_sxw.rml_parse):
                         s.state,
                         s.name,
                         t.uos_id,
-                        s.is_ok
+                        s.is_ok,
+                        part.r_type
                 order by part.name, t.name) as foo
         """%where_str
 

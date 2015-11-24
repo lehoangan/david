@@ -34,6 +34,7 @@ class res_partner(osv.Model):
         'warning_invoice': fields.integer('Aviso de Límite de Boletas'),
         'sale_journal_id': fields.many2one('account.journal', 'Sale Journal', domain="[('type','=','sale')]"),
         'purchase_journal_id': fields.many2one('account.journal', 'Purchase Journal', domain="[('type','=','purchase')]"),
+        'r_type': fields.selection([('A', 'A'), ('B', 'B'), ('C', 'C'), ('X', 'X')], 'Tipo Cliente'),
         }
     
     @api.multi

@@ -34,6 +34,18 @@ class sale_order(osv.osv):
         'is_ok': False,
     }
 
+    def onchange_partner_id(self, cr, uid, ids, part, context=None):
+        res = super(sale_order, self).onchange_partner_id(cr, uid, ids, part, context)
+        if part:
+            partner = self.pool.get('res.partner').browse(cr, uid, part)
+            if partner.r_type == 'X':
+                warning = {
+                       'title': '',
+                       'message' : 'Cliente Bloqueado, Consultar en Oficina Central su estado de cuentas!'
+                    }
+                res.update({'warning': warning})
+        return res
+
     def _prepare_invoice(self, cr, uid, order, lines, context=None):
         invoice_vals = super(sale_order, self)._prepare_invoice(cr, uid, order, lines, context)
         if order.partner_invoice_id.sale_journal_id:

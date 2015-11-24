@@ -25,6 +25,9 @@
                 <xpath expr="//field[@name='title']" position="after">
                     <field name="frial" />
                 </xpath>
+                <xpath expr="//field[@name='website']" position="after">
+                    <field name="r_type" />
+                </xpath>
 
             </field>
         </record>
