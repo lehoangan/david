@@ -79,7 +79,7 @@ class Parser(report_sxw.rml_parse):
                         distinct (categ.id) as id,
                         categ.name,
                         part.city,
-                        sum((l.product_uom_qty-l.discount_kg) * l.price_unit * (100.0-l.discount) / 100.0) as amount,
+                        sum(l.product_uom_qty* l.price_unit) as amount,
                         sum(l.discount_kg * l.price_unit * (100.0-l.discount) / 100.0 + l.product_uom_qty * l.price_unit * l.discount / 100.0) as discount
                 FROM (
                     sale_order_line l
@@ -208,7 +208,7 @@ class Parser(report_sxw.rml_parse):
                         sum(l.product_uos_qty) as uos,
                         t.uom_id as product_uom,
                         sum(l.product_uom_qty / u.factor * u2.factor) as uom,
-                        sum((l.product_uom_qty-l.discount_kg) * l.price_unit * (100.0-l.discount) / 100.0) as amount,
+                        sum(l.product_uom_qty * l.price_unit) as amount,
                         sum(l.product_uom_qty * l.price_unit * l.discount / 100.0) as disc_percent_amount,
                         sum(l.discount_kg * l.price_unit * (100.0-l.discount) / 100.0 + l.product_uom_qty * l.price_unit * l.discount / 100.0) as disc_amount,
                         sum(l.discount_kg / u.factor * u2.factor) as disc_kg,
@@ -279,7 +279,7 @@ class Parser(report_sxw.rml_parse):
             where_str = '%s %s'%(where_str, ''' AND l.product_id in %s '''%str(tuple(prod_ids)))
         select_str = """
                  SELECT
-                        sum((l.product_uom_qty-l.discount_kg) * l.price_unit * (100.0-l.discount) / 100.0) as amount,
+                        sum(l.product_uom_qty * l.price_unit) as amount,
                         sum(l.discount_kg * l.price_unit * (100.0-l.discount) / 100.0 + l.product_uom_qty * l.price_unit * l.discount / 100.0) as discount
                 FROM (
                     sale_order_line l
