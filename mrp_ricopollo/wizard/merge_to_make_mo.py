@@ -19,17 +19,40 @@
 #
 ##############################################################################
 
-from openerp.osv import osv
+from openerp.osv import osv, fields
 from openerp.tools.translate import _
 
 class merge_to_make_mo(osv.osv_memory):
 
     _name = "merge.to.make.mo"
+    _columns ={
+        "location_src_id": fields.many2one('stock.location', 'Raw Materials Location', required=True, domain=[('type', '=', 'internal')]),
+        "location_dest_id": fields.many2one('stock.location', 'Finished Products Location', required=True, domain=[('type', '=', 'internal')]),
+    }
+
+    def _default_src_location(self, cr, uid, context=None):
+        ids = self.pool.get('stock.warehouse').search(cr, uid, [('code', '=', 'FAB1-INS-ALI')])
+        return ids and self.pool.get('stock.warehouse').browse(cr, uid, ids[0]).lot_stock_id.id or False
+
+    def _default_dest_location(self, cr, uid, context=None):
+        ids = self.pool.get('stock.warehouse').search(cr, uid, [('code', '=', 'FAB2-ALIM')])
+        return ids and self.pool.get('stock.warehouse').browse(cr, uid, ids[0]).lot_stock_id.id or False
+
+    _defaults={
+        'location_src_id': _default_src_location,
+        'location_dest_id': _default_dest_location,
+    }
 
     def make_mo(self, cr, uid, ids, context=None):
         if context is None:
             context = {}
         active_ids = context.get('active_ids', []) or []
+
+        obj = self.browse(cr, uid, ids, context)
+        context.update({
+            'src_location': obj.location_src_id.id,
+            'dest_location': obj.location_dest_id.id
+        })
 
         request = self.pool.get('mrp.request.form')
         for record in request.browse(cr, uid, active_ids, context=context):
