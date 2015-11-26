@@ -114,8 +114,11 @@ class Parser(report_sxw.rml_parse):
                                         avg(qty_rojo) rojo, avg(qty_rojo_kg) rojo_kg, avg(qty_pernas_abiertas) pernas_abiertas, avg(qty_pernas_abiertas_kg) pernas_abiertas_kg,
                                         sum(fdetail.qty) as qty, sum(fdetail.weight) as weight, final.slaughtery_id,
                                         avg(final.qty_descarte) as qty_descarte, avg(final.qty_descarte_kg) as qty_descarte_kg
-                                        FROM final_products_for_sale_detail fdetail
-                                        JOIN final_products_for_sale final on (fdetail.parent_id = final.id)
+                                        FROM final_products_for_sale final
+                                        LEFT JOIN final_products_for_sale_detail fdetail on (fdetail.parent_id = final.id)
+                                        LEFT JOIN product_product prod on (fdetail.product_id = prod.id)
+                                        LEFT JOIN product_template tmp on (tmp.id = prod.product_tmpl_id)
+                                        WHERE tmp.name like 'Pollo Entero' or tmp.name like 'Pi. (P. Entero)'
                                         GROUP BY final.slaughtery_id, final.id) as final
                                         GROUP BY slaughtery_id) as detail on (detail.slaughtery_id = sl.id)
                         LEFT JOIN
@@ -178,16 +181,19 @@ class Parser(report_sxw.rml_parse):
                             SUM(qty + qty_descarte + rojo + pernas_abiertas) qty, SUM(weight + qty_descarte_kg + rotas_kg + pernas_abiertas_kg) weight,
                             SUM(qty_descarte) qty_descarte, SUM(qty_descarte_kg) qty_descarte_kg, slaughtery_id
                         FROM (
-                            SELECT avg(qty_rotas_rojas) rojas, avg(qty_rotas_rojas_kg) rojas_kg,
+                              SELECT avg(qty_rotas_rojas) rojas, avg(qty_rotas_rojas_kg) rojas_kg,
                                         avg(qty_rotas_blancas) blancas, avg(qty_rotas_blancas_kg) blancas_kg,
                                         avg(qty_pernas_rotas) rotas, avg(qty_pernas_rotas_kg) rotas_kg,
                                         avg(qty_rojo) rojo, avg(qty_rojo_kg) rojo_kg, avg(qty_pernas_abiertas) pernas_abiertas, avg(qty_pernas_abiertas_kg) pernas_abiertas_kg,
                                         sum(fdetail.qty) as qty, sum(fdetail.weight) as weight, final.slaughtery_id,
                                         avg(final.qty_descarte) as qty_descarte, avg(final.qty_descarte_kg) as qty_descarte_kg
-                                        FROM final_products_for_sale_detail fdetail
-                                        JOIN final_products_for_sale final on (fdetail.parent_id = final.id)
+                                        FROM final_products_for_sale final
+                                        LEFT JOIN final_products_for_sale_detail fdetail on (fdetail.parent_id = final.id)
+                                        LEFT JOIN product_product prod on (fdetail.product_id = prod.id)
+                                        LEFT JOIN product_template tmp on (tmp.id = prod.product_tmpl_id)
+                                        WHERE tmp.name like 'Pollo Entero' or tmp.name like 'Pi. (P. Entero)'
                                         GROUP BY final.slaughtery_id, final.id) as final
-                                        GROUP BY slaughtery_id) as detail on (detail.slaughtery_id = sl.id)
+                            GROUP BY slaughtery_id) as detail on (detail.slaughtery_id = sl.id)
                     LEFT JOIN
                         (SELECT sum(qty_buchis) as qty,slaughtery_id
                         FROM chicken_is_processed
