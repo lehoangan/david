@@ -38,6 +38,7 @@ class stock_warehouse(osv.osv):
         'state': fields.selection([('draft', 'Close'), ('open', 'Open')], 'State'),
         'journal_id': fields.many2one('account.journal', 'Journal', domain=[('type', '=', 'general')]),
     }
+    _order="code desc"
 
     _defaults={
         'state': 'draft',

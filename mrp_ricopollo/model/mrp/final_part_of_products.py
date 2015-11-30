@@ -50,6 +50,7 @@ class final_part_of_product(osv.osv):
                                    ('confirm', 'Confirm'),
                                    ('cancel','Cancel')], 'State', readonly=True)
     }
+    _order="date desc"
     _defaults = {
         'date': lambda*a: time.strftime('%Y-%m-%d'),
         'state': 'draft',

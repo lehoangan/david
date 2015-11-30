@@ -46,6 +46,7 @@ class slaughtery_chickens_daily(osv.osv):
                                    ('confirm', 'Realozado'),
                                    ('cancel','Cancel')], 'State', readonly=True)
     }
+    _order="date desc, name desc"
 
     def _get_default_product(self, cr, uid, context):
         product_ids = self.pool.get('product.product').search(cr, uid, [('name', '=', '102 Pollito BB')])

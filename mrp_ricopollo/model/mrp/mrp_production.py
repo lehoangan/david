@@ -30,6 +30,7 @@ class mrp_production(osv.osv):
         'remain_qty': fields.float('Remain Quantity', required=True, readonly=True, states={'draft': [('readonly', False)]}),
         'dead_ids': fields.one2many('dead.chickens.daily', 'mrp_id', 'Dead Chickens', readonly=False, states={'done': [('readonly', True)]}),
     }
+    _order="name desc"
     def create(self, cr, uid, vals, context=None):
         if vals.get('product_qty'):
             vals.update({'remain_qty': vals['product_qty']})
@@ -93,5 +94,9 @@ class mrp_production(osv.osv):
                                                                                                  remain_qty = brw.remain_qty))
         brw.write({'remain_qty': brw.remain_qty-production_qty})
         return res
+
+class mrp_production_workcenter_line(osv.osv):
+    _inherit = "mrp.production.workcenter.line"
+    _order="production_id desc, date_planned desc"
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

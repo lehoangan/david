@@ -37,6 +37,7 @@ class history_cycle_form(osv.osv):
         'warehouse_id':fields.many2one('stock.warehouse', 'Parent', ondelete='cascade'),
         'food_type_ids': fields.one2many('cycle.food.type', 'cycle_id', 'Food Type Detail')
     }
+    _order="name desc"
 
     _defaults= {
         'date_start': time.strftime('%Y-%m-%d'),

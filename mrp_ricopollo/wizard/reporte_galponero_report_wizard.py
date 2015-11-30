@@ -33,7 +33,7 @@ class reporte_galponero_report_wizard(osv.osv_memory):
         'date': fields.date('Fecha'),
         'state': fields.selection([
             ('draft', 'Borrador'),
-            ('confirm', 'Realozado'),
+            ('confirm', 'Realizado'),
             ], 'Tipo'),
     }
     _defaults={

@@ -46,6 +46,7 @@ class chicken_is_processed(osv.osv):
                                    ('confirm', 'Confirm'),
                                    ('cancel','Cancel')], 'State', readonly=True)
     }
+    _order="date desc"
     def _get_default_product(self, cr, uid, context):
         product_ids = self.pool.get('product.product').search(cr, uid, [('name', '=', '102 Pollito BB')])
         if product_ids:

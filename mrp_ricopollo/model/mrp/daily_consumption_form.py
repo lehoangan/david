@@ -48,6 +48,8 @@ class daily_consumption_form(osv.osv):
             ], 'Status', readonly=True,select=True),
     }
 
+    _order="date desc"
+
     _defaults= {
         'state': 'draft',
         'user_id': lambda self,cr,uid,context=None: uid,
