@@ -85,10 +85,13 @@ class sale_detail_report(osv.osv_memory):
             context = {}
         data = {}
         data['form'] = self.read(cr, uid, ids, [])[0]
-        datetime_from = self._convert_timezone(cr, uid, data['form']['date_from'] + ' 00:00:00', context)
-        datetime_to = self._convert_timezone(cr, uid, data['form']['date_to'] + ' 23:59:59', context)
-        data['form'].update({'datetime_from': datetime_from,
-                             'datetime_to': datetime_to})
+        data['form'].update({'datetime_from': False, 'datetime_to': False})
+        if data['form']['date_from']:
+            datetime_from = self._convert_timezone(cr, uid, data['form']['date_from'] + ' 00:00:00', context)
+            data['form'].update({'datetime_from': datetime_from})
+        if data['form']['date_to']:
+            datetime_to = self._convert_timezone(cr, uid, data['form']['date_to'] + ' 23:59:59', context)
+            data['form'].update({'datetime_to': datetime_to})
 
         return self.pool['report'].get_action(cr, uid, [], 'sale_detail_report', data=data, context=context)
 

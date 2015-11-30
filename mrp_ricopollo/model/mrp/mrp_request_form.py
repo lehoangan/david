@@ -110,22 +110,32 @@ class mrp_request_form(osv.osv):
         bom_obj = self.pool.get('mrp.bom')
         product_uom_obj = self.pool.get('product.uom')
         dict_product = {}
-        warehouse_id = False
         for obj in self.browse(cr, uid, ids, context):
-            if not warehouse_id:
-                warehouse_id = obj.warehouse_id
-            elif warehouse_id != obj.warehouse_id:
-                raise osv.except_osv(_("Invalid Action!"), _("Selected the same receive place."))
 
             # q = product_uom_obj._compute_qty(cr, uid, obj.uom_id.id, obj.qty_unit, obj.product_id.uom_id.id)
             q = obj.qty_qq
-            name = '%s:%s'%(obj.name, obj.description)
+            name = '%s:%s'%(obj.name or '', obj.description or '')
+            if name == ':':
+                name = '%s:%s'%(obj.warehouse_id.code or '', obj.cycle_id.name or '')
             if obj.product_id.id not in dict_product.keys():
                 dict_product.update({obj.product_id.id: [q, [name], obj.uom_id.id]})
             else:
                 dict_product[obj.product_id.id][0] += q
                 if name not in dict_product[obj.product_id.id][1]:
                     dict_product[obj.product_id.id][1] += [name]
+        src_location = context.get('src_location', False)
+        if not src_location:
+            ware_ids = self.pool.get('stock.warehouse').search(cr, uid, [('code', '=', 'FAB1-INS-ALI')])
+            src_location = ware_ids and self.pool.get('stock.warehouse').browse(cr, uid, ware_ids[0]).lot_stock_id.id or False
+            if not src_location:
+                raise osv.except_osv(_('Invalid Action!'), _('No warehouse found for "FAB1-INS-ALI".'))
+        dest_location = context.get('dest_location', False)
+        if not dest_location:
+            ware_ids = self.pool.get('stock.warehouse').search(cr, uid, [('code', '=', 'FAB2-ALIM')])
+            dest_location = ware_ids and self.pool.get('stock.warehouse').browse(cr, uid, ware_ids[0]).lot_stock_id.id or False
+            if not dest_location:
+                raise osv.except_osv(_('Invalid Action!'), _('No warehouse found for "FAB2-ALIM".'))
+
         for product_id in dict_product.keys():
             bom_id = bom_obj._bom_find(cr, uid, product_id=product_id,
                                                     properties=[], context=context)
@@ -138,8 +148,8 @@ class mrp_request_form(osv.osv):
                     'product_id': product_id,
                     'product_qty': dict_product[product_id][0],
                     'product_uom': dict_product[product_id][2],
-                    'location_src_id': warehouse_id.lot_stock_id.id,
-                    'location_dest_id': warehouse_id.lot_stock_id.id,
+                    'location_src_id': src_location,
+                    'location_dest_id': dest_location,
                     'bom_id': bom_id,
                     'routing_id': routing_id,
                     'date_planned': time.strftime('%Y-%m-%d %H:%M:%S'),

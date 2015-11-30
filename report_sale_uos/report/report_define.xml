@@ -172,6 +172,19 @@
         <field name="tml_source">file</field>
     </record>
 
+    <record id="aeroo_client_status_report_id" model="ir.actions.report.xml">
+        <field name="name">Reporte de Estado de Clientes</field>
+        <field name="type">ir.actions.report.xml</field>
+        <field name="model">client.status.report</field>
+        <field name="report_name">client_status_report</field>
+        <field name="report_type">aeroo</field>
+        <field name="in_format">oo-ods</field>
+        <field name="parser_loc">report_sale_uos/report/client_status_report.py</field>
+        <field name="report_rml">report_sale_uos/report/client_status_report.ods</field>
+        <field name="parser_state">loc</field>
+        <field name="tml_source">file</field>
+    </record>
+
 </data>
 </openerp>
 
