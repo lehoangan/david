@@ -45,7 +45,7 @@
         'view/standard_production.xml',
         'view/product_product.xml',
         'view/purchase_view.xml',
-
+        'view/final_part_of_product_view.xml',
 
         'wizard/merge_to_make_mo_view.xml',
         'wizard/approve_multi_request_form_view.xml',

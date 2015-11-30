@@ -24,4 +24,5 @@ import daily_consumption_form,daily_consumption_detail
 import temperature_warehouse,standard_production
 import slaughtery_chickens_daily,chicken_is_processed
 import final_products_for_sale
+import final_part_of_products
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

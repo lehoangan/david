@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+		<record id="final_part_of_product_search_view" model="ir.ui.view">
+            <field name="name">final.part.of.product.search</field>
+            <field name="model">final.part.of.product</field>
+            <field name="arch" type="xml">
+                <search string="Pollo Trozado">
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="warehouse_id"/>
+                    <field name="cycle_id"/>
+                    <field name="state" />
+                </search>
+            </field>
+        </record>
+        
+        <record id="final_part_of_product_tree_view" model="ir.ui.view">
+            <field name="name">final.part.of.product.tree</field>
+            <field name="model">final.part.of.product</field>
+            <field name="arch" type="xml">
+                <tree string="Pollo Trozado">
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="warehouse_id"/>
+                    <field name="cycle_id"/>
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="final_part_of_product_form_view" model="ir.ui.view">
+            <field name="name">final.part.of.product.form</field>
+            <field name="model">final.part.of.product</field>
+            <field name="arch" type="xml">
+                <form string="Pollo Trozado">
+					<header>
+                        <button name="action_cancel" states="draft,confirm,mo" type="object" string="Cancel"/>
+                        <button name="action_approve" states="draft" type="object" string="Approve"/>
+                        <button name="action_set_to_draft" states="cancel" type="object" string="Set To Draft"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,done" />
+					</header>
+                    <sheet>
+                        <field name="name" invisible="1"/>
+                        <group col="4" colspan="4">
+                            <field name="slaughtery_id" on_change="onchange_slaughtery_id(slaughtery_id,context)"/>
+                            <field name="date"/>
+                            <newline></newline>
+                            <field name="warehouse_id"/>
+                            <field name="cycle_id"/>
+                            <newline />
+                            <field name="note" colspan="4"/>
+                        </group>
+                        <notebook>
+                            <page string="Producto Utilizado">
+                                <field name="line_used_ids" colspan="4">
+                                    <tree string="Details" editable="top">
+                                        <field name="product_id"/>
+                                        <field name="qty" sum="QTY" on_change="onchange_qty(qty, weight)"/>
+                                        <field name="weight" sum="Weight" on_change="onchange_qty(qty, weight)"/>
+                                        <field name="average"/>
+                                    </tree>
+
+                                </field>
+                            </page>
+
+                            <page string="Productos Derivados">
+                                <field name="line_finish_ids" colspan="4">
+                                    <tree string="Details" editable="top">
+                                        <field name="product_id"/>
+                                        <field name="qty" sum="QTY" on_change="onchange_qty(qty, weight)"/>
+                                        <field name="weight" sum="Weight" on_change="onchange_qty(qty, weight)"/>
+                                        <field name="average"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_final_part_of_product" model="ir.actions.act_window">
+            <field name="name">Pollo Trozado</field>
+            <field name="res_model">final.part.of.product</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="final_part_of_product_tree_view"/>
+        </record>
+        <menuitem name="Pollo Trozado"
+                  action="action_final_part_of_product"
+                  id="menu_action_final_part_of_product"
+                  parent="menu_matadero"/>
+
+    </data>
+</openerp>
