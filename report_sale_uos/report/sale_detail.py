@@ -61,6 +61,9 @@ class Parser(report_sxw.rml_parse):
 
         if form['datetime_to']:
             where_str = '%s %s'%(where_str, ''' AND so.date_order <= '%s' '''%form['datetime_to'])
+
+        if form['category_id']:
+            where_str = '%s %s'%(where_str, ''' AND categ.id = %s '''%form['category_id'][0])
         select_str = """
                  SELECT
                         distinct (categ.id) as id,
@@ -105,6 +108,8 @@ class Parser(report_sxw.rml_parse):
         if state_id:
             if state_id['id']:
                 where_str = '%s %s'%(where_str, ''' AND categ.id = %s '''%state_id['id'])
+            elif form['category_id']:
+                where_str = '%s %s'%(where_str, ''' AND categ.id = %s '''%form['category_id'][0])
             else:
                 where_str = '%s %s'%(where_str, ''' AND categ.id is null''')
 
@@ -147,6 +152,8 @@ class Parser(report_sxw.rml_parse):
         if state_id:
             if state_id['id']:
                 where_str = '%s %s'%(where_str, ''' AND categ.id = %s '''%state_id['id'])
+            elif form['category_id']:
+                where_str = '%s %s'%(where_str, ''' AND categ.id = %s '''%form['category_id'][0])
             else:
                 where_str = '%s %s'%(where_str, ''' AND categ.id is null''')
 
@@ -218,6 +225,8 @@ class Parser(report_sxw.rml_parse):
 
         if form['datetime_to']:
             where_str = '%s %s'%(where_str, ''' AND s.date_order <= '%s' '''%form['datetime_to'])
+        if form['category_id']:
+            where_str = '%s %s'%(where_str, ''' AND categ.id = %s '''%form['category_id'][0])
 
         select_str = """
              SELECT ROW_NUMBER() OVER(ORDER BY id) AS no, * FROM (
@@ -264,6 +273,9 @@ class Parser(report_sxw.rml_parse):
 
         if form['datetime_to']:
             where_str = '%s %s'%(where_str, ''' AND s.date_order <= '%s' '''%form['datetime_to'])
+
+        if form['category_id']:
+            where_str = '%s %s'%(where_str, ''' AND categ.id = %s '''%form['category_id'][0])
 
         select_str = """
                  SELECT

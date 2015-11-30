@@ -32,6 +32,7 @@ class sale_detail_report(osv.osv_memory):
 
     _columns = {
         'partner_id' : fields.many2one('res.partner', 'Cliente'),
+        'category_id' : fields.many2one('res.partner.category', 'Mecardo'),
         'user_id': fields.many2one('res.users', 'Distribuidor'),
         'date_from': fields.date('Desde'),
         'date_to': fields.date('Hasta'),
@@ -83,7 +84,7 @@ class sale_detail_report(osv.osv_memory):
         if context is None:
             context = {}
         data = {}
-        data['form'] = self.read(cr, uid, ids, ['date_from', 'date_to', 'partner_id','state','user_id'])[0]
+        data['form'] = self.read(cr, uid, ids, [])[0]
         datetime_from = self._convert_timezone(cr, uid, data['form']['date_from'] + ' 00:00:00', context)
         datetime_to = self._convert_timezone(cr, uid, data['form']['date_to'] + ' 23:59:59', context)
         data['form'].update({'datetime_from': datetime_from,
