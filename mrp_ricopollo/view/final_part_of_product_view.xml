@@ -23,7 +23,7 @@
                     <field name="name"/>
                     <field name="date"/>
                     <field name="warehouse_id"/>
-                    <field name="cycle_id"/>
+                    <field name="warehouse_to_id"/>
                     <field name="state" />
                 </tree>
             </field>
@@ -47,9 +47,8 @@
                             <field name="date"/>
                             <newline></newline>
                             <field name="warehouse_id"/>
-                            <field name="cycle_id"/>
-                            <newline />
-                            <field name="note" colspan="4"/>
+                            <!--<field name="cycle_id"/>-->
+                            <field name="warehouse_to_id"/>
                         </group>
                         <notebook>
                             <page string="Producto Utilizado">
@@ -75,7 +74,9 @@
                                 </field>
                             </page>
                         </notebook>
-
+                        <newline />
+                        <label for="note" />
+                        <field name="note" colspan="4"/>
                     </sheet>
                     <div class="oe_chatter">
                         <field name="message_follower_ids" widget="mail_followers"/>

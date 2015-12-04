@@ -10,6 +10,7 @@ class stock_move(osv.osv):
         'account_credit_id': fields.many2one('account.account', 'Account Crebit', ondelete="cascade", domain=[('type','<>','view'), ('type', '<>', 'closed')], select=2),
         'cost_price': fields.float('Cost Price' , digits=(16,6)),
         'dead_chicken': fields.boolean('Dead Chicken'),
+        # 'qty_kg': fields.float('Qty Kg'),
     }
 stock_move()
     

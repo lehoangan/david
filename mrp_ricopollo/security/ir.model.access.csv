@@ -13,3 +13,6 @@ access_slaughtery_chickens_daily,slaughtery.chickens.daily,model_slaughtery_chic
 access_chicken_is_processed,chicken.is.processed,model_chicken_is_processed,base.group_user,1,1,1,1
 access_final_products_for_sale,final.products.for.sale,model_final_products_for_sale,base.group_user,1,1,1,1
 access_final_products_for_sale_detail,final.products.for.sale.detail,model_final_products_for_sale_detail,base.group_user,1,1,1,1
+access_final_part_of_product,final.part.of.product,model_final_part_of_product,base.group_user,1,1,1,1
+access_final_part_of_product_used_detail,final.part.of.product.used.detail,model_final_part_of_product_used_detail,base.group_user,1,1,1,1
+access_final_part_of_product_finish_detail,final.part.of.product.finish.detail,model_final_part_of_product_finish_detail,base.group_user,1,1,1,1
