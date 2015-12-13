@@ -27,8 +27,8 @@ class production_report_wizard(osv.osv_memory):
     _name = "production.report.wizard"
 
     _columns = {
-        'warehouse_id': fields.many2one('stock.warehouse', 'Granja'),
-        'cycle_id': fields.many2one('history.cycle.form', 'Lote'),
+        'warehouse_id': fields.many2one('stock.warehouse', 'Granja', domain=[('is_farm', '=', True)]),
+        'cycle_id': fields.many2one('history.cycle.form', 'Lote', domain="[('warehouse_id','=', warehouse_id)]"),
         'date_from': fields.date('Desde'),
         'date_to': fields.date('Hasta'),
         'food_type_id': fields.many2one('product.product', 'Tipo de Alimento', domain=[('food_type', '=', True)]),

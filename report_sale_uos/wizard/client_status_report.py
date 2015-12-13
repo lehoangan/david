@@ -25,6 +25,8 @@ class client_status_report(osv.osv_memory):
     _name = "client.status.report"
 
     _columns = {
+        'market_ids': fields.many2many('res.partner.category', 'client_stats_categ_rel',
+                                       'report_id', 'categ_id', 'Market'),
     }
     _defaults={
     }

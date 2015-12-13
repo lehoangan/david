@@ -27,9 +27,9 @@ class reporte_galponero_report_wizard(osv.osv_memory):
     _name = "reporte.galponero.report.wizard"
 
     _columns = {
-        'warehouse_id': fields.many2one('stock.warehouse', 'Granja'),
-        'cycle_id': fields.many2one('history.cycle.form', 'Lote'),
-        'slaughtery_id': fields.many2one('slaughtery.chickens.daily', 'Nro. Boleta'),
+        'warehouse_id': fields.many2one('stock.warehouse', 'Granja', domain=[('is_farm', '=', True)]),
+        'cycle_id': fields.many2one('history.cycle.form', 'Lote', domain="[('warehouse_id','=', warehouse_id)]"),
+        'slaughtery_id': fields.many2one('slaughtery.chickens.daily', 'Nro. Boleta', domain="[('cycle_id','=', cycle_id)]"),
         'date': fields.date('Fecha'),
         'state': fields.selection([
             ('draft', 'Borrador'),

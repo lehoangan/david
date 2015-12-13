@@ -47,6 +47,9 @@ class Parser(report_sxw.rml_parse):
         return self.total
 
     def get_market(self, form):
+        where = ''
+        if form['market_ids']:
+            where = 'WHERE categ.id in %s'%str(tuple(form['market_ids'] + [-1, -1]))
         select_str = """
                  SELECT
                         distinct (categ.id) as id,
@@ -54,8 +57,9 @@ class Parser(report_sxw.rml_parse):
                 FROM ( res_partner part
                        left join res_partner_res_partner_category_rel rel on (rel.partner_id=part.id)
                        left join res_partner_category categ on (rel.category_id=categ.id))
-                order by categ.name
-        """
+                %s
+                ORDER BY categ.name
+        """%where
         self.cr.execute(select_str)
         res = self.cr.dictfetchall()
         for categ in res:

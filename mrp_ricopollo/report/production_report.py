@@ -79,15 +79,6 @@ class Parser(report_sxw.rml_parse):
             date_to = self._convert_timezone(self.cr, self.uid, form['date_to'] + ' 23:59:59')
             where_str = '%s %s'%(where_str, ''' AND consumed.date <= '%s' '''%date_to)
 
-        # if form['warehouse_id']:
-        #     where_str = '%s %s'%(where_str, ''' AND ware.id = %s '''%form['warehouse_id'][0])
-        #
-        # if form['cycle_id']:
-        #     where_str = '%s %s'%(where_str, ''' AND his.id = %s '''%form['cycle_id'][0])
-        #
-        # if form['slaughtery_id']:
-        #     where_str = '%s %s'%(where_str, ''' AND sl.id = %s '''%form['slaughtery_id'][0])
-
         #get from parent
         if form['product_id']:
             where_str = '%s %s'%(where_str, ''' AND mrp.product_id = %s '''%form['product_id'][0])

@@ -20,7 +20,7 @@
 #
 ##############################################################################
 
-from openerp.osv import fields, osv
+from openerp.osv import fields, osv, expression
 from openerp.tools.translate import _
 from openerp.exceptions import except_orm, Warning, RedirectWarning
 import time
@@ -78,6 +78,12 @@ class stock_warehouse(osv.osv):
                 self.browse(cr, uid, id, context).lot_stock_id.write({'account_id': vals['account_id']})
         return new_id
 
+    def name_search(self, cr, user, name, args=None, operator='ilike', context=None, limit=80):
+        if not args:
+            args = []
+        domain = ['|', ('code', operator, name), ('name', operator, name)]
+        ids = self.search(cr, user, expression.AND([domain, args]), limit=limit, context=context)
+        return self.name_get(cr, user, ids, context=context)
 
     def name_get(self, cr, uid, ids, context=None):
         if not ids:
