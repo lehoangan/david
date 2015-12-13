@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="supplier_invoice_detail_report_view" model="ir.ui.view">
+            <field name="name">Supplier Invoice Report</field>
+            <field name="model">supplier.invoice.detail.report</field>
+            <field name="arch" type="xml">
+                <form string="Report Options">
+                    <group col="4">
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        <field name="partner_id"/>
+                        <field name="state"/>
+                        <field name="frial"/>
+                        <field name="inv_state" attrs="{'invisible':[('state','=','draft')]}"/>
+                    </group>
+                    <footer>
+                        <button name="print_report" string="Imprimir" type="object" default_focus="1"
+                                class="oe_highlight"/>
+                        or
+                        <button string="Cancelar" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_supplier_invoice_detail_report" model="ir.actions.act_window">
+            <field name="name">Kardex de Proveedor</field>
+            <field name="res_model">supplier.invoice.detail.report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="supplier_invoice_detail_report_view"/>
+            <field name="target">new</field>
+        </record>
+        <menuitem icon="STOCK_PRINT" name="Kardex de Proveedor" action="action_supplier_invoice_detail_report" id="menu_supplier_invoice_detail_report"
+                  parent="account.menu_finance_payables" sequence="100"/>
+    </data>
+</openerp>

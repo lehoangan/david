@@ -184,6 +184,19 @@
         <field name="parser_state">loc</field>
         <field name="tml_source">file</field>
     </record>
+    
+    <record id="aeroo_supplier_invoice_detail_id" model="ir.actions.report.xml">
+        <field name="name">Supplier Invoice Report</field>
+        <field name="type">ir.actions.report.xml</field>
+        <field name="model">supplier.invoice.detail.report</field>
+        <field name="report_name">supplier_invoice_detail_report</field>
+        <field name="report_type">aeroo</field>
+        <field name="in_format">oo-ods</field>
+        <field name="parser_loc">report_sale_uos/report/supplier_invoice_total.py</field>
+        <field name="report_rml">report_sale_uos/report/supplier_invoice_total.ods</field>
+        <field name="parser_state">loc</field>
+        <field name="tml_source">file</field>
+    </record>
 
 </data>
 </openerp>
