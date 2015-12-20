@@ -29,7 +29,7 @@
         Not change UoS quantity when change UoM quanity
                     """,
     'images': [],
-    'depends': ['sale', 'sale_stock', 'sale_layout', 'account'],
+    'depends': ['sale_stock', 'sale_layout', 'account'],
     'data': [
         'view/sale_stock_view.xml',
         'view/report_saleorder.xml',

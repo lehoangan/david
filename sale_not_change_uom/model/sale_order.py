@@ -25,13 +25,23 @@ import openerp.addons.decimal_precision as dp
 
 class sale_order(osv.osv):
 
+    def _get_default_warehouse(self, cr, uid, context=None):
+        company_id = self.pool.get('res.users')._get_company(cr, uid, context=context)
+        warehouse_ids = self.pool.get('stock.warehouse').search(cr, uid, [('company_id', '=', company_id),
+                                                                          ('code', '=', 'MAT2-FRIG')], context=context)
+        if not warehouse_ids:
+            return False
+        return warehouse_ids[0]
+
     _inherit = "sale.order"
     _columns = {
         'is_ok': fields.boolean('Producto Despachado'),
+        'warehouse_id': fields.many2one('stock.warehouse', 'Warehouse', required=True),
     }
 
-    defaults={
+    _defaults={
         'is_ok': False,
+        'warehouse_id': _get_default_warehouse,
     }
 
     def onchange_partner_id(self, cr, uid, ids, part, context=None):
