@@ -59,9 +59,18 @@ class stock_warehouse(osv.osv):
             if not obj.account_id:
                 raise Warning(_('Please set account before'))
             if obj.account_id.balance != 0:
-                raise Warning(_('Account balance = %s. You must transfer it.'%obj.account_id.balance))
-            if obj.cycle_ids and not obj.cycle_ids[len(obj.cycle_ids)-1].date_end:
-                obj.cycle_ids[len(obj.cycle_ids)-1].write({'date_end': time.strftime('%Y-%m-%d')})
+                # raise Warning(_('Account balance = %s. You must transfer it.'%obj.account_id.balance))
+                mod_obj = self.pool.get('ir.model.data')
+                act_obj = self.pool.get('ir.actions.act_window')
+                result = mod_obj.get_object_reference(cr, uid, 'mrp_ricopollo', 'action_unbalance_entry_close_cycle')
+                id = result and result[1] or False
+                result = act_obj.read(cr, uid, [id], context=context)[0]
+                result['context'] = str(dict(context, active_id=obj.id))
+                return result
+
+            for cycle in obj.cycle_ids:
+                if not cycle.date_end:
+                    cycle.write({'date_end': time.strftime('%Y-%m-%d')})
             cr.execute('UPDATE account_move_line set closed_cycle=TRUE where (closed_cycle is null or closed_cycle = FALSE) AND account_id = %s'%obj.account_id.id)
         return self.write(cr, uid, ids, {'state': 'draft'}, context)
 

@@ -58,6 +58,7 @@
         'view/final_products_for_sale_view.xml',
         'wizard/reporte_galponero_report_wizard_view.xml',
         'wizard/production_report_wizard_view.xml',
+        'wizard/unbalance_entry_close_cycle_view.xml',
 
 
         'data/schedule_action.xml',

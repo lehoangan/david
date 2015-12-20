@@ -30,18 +30,30 @@ class slaughtery_chickens_daily(osv.osv):
     _name = 'slaughtery.chickens.daily'
     _inherit = ['mail.thread']
     _columns ={
-        'date': fields.date('Fecha', required=True),
-        'time': fields.float('Hora', required=True),
-        'name': fields.char('Nr. Boleta', 100, required=True),
-        'warehouse_id': fields.many2one('stock.warehouse', 'From Galpón', required=True, domain=[('is_farm', '=', True)]),
-        'to_warehouse_id': fields.many2one('stock.warehouse', 'To Galpón', domain=[('is_farm', '=', True)]),
-        'product_id': fields.many2one('product.product', 'Producto', required=True),
-        'cycle_id': fields.many2one('history.cycle.form', 'Lote', required=True, domain="[('warehouse_id','=', warehouse_id),('date_end', '=', False)]"),
-        'picking_id': fields.many2one('stock.picking', 'Picking'),
-        'qty_qq': fields.float('Total Pollos', required=True),
-        'qty_kg': fields.float('Total Kg', required=True),
-        'qty_dead': fields.float('Pollos Muertos', required=True),
-        'note': fields.text('Observaciones'),
+        'date': fields.date('Fecha', required=True,
+                        readonly=True, states={'draft': [('readonly', False)]}),
+        'time': fields.float('Hora', required=True,
+                        readonly=True, states={'draft': [('readonly', False)]}),
+        'name': fields.char('Nr. Boleta', 100, required=True,
+                        readonly=True, states={'draft': [('readonly', False)]}),
+        'warehouse_id': fields.many2one('stock.warehouse', 'From Galpón', required=True, domain=[('is_farm', '=', True)],
+                        readonly=True, states={'draft': [('readonly', False)]}),
+        'to_warehouse_id': fields.many2one('stock.warehouse', 'To Galpón', domain=[('is_farm', '=', True)],
+                        readonly=True, states={'draft': [('readonly', False)]}),
+        'product_id': fields.many2one('product.product', 'Producto', required=True,
+                        readonly=True, states={'draft': [('readonly', False)]}),
+        'cycle_id': fields.many2one('history.cycle.form', 'Lote', required=True, domain="[('warehouse_id','=', warehouse_id),('date_end', '=', False)]",
+                        readonly=True, states={'draft': [('readonly', False)]}),
+        'picking_id': fields.many2one('stock.picking', 'Picking',
+                        readonly=True, states={'draft': [('readonly', False)]}),
+        'qty_qq': fields.float('Total Pollos', required=True,
+                        readonly=True, states={'draft': [('readonly', False)]}),
+        'qty_kg': fields.float('Total Kg', required=True,
+                        readonly=True, states={'draft': [('readonly', False)]}),
+        'qty_dead': fields.float('Pollos Muertos', required=True,
+                        readonly=True, states={'draft': [('readonly', False)]}),
+        'note': fields.text('Observaciones',
+                        readonly=True, states={'draft': [('readonly', False)]}),
         'state': fields.selection([('draft', 'Borrador'),
                                    ('confirm', 'Realozado'),
                                    ('cancel','Cancel')], 'State', readonly=True)
@@ -121,7 +133,7 @@ class slaughtery_chickens_daily(osv.osv):
                 obj.picking_id.unlink()
 
         for am in am_objs:
-            am.action_cancel()
+            am.button_cancel()
         return self.write(cr, uid, ids, {'state': 'cancel'})
 
     def action_set_to_draft(self, cr, uid, ids, context):

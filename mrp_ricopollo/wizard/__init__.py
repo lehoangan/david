@@ -25,4 +25,5 @@ import generate_request
 import foodtype_per_cycle_wizard
 import reporte_galponero_report_wizard
 import production_report_wizard
+import unbalance_entry_close_cycle
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
