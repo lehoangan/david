@@ -21,3 +21,4 @@
 import sale_detail, sale_sumary, invoice_detail, payment_detail, discount_client, collector_payment_detail
 import sale_analysis, accounts_receivable_report,daily_average_sales
 import client_status_report,supplier_invoice_total
+import stock_movement

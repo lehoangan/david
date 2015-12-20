@@ -43,6 +43,7 @@
         'wizard/daily_average_sales_view.xml',
         'wizard/client_status_report_view.xml',
         'wizard/supplier_invoice_total_view.xml',
+        'wizard/stock_movement_view.xml',
         
         'view/config_report_rico_view.xml',
         'report/report_define.xml',

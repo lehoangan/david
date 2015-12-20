@@ -198,6 +198,18 @@
         <field name="tml_source">file</field>
     </record>
 
+    <record id="aeroo_stock_movement_id" model="ir.actions.report.xml">
+        <field name="name">Stock Movement</field>
+        <field name="type">ir.actions.report.xml</field>
+        <field name="model">stock.movement.report</field>
+        <field name="report_name">stock_movement_report</field>
+        <field name="report_type">aeroo</field>
+        <field name="in_format">oo-ods</field>
+        <field name="parser_loc">report_sale_uos/report/stock_movement.py</field>
+        <field name="report_rml">report_sale_uos/report/stock_movement.ods</field>
+        <field name="parser_state">loc</field>
+        <field name="tml_source">file</field>
+    </record>
 </data>
 </openerp>
 
