@@ -25,7 +25,7 @@
         </record>
 
         <record id="action_stock_movement_report" model="ir.actions.act_window">
-            <field name="name">Stock Movement Report</field>
+            <field name="name">Reporte De Movimientos De Stock</field>
             <field name="res_model">stock.movement.report</field>
             <field name="type">ir.actions.act_window</field>
             <field name="view_type">form</field>
@@ -33,7 +33,7 @@
             <field name="view_id" ref="stock_movement_report_view"/>
             <field name="target">new</field>
         </record>
-        <menuitem icon="STOCK_PRINT" name="Stock Movement Report" action="action_stock_movement_report" id="menu_stock_movement_report"
+        <menuitem icon="STOCK_PRINT" name="Reporte De Movimientos De Stock" action="action_stock_movement_report" id="menu_stock_movement_report"
                   parent="stock.menu_stock_reporting" sequence="100"/>
     </data>
 </openerp>
