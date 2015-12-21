@@ -41,7 +41,22 @@ class Parser(report_sxw.rml_parse):
             'get_product': self.get_product,
             'get_total' : self.get_total,
             'get_farm_desc': self.get_farm_desc,
+            'number_of_day': self.number_of_day,
         })
+
+    def number_of_day(self, form, date_start):
+        date_end = form['date']
+        if not date_end:
+            import time
+            date_end = time.strftime('%Y-%m-%d')
+        from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
+        from datetime import datetime
+        date_end = datetime.strptime(date_end, DEFAULT_SERVER_DATE_FORMAT)
+        date_start = datetime.strptime(date_start, DEFAULT_SERVER_DATE_FORMAT)
+        age = 0
+        if date_end > date_start:
+            age = (date_end - date_start).days
+        return age
 
     def product(self, prod_id):
         res = self.pool.get('product.product').name_get(self.cr, self.uid, [prod_id])
@@ -64,13 +79,15 @@ class Parser(report_sxw.rml_parse):
                         w.code,
                         w.id,
                         avg(req.qty_chicken) as chicken,
-                        sum(req.qty_qq) as qty
+                        sum(req.qty_qq) as qty,
+                        cycle.date_start as date
                 FROM 
                     mrp_request_form req
-                    join stock_warehouse w on (req.warehouse_id = w.id)
+                    JOIN stock_warehouse w on (req.warehouse_id = w.id)
+                    JOIN history_cycle_form cycle on (req.cycle_id = cycle.id)
                     
                 %s
-                GROUP BY w.id,w.name,w.code
+                GROUP BY w.id,w.name,w.code, cycle.date_start
                 order by w.name
         """%where_str
         self.cr.execute(select_str)
