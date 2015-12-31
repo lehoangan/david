@@ -33,6 +33,7 @@
         'view/account_voucher_view.xml',
         'report/template/define_report.xml',
         'report/template/report_statement.xml',
+        'view/menu_view.xml',
         ],
     'auto_install': False,
     'installable': True,

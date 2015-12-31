@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <menuitem icon="STOCK_PRINT" name="Balance Sheet" action="account.action_account_report_bs" id="account.menu_account_report_bs"
+                  parent="account.final_accounting_reports"/>
+        <menuitem icon="STOCK_PRINT" name="Profit And Loss" action="account.action_account_report_pl"
+                  id="account.menu_account_report_pl" parent="account.final_accounting_reports"/>
+        <menuitem icon="STOCK_PRINT" name="Financial Report" action="account.action_account_report" id="account.menu_account_report"
+                  parent="account.final_accounting_reports" sequence="100"/>
+        <menuitem id="account.menu_account_report_tree_hierarchy" name="Account Reports Hierarchy"
+                  parent="account.menu_account_reports" action="account.action_account_report_tree_hierarchy"/>
+        <menuitem id="account.menu_account_financial_reports_tree" name="Account Reports" parent="account.menu_account_reports"
+                  action="account.action_account_financial_report_tree"/>
+
+    </data>
+</openerp>

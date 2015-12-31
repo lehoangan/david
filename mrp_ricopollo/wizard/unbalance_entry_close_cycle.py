@@ -28,12 +28,12 @@ class unbalance_entry_close_cycle(osv.osv_memory):
 
     _name = "unbalance.entry.close.cycle"
     _columns ={
-        'amount': fields.float('Balance Amount', digits_compute=dp.get_precision('Account')),
+        'amount': fields.float('Balance (Bs)', digits_compute=dp.get_precision('Account')),
 
-        'farmer_account_id': fields.many2one('account.account', 'Farmer Account', required=True, domain=[('type', '!=', 'view')]),
-        'other_account_id': fields.many2one('account.account', 'Other Account', required=True, domain=[('type', '!=', 'view')]),
-        'journal_id': fields.many2one('account.journal', 'Journal', required=True),
-        'name': fields.char('Reference', 100),
+        'farmer_account_id': fields.many2one('account.account', 'Cuenta Galpon', required=True, domain=[('type', '!=', 'view')]),
+        'other_account_id': fields.many2one('account.account', 'Cuenta de Produccion', required=True, domain=[('type', '!=', 'view')]),
+        'journal_id': fields.many2one('account.journal', 'Diario Contable', required=True),
+        'name': fields.char('Referencia', 100),
     }
 
     def _default_farmer_account_id(self, cr, uid, context=None):
