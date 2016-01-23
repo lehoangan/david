@@ -186,7 +186,7 @@
     </record>
     
     <record id="aeroo_supplier_invoice_detail_id" model="ir.actions.report.xml">
-        <field name="name">Supplier Invoice Report</field>
+        <field name="name">Kardex de Proveedor</field>
         <field name="type">ir.actions.report.xml</field>
         <field name="model">supplier.invoice.detail.report</field>
         <field name="report_name">supplier_invoice_detail_report</field>

@@ -188,8 +188,9 @@ class stock_picking(osv.osv):
                 if move.state != 'done' or move.location_dest_id == move.location_id:
                     continue
                 warehouse_ids = warehouse.search(cr, uid, [('lot_stock_id','=', move.location_id.id),
-                                                                              ('is_farm', '=', True),
-                                                                              ('state', '=', 'open')])
+                                                                              # ('is_farm', '=', True),
+                                                                              # ('state', '=', 'open')
+                                                           ])
 
                 if not warehouse_ids:
                     warehouse_ids = warehouse.search(cr, uid, [('lot_stock_id','=', move.location_dest_id.id),
