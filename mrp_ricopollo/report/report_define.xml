@@ -80,6 +80,19 @@
         <field name="tml_source">file</field>
     </record>
 
+    <record id="aeroo_slaughterhouse_production_report_id" model="ir.actions.report.xml">
+        <field name="name">slaughterhouse production report</field>
+        <field name="type">ir.actions.report.xml</field>
+        <field name="model">slaughterhouse.production.wizard</field>
+        <field name="report_name">slaughterhouse_production_report</field>
+        <field name="report_type">aeroo</field>
+        <field name="in_format">oo-ods</field>
+        <field name="parser_loc">mrp_ricopollo/report/slaughterhouse_production_report.py</field>
+        <field name="report_rml">mrp_ricopollo/report/slaughterhouse_production_report.ods</field>
+        <field name="parser_state">loc</field>
+        <field name="tml_source">file</field>
+    </record>
+
 
 </data>
 </openerp>

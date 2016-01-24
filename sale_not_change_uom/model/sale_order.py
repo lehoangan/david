@@ -33,10 +33,38 @@ class sale_order(osv.osv):
             return False
         return warehouse_ids[0]
 
+    def _convert_timezone(self, cr, uid, date, context):
+        from datetime import datetime
+        from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT, DEFAULT_SERVER_DATE_FORMAT
+        from openerp.osv.fields import datetime as datetime_field
+        from dateutil.relativedelta import relativedelta
+
+        date = datetime.strptime(date, DEFAULT_SERVER_DATETIME_FORMAT)
+        new_date = datetime_field.context_timestamp(cr, uid,
+                                                    timestamp=date,
+                                                    context=context)
+        new_date = datetime.strptime(new_date.strftime(DEFAULT_SERVER_DATETIME_FORMAT), DEFAULT_SERVER_DATETIME_FORMAT)
+
+        duration = new_date - date
+        seconds = duration.total_seconds()
+        hours = seconds // 3600
+
+        date = date + relativedelta(hours=-hours)
+        return date.date().strftime(DEFAULT_SERVER_DATE_FORMAT)
+
+    def _get_date(self, cr, uid, ids, field_name, arg, context=None):
+        res = {}
+        for so in self.browse(cr, uid, ids, context=context):
+            date = self._convert_timezone(cr, uid, so.date_order, context)
+            res[so.id] = date
+        return res
+
     _inherit = "sale.order"
     _columns = {
         'is_ok': fields.boolean('Producto Despachado'),
         'warehouse_id': fields.many2one('stock.warehouse', 'Warehouse', required=True),
+        'date': fields.function(_get_date, type='date', string='Date', store=True),
+                # store={'sale.order': (lambda self, cr, uid, ids, c={}: ids, ['date_order'], 20)},),
     }
 
     _defaults={

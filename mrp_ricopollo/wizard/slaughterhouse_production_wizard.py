@@ -19,5 +19,24 @@
 #
 ##############################################################################
 
-import manufacture_request,lst_wahouse,foodtype_per_cycle,slaughterhouse_production_report
+from openerp.osv import osv,fields
+from openerp.tools.translate import _
+
+class slaughterhouse_production_wizard(osv.osv_memory):
+
+    _name = "slaughterhouse.production.wizard"
+
+    _columns = {
+        'date_from': fields.date('Desde'),
+        'date_to': fields.date('Hasta'),
+    }
+
+    def print_report(self, cr, uid, ids, context=None):
+        if context is None:
+            context = {}
+        data = {}
+        data['form'] = self.read(cr, uid, ids, [])[0]
+        return self.pool['report'].get_action(cr, uid, [], 'slaughterhouse_production_report', data=data, context=context)
+
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+

@@ -105,7 +105,7 @@ class Parser(report_sxw.rml_parse):
                         JOIN history_cycle_form his on (sl.cycle_id = his.id)
                         LEFT JOIN
                         (SELECT SUM(rojas) rojas, SUM(rojas_kg) rojas_kg, SUM(blancas) blancas, SUM(blancas_kg) blancas_kg, SUM(rotas) rotas, SUM(rotas_kg) rotas_kg,
-                            SUM(qty + qty_descarte + rojo + pernas_abiertas) qty, SUM(weight + qty_descarte_kg + rotas_kg + pernas_abiertas_kg) weight,
+                            SUM(qty + qty_descarte + rojo + pernas_abiertas) qty, SUM(weight + qty_descarte_kg + rojo_kg + pernas_abiertas_kg) weight,
                             SUM(qty_descarte) qty_descarte, SUM(qty_descarte_kg) qty_descarte_kg, slaughtery_id
                         FROM (
                             SELECT avg(qty_rotas_rojas) rojas, avg(qty_rotas_rojas_kg) rojas_kg,
