@@ -44,14 +44,15 @@ class Parser(report_sxw.rml_parse):
         if form['date_end']:
             where_str = " AND inv.date_invoice <= '%s' "%form['date_end']
 
-        if form['journal.id']:
-            where_str += " AND ijournal.id = %s "%form['journal.id'][0]
+        if form['journal_id']:
+            where_str += " AND journal.id = %s "%form['journal_id'][0]
 
         select_str = """
-                 SELECT DISTINCT(collected_journal_id) as id, journal.name FROM res_partner part
+                 SELECT ROW_NUMBER() OVER(ORDER BY id) AS no, tmp.* FROM (
+                  SELECT DISTINCT(collected_journal_id) as id, journal.name FROM res_partner part
                         JOIN account_invoice inv on (inv.partner_id = part.id)
                         JOIN account_journal journal on (journal.id = part.collected_journal_id)
-                        WHERE inv.state = 'open' %s
+                        WHERE inv.state = 'open' %s ) tmp
         """%where_str
         self.cr.execute(select_str)
         res = self.cr.dictfetchall()
@@ -100,16 +101,16 @@ class Parser(report_sxw.rml_parse):
                     ref += [deposit.ref]
                 if deposit.name:
                     bank_ref += [deposit.name]
-            data={'unpaid': unpaid,
-                  'paid': paid,
-                  'deposit': total_deposit,
-                  'balance': paid - total_deposit,
-                  'entry': '-'.join(name),
-                  'ref': '-'.join(ref),
-                  'bank_ref': '-'.join(bank_ref),
-                  'balance2': unpaid - paid,
-                  'percent': round((unpaid - paid)/unpaid * 100, 2)
-                  }
+            data = {'unpaid': unpaid,
+                      'paid': paid,
+                      'deposit': total_deposit,
+                      'balance': paid - total_deposit,
+                      'entry': '-'.join(name),
+                      'ref': '-'.join(ref),
+                      'bank_ref': '-'.join(bank_ref),
+                      'balance2': unpaid - paid,
+                      'percent': round((unpaid - paid)/unpaid * 100, 2)
+                      }
             res.append(data)
 
         return res
