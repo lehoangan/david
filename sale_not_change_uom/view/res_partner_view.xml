@@ -7,6 +7,7 @@
             <field name="inherit_id" ref="account.view_partner_property_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='credit_limit']" position="after">
+                    <field name="collected_journal_id" />
                     <field name="sale_journal_id" />
                     <field name="warning_invoice" />
                 </xpath>

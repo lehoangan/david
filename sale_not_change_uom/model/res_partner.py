@@ -32,6 +32,7 @@ class res_partner(osv.Model):
     _columns = {
         'frial': fields.boolean('Frial Rico Pollo'),
         'warning_invoice': fields.integer('Aviso de Límite de Boletas'),
+        'collected_journal_id': fields.many2one('account.journal', 'Collector Journal'),
         'sale_journal_id': fields.many2one('account.journal', 'Sale Journal', domain="[('type','=','sale')]"),
         'purchase_journal_id': fields.many2one('account.journal', 'Purchase Journal', domain="[('type','=','purchase')]"),
         'r_type': fields.selection([('A', 'A'), ('B', 'B'), ('C', 'C'), ('X', 'X')], 'Tipo Cliente'),

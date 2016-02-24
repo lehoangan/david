@@ -726,6 +726,7 @@ class report_xml(osv.osv):
         return new_report
 
     def __init__(self, pool, cr):
-        self._columns['report_type'].selection.append(('aeroo', 'Aeroo'))
+        if self._columns:
+            self._columns['report_type'].selection.append(('aeroo', 'Aeroo'))
         return super(report_xml, self).__init__(pool, cr)
 

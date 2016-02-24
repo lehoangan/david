@@ -19,22 +19,6 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
 ##############################################################################
-{
-    'name': 'R - Bank Deposit',
-    'category': 'Generic Modules/Accounting',
-    'author': 'Anle<lehoangan1988@gmail.com>',
-    'depends': ['account_cancel'],
-    'init_xml': [],
-    'update_xml': [
-        'security/ir.model.access.csv',
-        'view/account_make_deposit_view.xml',
-        'report/report_define.xml',
-        'wizard/collected_control_view.xml',
-				   ],
-    'test': [],
-    'active': False,
-    'installable': True,
-    'certificate':''
-}
+import collected_control
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
