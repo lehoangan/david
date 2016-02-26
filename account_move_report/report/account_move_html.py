@@ -32,6 +32,7 @@ class account_move_report_html(report_sxw.rml_parse):
         self.localcontext.update({
             'time': time,
             'get_total_debit_credit': self.get_total_debit_credit,
+            'get_note': self.get_note,
         })
 
     def get_total_debit_credit(self, line_ids):
@@ -40,8 +41,41 @@ class account_move_report_html(report_sxw.rml_parse):
         for line in line_ids:
             sum_tot_debit += (line.debit)
             sum_tot_credit += (line.credit)
-        return {
-            'sum_tot_debit': sum_tot_debit, 'sum_tot_credit': sum_tot_credit}
+        return {'sum_tot_debit': sum_tot_debit, 'sum_tot_credit': sum_tot_credit}
+
+    def get_inv_note(self, move_id):
+        cr, uid = self.cr, self.uid
+        invoice_obj = self.pool.get('account.invoice')
+        invoice_ids = invoice_obj.search(cr, uid, [('move_id', '=', move_id)])
+        invoice_note = ''
+        if invoice_ids:
+            invoice = invoice_obj.browse(cr, uid, invoice_ids[0])
+            invoice_note = invoice.comment
+        return invoice_note
+
+    def get_note(self, move_id):
+        cr, uid = self.cr, self.uid
+        invoice_obj = self.pool.get('account.invoice')
+        voucher_obj = self.pool.get('account.voucher')
+        invoice_ids = invoice_obj.search(cr, uid, [('move_id', '=', move_id)])
+        invoice_note = []
+        move_note = []
+        if invoice_ids:
+            invoice = invoice_obj.browse(cr, uid, invoice_ids[0])
+            invoice_note.append(invoice.comment)
+
+            for payment in invoice.payment_ids:
+                if payment.move_id.narration and payment.move_id.narration not in move_note:
+                    move_note.append(payment.move_id.narration)
+        else:
+            voucher_ids = voucher_obj.search(cr, uid, [('move_id', '=', move_id)])
+            if voucher_ids:
+                voucher = voucher_obj.browse(cr, uid, voucher_ids[0])
+                move_note.append(voucher.narration or '')
+                for line in voucher.line_ids:
+                    if line.amount:
+                        invoice_note.append(self.get_inv_note(line.move_line_id.move_id.id))
+        return ' - '.join(invoice_note), ' - '.join(move_note)
 
 HeaderFooterTextWebKitParser(
     'report.account.move.report.webkit',

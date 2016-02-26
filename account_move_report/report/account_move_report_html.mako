@@ -108,13 +108,9 @@
             <tr>
                 <div>
                     <tr>
-                        <td>
-                            ${_("To Review: ")} 
-                        </td>
-                        <td>
-                            %if o.to_check:
-                                <p>&#10004;</p>
-                            %endif
+                        <td colspan="2">
+                            ${_("Glosa General: ")}
+                            ${get_note(o.id)[0] |entity}
                         </td>
                     </tr>
                 </div>
@@ -205,18 +201,37 @@
                 <td colspan="9"></td>
             </tr>
             <tr  class='celdaDetailTitulo'>
-                <td width='6%'>
+                <td colspan="2">
                     ${_("Detalle: ")}
-                </td>
-                <td width='94%'>
-                    <div>${o.narration or '' |entity}</div>
+                    ${get_note(o.id)[1] |entity}
                 </td>
             </tr>
             
         </table>
-        %if len(loop._iterable) != 1 and loop.index != len(loop._iterable)-1:
-            <p style="page-break-after:always"></p>
-        %endif
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <table width= '100%'>
+            <tr>
+                <td style="border-top: 1px solid #000;width: 20%;text-align: center;font-size:8pt;">
+                    Realizado Por
+                </td>
+                <td style="width: 5%;"></td>
+                <td style="border-top: 1px solid #000;width: 20%;text-align: center;font-size:8pt;">
+                    Revizado Por
+                </td>
+                <td style="width: 5%;"></td>
+                <td style="border-top: 1px solid #000;width: 20%;text-align: center;font-size:8pt;">
+                    Autorizado Por
+                </td>
+                <td style="width: 5%;"></td>
+                <td style="border-top: 1px solid #000;width: 20%;text-align: center;font-size:8pt;">
+                    Pagado a / Recibido de
+                </td>
+
+            </tr>
+        </table>
     %endfor
     </body>
 </html>
