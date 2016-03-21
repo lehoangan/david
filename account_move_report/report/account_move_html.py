@@ -33,7 +33,20 @@ class account_move_report_html(report_sxw.rml_parse):
             'time': time,
             'get_total_debit_credit': self.get_total_debit_credit,
             'get_note': self.get_note,
+            'get_title': self.get_title,
         })
+
+    def get_title(self, lines):
+        type = ''
+        for line in lines:
+            if line.debit:
+                type = line.account_id.user_type.name
+                break
+        title = {
+            'Expense': 'Comprobante de Egreso',
+            'Income': 'Comprobante de Ingreso',
+        }
+        return title.get(type, 'Comprobante de Transpaso')
 
     def get_total_debit_credit(self, line_ids):
         sum_tot_debit = 0.00
@@ -62,11 +75,11 @@ class account_move_report_html(report_sxw.rml_parse):
         move_note = []
         if invoice_ids:
             invoice = invoice_obj.browse(cr, uid, invoice_ids[0])
-            invoice_note.append(invoice.comment)
+            invoice_note.append(invoice.comment or '')
 
             for payment in invoice.payment_ids:
                 if payment.move_id.narration and payment.move_id.narration not in move_note:
-                    move_note.append(payment.move_id.narration)
+                    move_note.append(payment.move_id.narration or '')
         else:
             voucher_ids = voucher_obj.search(cr, uid, [('move_id', '=', move_id)])
             if voucher_ids:
@@ -74,7 +87,8 @@ class account_move_report_html(report_sxw.rml_parse):
                 move_note.append(voucher.narration or '')
                 for line in voucher.line_ids:
                     if line.amount:
-                        invoice_note.append(self.get_inv_note(line.move_line_id.move_id.id))
+                        invoice_note.append(self.get_inv_note(line.move_line_id.move_id.id) or '')
+
         return ' - '.join(invoice_note), ' - '.join(move_note)
 
 HeaderFooterTextWebKitParser(

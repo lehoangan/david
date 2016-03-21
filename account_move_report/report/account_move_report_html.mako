@@ -84,10 +84,11 @@
             </tr>
         </table>                                   
 
-        <table class='celdaDetailTitulo'>
+        <table width= '100%' class='celdaDetailTitulo'>
             <tr>
                 <div>
-                    <td>${_("Comprobante: ")} ${o.name or '' |entity}</td>
+                    <td style="width: 50%">${_("Comprobante: ")} ${o.name or '' |entity}</td>
+                    <td style="width: 50%;font-weight:bold;font-size:13pt;">${get_title(o.line_id) |entity}</td>
                 </div>
             </tr>
             <tr>
@@ -95,7 +96,7 @@
                     <td>${_("Reference: ")} ${o.ref or '' |entity}</td>
                 </div>
             </tr>
-            <tr width= '100%'>
+            <tr>
                 <div>
                     <td width= '50%'>
                         ${_("Period: ")} ${o.period_id.name or '' |entity}
