@@ -156,8 +156,20 @@ class Parser(report_sxw.rml_parse):
                               left join res_partner_res_partner_category_rel rel on (rel.partner_id=part.id)
                               left join res_partner_category categ on (rel.category_id=categ.id))
                     %s
-                    ) ) as TEMP
-        """%(where_str_vou, where_str)
+                    )
+                     UNION
+                     ( SELECT partner_id as id FROM (
+                         SELECT SUM(l.debit-l.credit) as amount, l.partner_id
+                              FROM account_move_line l
+                              LEFT JOIN account_account a ON (l.account_id=a.id)
+                              WHERE a.type = 'receivable'
+                              AND l.reconcile_id IS NULL
+                              AND l.partner_id IS NOT NULL
+                              AND l.state <> 'draft' AND l.date < '%s'
+                              GROUP BY l.partner_id)as opening WHERE amount > 0)
+                     ) as TEMP
+        """%(where_str_vou, where_str, form['date_from'])
+
         self.cr.execute(select_str)
         res = self.cr.dictfetchall()
         for part in res:
@@ -247,7 +259,7 @@ class Parser(report_sxw.rml_parse):
             })
             #ending
 
-            ending = part['opening'] + part['sale_amount'] - part['percent_amount'] - part['kg_amount'] - part['payment']
+            ending = part['opening'] + part['sale_amount'] - part['percent_amount'] - part['kg_amount'] - part['payment'] + part['diff']
 
             part.update({
                 'percent_ending': part['sale_amount'] and round(ending/part['sale_amount']*100, 2) or 0,

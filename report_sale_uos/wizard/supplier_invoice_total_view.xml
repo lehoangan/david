@@ -12,7 +12,7 @@
                         <field name="date_to"/>
                         <field name="partner_id"/>
                         <field name="state"/>
-                        <field name="frial"/>
+                        <!--<field name="frial"/>-->
                         <field name="inv_state" attrs="{'invisible':[('state','=','draft')]}"/>
                     </group>
                     <footer>
