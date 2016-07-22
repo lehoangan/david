@@ -44,6 +44,7 @@ class Parser(report_sxw.rml_parse):
 
     def get_market(self, form):
         where_str_vou = ''' WHERE vou.state not in ('draft', 'cancel') AND vou.type = 'receipt' '''
+        where_previous = ''
 
         if form['date_from']:
             where_str_vou = '%s %s'%(where_str_vou, ''' AND vou.date::date >= '%s' '''%form['date_from'])
@@ -56,6 +57,7 @@ class Parser(report_sxw.rml_parse):
             if tag_ids:
                 tag_ids += [-1,-1]
             where_str_vou = '%s %s'%(where_str_vou, ''' AND categ.id in %s '''%str(tuple(tag_ids)))
+            where_previous = ''' AND categ.id in %s '''%str(tuple(tag_ids))
 
         where_str = ''' WHERE inv.state not in ('refund', 'cancel') AND inv.type = 'out_invoice' '''
 
@@ -96,10 +98,24 @@ class Parser(report_sxw.rml_parse):
                               left join res_partner_category categ on (rel.category_id=categ.id))
                     %s
                     GROUP BY categ.name,categ.id
-                    order by categ.name) ) as TEMP
+                    order by categ.name)
+                    UNION
+                     ( SELECT distinct (id) as id, name, payment FROM (
+                         SELECT SUM(l.debit-l.credit) as payment, categ.id, categ.name
+                              FROM account_move_line l
+                                  JOIN account_account a ON (l.account_id=a.id)
+                                  join res_partner part on (l.partner_id=part.id)
+                                  left join res_partner_res_partner_category_rel rel on (rel.partner_id=part.id)
+                                  left join res_partner_category categ on (rel.category_id=categ.id)
+                              WHERE a.type = 'receivable'
+                              AND l.reconcile_id IS NULL
+                              AND l.partner_id IS NOT NULL
+                              AND l.state <> 'draft' AND l.date < '%s' %s
+                              GROUP BY categ.id, categ.name)as opening WHERE payment > 0)
+                     ) as TEMP
                     GROUP BY name,id
                 ORDER BY name
-        """%(where_str_vou, where_str)
+        """%(where_str_vou, where_str, form['date_from'], where_previous)
         self.cr.execute(select_str)
         res = self.cr.dictfetchall()
         for categ in res:
@@ -111,6 +127,7 @@ class Parser(report_sxw.rml_parse):
 
     def get_client(self, form, tag):
         where_str_vou = ''' WHERE vou.state not in ('draft', 'cancel') AND vou.type = 'receipt' '''
+        where_previous = ''
 
         if form['date_from']:
             where_str_vou = '%s %s'%(where_str_vou, ''' AND vou.date::date >= '%s' '''%form['date_from'])
@@ -121,8 +138,10 @@ class Parser(report_sxw.rml_parse):
         if tag:
             if tag['id']:
                 where_str_vou = '%s %s'%(where_str_vou, ''' AND categ.id = %s '''%tag['id'])
+                where_previous = ''' AND categ.id = %s '''%tag['id']
             else:
                 where_str_vou = '%s %s'%(where_str_vou, ''' AND categ.id is null''')
+                where_previous = ' AND categ.id is null'
 
         where_str = ''' WHERE inv.state not in ('refund', 'cancel') AND inv.type = 'out_invoice' '''
 
@@ -161,14 +180,17 @@ class Parser(report_sxw.rml_parse):
                      ( SELECT partner_id as id FROM (
                          SELECT SUM(l.debit-l.credit) as amount, l.partner_id
                               FROM account_move_line l
-                              LEFT JOIN account_account a ON (l.account_id=a.id)
+                                  JOIN account_account a ON (l.account_id=a.id)
+                                  join res_partner part on (l.partner_id=part.id)
+                                  left join res_partner_res_partner_category_rel rel on (rel.partner_id=part.id)
+                                  left join res_partner_category categ on (rel.category_id=categ.id)
                               WHERE a.type = 'receivable'
                               AND l.reconcile_id IS NULL
                               AND l.partner_id IS NOT NULL
-                              AND l.state <> 'draft' AND l.date < '%s'
+                              AND l.state <> 'draft' AND l.date < '%s' %s
                               GROUP BY l.partner_id)as opening WHERE amount > 0)
                      ) as TEMP
-        """%(where_str_vou, where_str, form['date_from'])
+        """%(where_str_vou, where_str, form['date_from'], where_previous)
 
         self.cr.execute(select_str)
         res = self.cr.dictfetchall()
