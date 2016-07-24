@@ -21,3 +21,4 @@
 ################################################################################
 
 from . import account_move_html
+from . import account_ledger_report
