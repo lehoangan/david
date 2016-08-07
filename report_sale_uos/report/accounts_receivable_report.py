@@ -125,7 +125,144 @@ class Parser(report_sxw.rml_parse):
                 categ['name'] = result[0][1]
         return res
 
+    def _get_opening_client(self, form, tag):
+        where_str_vou = ''' WHERE vou.state not in ('draft', 'cancel') AND vou.type = 'receipt' '''
+        where_previous = ''
+
+        if form['date_from']:
+            where_str_vou = '%s %s' % (where_str_vou, ''' AND vou.date::date < '%s' ''' % form['date_from'])
+
+        if tag:
+            if tag['id']:
+                where_str_vou = '%s %s' % (where_str_vou, ''' AND categ.id = %s ''' % tag['id'])
+                where_previous = ''' AND categ.id = %s ''' % tag['id']
+            else:
+                where_str_vou = '%s %s' % (where_str_vou, ''' AND categ.id is null''')
+                where_previous = ' AND categ.id is null'
+
+        where_str = ''' WHERE inv.state not in ('refund', 'cancel') AND inv.type = 'out_invoice' '''
+
+        if form['date_from']:
+            where_str = '%s %s' % (where_str, ''' AND inv.date_invoice::date < '%s' ''' % form['date_from'])
+
+        if tag:
+            if tag['id']:
+                where_str = '%s %s' % (where_str, ''' AND categ.id = %s ''' % tag['id'])
+            else:
+                where_str = '%s %s' % (where_str, ''' AND categ.id is null''')
+
+        select_str = """
+                 SELECT distinct (id) as id
+                 FROM
+                     ((SELECT
+                            distinct (part.id) as id
+                    FROM ( account_voucher vou
+                              join res_partner part on (vou.partner_id=part.id)
+                              left join res_partner_res_partner_category_rel rel on (rel.partner_id=part.id)
+                              left join res_partner_category categ on (rel.category_id=categ.id))
+                    %s)
+                    UNION
+                    (SELECT
+                            distinct (part.id) as id
+                    FROM ( account_invoice inv
+                              join res_partner part on (inv.partner_id=part.id)
+                              left join res_partner_res_partner_category_rel rel on (rel.partner_id=part.id)
+                              left join res_partner_category categ on (rel.category_id=categ.id))
+                    %s
+                    )
+                     UNION
+                     ( SELECT partner_id as id FROM (
+                         SELECT SUM(l.debit-l.credit) as amount, l.partner_id
+                              FROM account_move_line l
+                                  JOIN account_account a ON (l.account_id=a.id)
+                                  join res_partner part on (l.partner_id=part.id)
+                                  left join res_partner_res_partner_category_rel rel on (rel.partner_id=part.id)
+                                  left join res_partner_category categ on (rel.category_id=categ.id)
+                              WHERE a.type = 'receivable'
+                              AND l.reconcile_id IS NULL
+                              AND l.partner_id IS NOT NULL
+                              AND l.state <> 'draft' AND l.date < '%s' %s
+                              GROUP BY l.partner_id)as opening WHERE amount > 0)
+                     ) as TEMP
+        """ % (where_str_vou, where_str, form['date_from'], where_previous)
+
+        self.cr.execute(select_str)
+        res = self.cr.dictfetchall()
+        result ={}
+        for part in res:
+            if not part['id']: continue
+
+            # get amount of in transact sale
+            # get amount of discount
+            in_vwhere_str = ''' WHERE inv.state not in ('refund', 'cancel') AND inv.type = 'out_invoice' AND inv.partner_id=%s ''' % \
+                            part['id']
+
+            if form['date_from']:
+                in_vwhere_str = '%s %s' % (in_vwhere_str, ''' AND inv.date_invoice::date < '%s' ''' % form['date_from'])
+
+            sql = '''
+                SELECT
+                        sum(l.quantity * l.price_unit * l.discount / 100.0) as disc_percent_amount,
+                        sum(l.discount_kg * l.price_unit * (100.0-l.discount) / 100.0 + l.quantity * l.price_unit * l.discount / 100.0) as disc_amount,
+                        sum(l.discount_kg * l.price_unit * (100.0-l.discount) / 100.0) as disc_kg_amount,
+                        SUM(l.quantity * l.price_unit) as amount
+
+                FROM (
+                       account_invoice_line l
+                          join account_invoice inv on (l.invoice_id=inv.id)
+                          join res_partner part on (inv.partner_id=part.id)
+                          left join res_partner_res_partner_category_rel rel on (rel.partner_id=part.id)
+                          left join res_partner_category categ on (rel.category_id=categ.id))
+                %s
+            ''' % in_vwhere_str
+            self.cr.execute(sql)
+            discount = self.cr.dictfetchone()
+            disc_percent_amount = discount['disc_percent_amount'] or 0
+            disc_kg_amount = discount['disc_kg_amount'] or 0
+            amount_in_period = discount['amount'] or 0
+            part.update({
+                'percent_amount': disc_percent_amount,
+                'kg_amount': disc_kg_amount,
+                'sale_amount': amount_in_period
+            })
+            # payment information
+            where_str_vou = ''' WHERE vou.state not in ('draft', 'cancel') AND vou.type = 'receipt' AND vou.partner_id=%s ''' % \
+                            part['id']
+
+            if form['date_from']:
+                where_str_vou = '%s %s' % (where_str_vou, ''' AND vou.date::date < '%s' ''' % form['date_from'])
+            select_str = """
+                SELECT
+                        vou.id
+                FROM account_voucher vou
+                %s
+            """ % where_str_vou
+            self.cr.execute(select_str)
+            res1 = self.cr.dictfetchall()
+            total = 0
+            diff = 0
+            for vou in res1:
+                if not vou['id']: continue
+                value = self.get_amount_due(vou['id'])
+                total += value[0]
+                diff += value[1]
+            part.update({
+                'payment': total,
+                'diff': diff,
+            })
+            # ending
+
+            ending = part['sale_amount'] - part['percent_amount'] - part['kg_amount'] - part[
+                'payment'] + part['diff']
+
+            part.update({
+                'ending': ending
+            })
+            result.update({part['id']: ending})
+        return result
+
     def get_client(self, form, tag):
+        opening = self._get_opening_client(form, tag)
         where_str_vou = ''' WHERE vou.state not in ('draft', 'cancel') AND vou.type = 'receipt' '''
         where_previous = ''
 
@@ -198,20 +335,9 @@ class Parser(report_sxw.rml_parse):
             if not part['id']: continue
             if form['date_from']:
                 result = self.pool.get('res.partner').browse(self.cr, self.uid, part['id'], {'date_to': form['date_from']})
-                opening_sql = '''
-                    SELECT SUM(l.debit-l.credit) as amount
-                          FROM account_move_line l
-                          LEFT JOIN account_account a ON (l.account_id=a.id)
-                          WHERE a.type = 'receivable'
-                          AND l.partner_id = %s
-                          AND l.reconcile_id IS NULL
-                          AND l.state <> 'draft' AND l.date < '%s'
-                '''%(part['id'], form['date_from'])
-                self.cr.execute(opening_sql)
-                opening = self.cr.dictfetchone()
                 part.update({
                     'name': result.name,
-                    'opening': opening['amount'] or 0
+                    'opening': opening.get(part['id'], 0)
                 })
 
             #get amount of in transact sale
@@ -335,9 +461,12 @@ class Parser(report_sxw.rml_parse):
         voucher_obj = self.pool.get('account.voucher')
         voucher = voucher_obj.browse(self.cr, self.uid, voucher_id)
         amount = voucher.amount
+        diff = 0
+        if voucher.payment_option == 'with_writeoff':
+            diff = voucher.writeoff_amount
         # for line in voucher.line_cr_ids:
         #     amount += line.amount_unreconciled - line.amount
-        return amount, voucher.writeoff_amount
+        return amount, diff
 
     def get_total_market(self, form, tag):
         res = {'opening': 0,
