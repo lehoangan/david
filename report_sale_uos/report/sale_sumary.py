@@ -78,18 +78,29 @@ class Parser(report_sxw.rml_parse):
                  SELECT
                         distinct (categ.id) as id,
                         categ.name,
-                        part.city,
+                        sum(l.product_uos_qty) as uos,
+                        sum(l.product_uom_qty / u.factor * u2.factor) as uom,
                         sum(l.product_uom_qty* l.price_unit) as amount,
-                        sum(l.discount_kg * l.price_unit * (100.0-l.discount) / 100.0 + l.product_uom_qty * l.price_unit * l.discount / 100.0) as discount
+                        sum(l.product_uom_qty * l.price_unit * l.discount / 100.0) as disc_percent_amount,
+                        sum(l.discount_kg * l.price_unit * (100.0-l.discount) / 100.0 + l.product_uom_qty * l.price_unit * l.discount / 100.0) as discount,
+                        sum(l.discount_kg / u.factor * u2.factor) as disc_kg,
+                        sum(l.discount_kg * l.price_unit * (100.0-l.discount) / 100.0) as disc_kg_amount
                 FROM (
                     sale_order_line l
                           join sale_order s on (l.order_id=s.id)
                           join res_partner part on (s.partner_id=part.id)
                           left join res_partner_res_partner_category_rel rel on (rel.partner_id=part.id)
-                          left join res_partner_category categ on (rel.category_id=categ.id))
+                          left join res_partner_category categ on (rel.category_id=categ.id)
+                          left join product_product p on (l.product_id=p.id)
+                          left join product_template t on (p.product_tmpl_id=t.id)
+                          left join product_uom u on (u.id=l.product_uom)
+                          left join product_uom u2 on (u2.id=t.uom_id)
+                          left join product_uom us on (us.id=l.product_uos)
+                          left join product_uom us2 on (us2.id=t.uom_id)
+                  )
                 %s
                 %s
-                GROUP BY categ.name,categ.id, part.city
+                GROUP BY categ.name,categ.id
                 order by categ.name
         """%(join_sql, where_str)
 
