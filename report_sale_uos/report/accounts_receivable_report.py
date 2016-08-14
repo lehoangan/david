@@ -391,30 +391,20 @@ class Parser(report_sxw.rml_parse):
                 FROM account_voucher vou
                 %s
             """%where_str_vou
-            if part['id'] == 400:
-                print select_str
             self.cr.execute(select_str)
             res1 = self.cr.dictfetchall()
             total = 0
             diff = 0
             for vou in res1:
                 if not vou['id']: continue
-                if part['id'] == 400:
-                    print '-----start', diff
                 value = self.get_amount_due(vou['id'])
-                if part['id'] == 400:
-                     print '-----value', value
                 total += value[0]
                 diff += value[1]
-                if part['id'] == 400:
-                     print '-----diff', diff
             part.update({
                 'payment': total,
                 'percent_payment': (amount_in_period + part['opening']) and round(total/(amount_in_period + part['opening'])*100, 2) or 0,
                 'diff': diff,
             })
-            if part['id'] == 400:
-                print part['diff']
             #ending
 
             ending = part['opening'] + part['sale_amount'] - part['percent_amount'] - part['kg_amount'] - part['payment'] + part['diff']
