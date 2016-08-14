@@ -399,9 +399,15 @@ class Parser(report_sxw.rml_parse):
             diff = 0
             for vou in res1:
                 if not vou['id']: continue
+                if part['id'] == 400:
+                    print '-----start', diff
                 value = self.get_amount_due(vou['id'])
+                if part['id'] == 400:
+                     print '-----value', value
                 total += value[0]
                 diff += value[1]
+                if part['id'] == 400:
+                     print '-----diff', diff
             part.update({
                 'payment': total,
                 'percent_payment': (amount_in_period + part['opening']) and round(total/(amount_in_period + part['opening'])*100, 2) or 0,
