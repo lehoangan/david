@@ -40,6 +40,7 @@ class Parser(report_sxw.rml_parse):
             'product': self.product,
             'get_market_payable': self.get_market_payable,
             'get_total': self.get_total,
+            'get_detail_group_by_product': self.get_detail_group_by_product,
         })
 
     def get_market(self, form):
@@ -290,14 +291,26 @@ class Parser(report_sxw.rml_parse):
             where_str = '%s %s'%(where_str, ''' AND l.product_id in %s '''%str(tuple(prod_ids)))
         select_str = """
                  SELECT
-                        sum(l.product_uom_qty * l.price_unit) as amount,
-                        sum(l.discount_kg * l.price_unit * (100.0-l.discount) / 100.0 + l.product_uom_qty * l.price_unit * l.discount / 100.0) as discount
+                        sum(l.product_uos_qty) as uos,
+                        sum(l.product_uom_qty / u.factor * u2.factor) as uom,
+                        sum(l.product_uom_qty* l.price_unit) as amount,
+                        sum(l.product_uom_qty * l.price_unit * l.discount / 100.0) as disc_percent_amount,
+                        sum(l.discount_kg * l.price_unit * (100.0-l.discount) / 100.0 + l.product_uom_qty * l.price_unit * l.discount / 100.0) as discount,
+                        sum(l.discount_kg / u.factor * u2.factor) as disc_kg,
+                        sum(l.discount_kg * l.price_unit * (100.0-l.discount) / 100.0) as disc_kg_amount
                 FROM (
                     sale_order_line l
                           join sale_order s on (l.order_id=s.id)
                           join res_partner part on (s.partner_id=part.id)
                           left join res_partner_res_partner_category_rel rel on (rel.partner_id=part.id)
-                          left join res_partner_category categ on (rel.category_id=categ.id))
+                          left join res_partner_category categ on (rel.category_id=categ.id)
+                          left join product_product p on (l.product_id=p.id)
+                          left join product_template t on (p.product_tmpl_id=t.id)
+                          left join product_uom u on (u.id=l.product_uom)
+                          left join product_uom u2 on (u2.id=t.uom_id)
+                          left join product_uom us on (us.id=l.product_uos)
+                          left join product_uom us2 on (us2.id=t.uom_id)
+                    )
                 %s
                 %s
         """%(join_sql, where_str)
@@ -331,6 +344,72 @@ class Parser(report_sxw.rml_parse):
                 total += res[0]['amount']
             res[0].update({'payable': total})
 
+        return res
+
+    def get_detail_group_by_product(self, form):
+        where_str = ''
+        if form['state'] == 'draft':
+            where_str = ''' WHERE s.state = 'draft' '''
+        else:
+            where_str = ''' WHERE s.state not in ('draft', 'cancel')'''
+
+        join_sql = ''
+        if form['invoice_state']:
+            join_sql = '''
+                        INNER JOIN sale_order_line_invoice_rel inv_rel on (inv_rel.order_line_id = l.id)
+                        INNER JOIN account_invoice_line inv_l on (inv_l.id = inv_rel.invoice_id)
+                        INNER JOIN account_invoice inv on (inv.id = inv_l.invoice_id)
+            '''
+            if form['invoice_state'] == 'draft':
+                where_str = '%s %s'%(where_str, ''' AND inv.state = 'draft' ''')
+            elif form['invoice_state'] == 'done':
+                where_str = '%s %s'%(where_str, ''' AND inv.state not in ('draft', 'cancel') ''')
+            else:
+                where_str = '%s %s'%(where_str, ''' AND inv.state != 'cancel' ''')
+
+        if form['datetime_from']:
+            where_str = '%s %s'%(where_str, ''' AND s.date_order >= '%s' '''%form['datetime_from'])
+
+        if form['datetime_to']:
+            where_str = '%s %s'%(where_str, ''' AND s.date_order <= '%s' '''%form['datetime_to'])
+
+        if form['product_ids']:
+            prod_ids = form['product_ids']
+            if prod_ids:
+                prod_ids += [-1,-1]
+            where_str = '%s %s'%(where_str, ''' AND l.product_id in %s '''%str(tuple(prod_ids)))
+        select_str = """
+                 SELECT
+                        distinct (p.id) as id,
+                        t.name,
+                        sum(l.product_uos_qty) as uos,
+                        sum(l.product_uom_qty / u.factor * u2.factor) as uom,
+                        sum(l.product_uom_qty* l.price_unit) as amount,
+                        sum(l.product_uom_qty * l.price_unit * l.discount / 100.0) as disc_percent_amount,
+                        sum(l.discount_kg * l.price_unit * (100.0-l.discount) / 100.0 + l.product_uom_qty * l.price_unit * l.discount / 100.0) as discount,
+                        sum(l.discount_kg / u.factor * u2.factor) as disc_kg,
+                        sum(l.discount_kg * l.price_unit * (100.0-l.discount) / 100.0) as disc_kg_amount
+                FROM (
+                    sale_order_line l
+                          join sale_order s on (l.order_id=s.id)
+                          join res_partner part on (s.partner_id=part.id)
+                          left join res_partner_res_partner_category_rel rel on (rel.partner_id=part.id)
+                          left join res_partner_category categ on (rel.category_id=categ.id)
+                          left join product_product p on (l.product_id=p.id)
+                          left join product_template t on (p.product_tmpl_id=t.id)
+                          left join product_uom u on (u.id=l.product_uom)
+                          left join product_uom u2 on (u2.id=t.uom_id)
+                          left join product_uom us on (us.id=l.product_uos)
+                          left join product_uom us2 on (us2.id=t.uom_id)
+                  )
+                %s
+                %s
+                GROUP BY t.name,p.id
+                order by t.name
+        """%(join_sql, where_str)
+
+        self.cr.execute(select_str)
+        res = self.cr.dictfetchall()
         return res
         
     
