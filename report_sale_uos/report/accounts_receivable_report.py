@@ -459,13 +459,11 @@ class Parser(report_sxw.rml_parse):
 
     def get_amount_due(self, voucher_id):
         voucher_obj = self.pool.get('account.voucher')
-        voucher = voucher_obj.browse(self.cr, self.uid, voucher_id)
-        amount = voucher.amount
+        voucher = voucher_obj.read(self.cr, self.uid, voucher_id, ['amount', 'writeoff_amount', 'payment_option'])
+        amount = voucher['amount']
         diff = 0
-        if voucher.payment_option == 'with_writeoff':
-            diff = voucher.writeoff_amount
-        # for line in voucher.line_cr_ids:
-        #     amount += line.amount_unreconciled - line.amount
+        if voucher['payment_option'] == 'with_writeoff':
+            diff = voucher['writeoff_amount']
         return amount, diff
 
     def get_total_market(self, form, tag):
