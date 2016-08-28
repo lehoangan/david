@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
+
+        <record id="view_account_invoice_filter" model="ir.ui.view">
+            <field name="name">account.invoice.select</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+            <field name="arch" type="xml">
+                <filter name="group_by_partner_id" string="Partner" context="{'group_by':'partner_id'}" position="after">
+                    <filter name="group_by_market" string="Mercado" context="{'group_by':'market'}" />
+                </filter>
+            </field>
+        </record>
+
         <record id="invoice_form_1" model="ir.ui.view">
             <field name="name">account.invoice.form</field>
             <field name="model">account.invoice</field>
@@ -15,6 +27,10 @@
                 <xpath expr="//tree/field[@name='quantity']" position="before">
                     <field name="product_uos_qty"/>
                     <field name="uom_id"/>
+                </xpath>
+
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="market" invisible="1"/>
                 </xpath>
 
                 <button name="invoice_open" states="draft" string="Validate" class="oe_highlight" groups="base.group_user" position="replace">

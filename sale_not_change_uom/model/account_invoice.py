@@ -34,3 +34,17 @@ class account_invoice(models.Model):
                 raise Warning(_('Alerta: Sobrepaso de límite de Boletas Permitido.'))
         return self.signal_workflow('invoice_open')
 
+    @api.depends('partner_id', 'partner_id.category_id')
+    @api.multi
+    def _get_market(self):
+        makert = []
+        for obj in self:
+            for categ in obj.partner_id.category_id:
+                if categ.parent_id:
+                    makert.append('%s / %s'%(categ.parent_id.name, categ.name))
+                else:
+                    makert.append(categ.name)
+            obj.market = ','.join(makert)
+
+    market = fields.Char('Market', compute="_get_market", store=True)
+

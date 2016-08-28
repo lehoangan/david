@@ -109,7 +109,7 @@ class Parser(report_sxw.rml_parse):
                       'ref': '-'.join(ref),
                       'bank_ref': '-'.join(bank_ref),
                       'balance2': unpaid - paid,
-                      'percent': round((unpaid - paid)/unpaid * 100, 2)
+                      'percent': unpaid and round((unpaid - paid)/unpaid * 100, 2) or 0
                       }
             res.append(data)
 
